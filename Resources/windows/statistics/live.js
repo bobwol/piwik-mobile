@@ -88,7 +88,7 @@ function window (params) {
                     return;
                 }
                 
-                if (0 == countdownLabel.text || '-' == countdownLabel.text) {
+                if (0 == countdownLabel.text || '-' == countdownLabel.text) {
                     // a refresh should occur
                     return;
                 }
