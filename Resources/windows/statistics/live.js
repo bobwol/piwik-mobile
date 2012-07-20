@@ -43,7 +43,7 @@ function window (params) {
     }
 
     this.refreshTimer = null;
-
+    
     var that                     = this;
     var refreshIntervalInMs      = 45000;
     var latestRequestedTimestamp = 0;
@@ -53,14 +53,61 @@ function window (params) {
     var refresh   = this.create('Refresh', {tableView: tableView});
 
     this.add(tableView.get());
+    
+    var countdownView  = Ti.UI.createView({className: 'countdownView'});
+    var countdownLabel = Ti.UI.createLabel({text: '-', className: 'countdownLabel'});
+    countdownView.add(countdownLabel);
+    
+    this.add(countdownView);
+    countdownView = null;
 
+    var interval  = null;
     var stopRefreshTimer = function () {
 
         if (that && that.refreshTimer) {
             // do no longer execute autoRefresh if user opens another app or returns the home screen (only for iOS)
             clearTimeout(that.refreshTimer);
         }
+        
+        if (interval) {
+            clearInterval(interval);
+            interval = null;
+        }
+        
+        countdownLabel.text = '-';
     };
+
+    var startRefreshTimer = function (timeoutInMs) {
+        
+        if (!interval) {
+            
+            interval = setInterval(function () {
+                
+                if (!countdownLabel) {
+                    
+                    return;
+                }
+                
+                if (0 == countdownLabel.text || '-' == countdownLabel.text) {
+                    // a refresh should occur
+                    return;
+                }
+                
+                countdownLabel.text = countdownLabel.text - 1;
+
+            }, 1000);
+        }
+        
+        if (countdownLabel) {
+            countdownLabel.text = '' + parseInt(timeoutInMs/1000);
+        }
+        
+        that.refreshTimer = setTimeout(function () {
+            if (refresh) {
+                refresh.refresh();
+            }
+        }, timeoutInMs);
+    }
 
     var site = params.site;
 
@@ -122,11 +169,8 @@ function window (params) {
     this.addEventListener('focusWindow', function () {
         if (params && params.autoRefresh && tableView && tableView.data && tableView.data.length && that) {
             // start auto refresh again if user returns to this window from a previous displayed window
-            that.refreshTimer = setTimeout(function () {
-                if (refresh) {
-                    refresh.refresh();
-                }
-            }, 20000);
+            
+            startRefreshTimer(20000);
         }
     });
     
@@ -139,11 +183,7 @@ function window (params) {
             }
             
             // start auto refresh again if user returns to this window from a previous displayed window
-            that.refreshTimer = setTimeout(function () {
-                if (refresh) {
-                    refresh.refresh();
-                }
-            }, 3000);
+            startRefreshTimer(3000);
         }
     });
 
@@ -257,12 +297,8 @@ function window (params) {
                 if (stopRefreshTimer) {
                     stopRefreshTimer();
                 }
-        
-                that.refreshTimer = setTimeout(function () {
-                    if (refresh) {
-                        refresh.refresh();
-                    }
-                }, refreshIntervalInMs);
+
+                startRefreshTimer(refreshIntervalInMs);
             }
 
             return;
@@ -363,12 +399,8 @@ function window (params) {
             if (stopRefreshTimer) {
                 stopRefreshTimer();
             }
-            
-            that.refreshTimer = setTimeout(function () {
-                if (refresh) {
-                    refresh.refresh();
-                }
-            }, refreshIntervalInMs);
+
+            startRefreshTimer(refreshIntervalInMs);
         }
         
         event = null;
@@ -386,9 +418,7 @@ function window (params) {
     };
     
     this.cleanup = function () {
-        if (this.refreshTimer) {
-            clearTimeout(this.refreshTimer);
-        }
+        stopRefreshTimer();
         
         if (tableView && tableView.get()) {
             this.remove(tableView.get());
@@ -414,6 +444,7 @@ function window (params) {
         site           = null;
         params         = null;
         activity       = null;
+        countdownLabel    = null;
         stopRefreshTimer  = null;
         this.lastMinutes  = null;
         this.lastHours    = null;

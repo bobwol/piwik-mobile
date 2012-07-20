@@ -209,6 +209,19 @@
  * window statistics/live.js
  */
 #liveTableView {
+    bottom: 20;
+}
+
+.countdownView {
+    height: 20;
+    bottom: 0;
+    opacity: 0.8;
+    backgroundColor: '#333333';
+}
+
+.countdownLabel {
+    fontSize: 14;
+    color: 'white';
 }
 
 /**

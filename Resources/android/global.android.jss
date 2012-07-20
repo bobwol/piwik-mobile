@@ -220,6 +220,19 @@
  */
 #liveTableView {
     separatorColor: '#eeedeb';
+    bottom: '20dp';
+}
+
+.countdownView {
+    height: '20dp';
+    bottom: '0dp';
+    opacity: 0.8;
+    backgroundColor: '#333333';
+}
+
+.countdownLabel {
+    fontSize: '14dp';
+    color: 'white';
 }
 
 /**
