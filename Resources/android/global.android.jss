@@ -200,6 +200,13 @@
     focusable: true;
 }
 
+.editAccountNoPiwikAccountLabel {
+    textAlign: 'center';
+    color: '#333333';
+    top: 20;
+}
+
+
 /**
  * window statistics/show.js
  */

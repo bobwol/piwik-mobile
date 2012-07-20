@@ -115,11 +115,28 @@ function window (params) {
     piwikPasswordRow.add(piwikPassword);
     tableData.push(piwikPasswordRow);
     
-    var footerView       = Ti.UI.createView({className: 'editAccountTableFooterView'});
-    var save             = Ti.UI.createButton({title:  _('General_Save'), 
-                                               className: 'editAccountSaveButton'});
+    var footerView = Ti.UI.createView({className: 'editAccountTableFooterView', layout: 'vertical'});
+    var save       = Ti.UI.createButton({title:  _('General_Save'), className: 'editAccountSaveButton'});
     footerView.add(save);
+    
+    footerView.add(Ti.UI.createLabel({text: _('Mobile_NoPiwikAccount'), className: 'editAccountNoPiwikAccountLabel'}));
+    
+    var addDemoButton = Ti.UI.createButton({title:  _('Mobile_AddPiwikDemo'), className: 'editAccountSaveButton'});
+    footerView.add(addDemoButton); 
+    addDemoButton.addEventListener('click', function () {
+        
+        piwikUrl.value       = 'http://demo.piwik.org/';
+        piwikUser.value      = '';
+        piwikPassword.value  = '';
+        piwikAnonymous.value = true
+
+        saveAccount();
+    }); 
+    
+    addDemoButton = null;  
+    
     tableView.setFooterView(footerView);
+    
     footerView           = null;
 
     piwikAnonymous.addEventListener('change', function (event) {

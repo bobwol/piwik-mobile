@@ -192,6 +192,12 @@
     focusable: true;
 }
 
+.editAccountNoPiwikAccountLabel {
+    textAlign: 'center';
+    top: 20;
+    color:'#333333';
+}
+
 /**
  * window statistics/show.js
  */
