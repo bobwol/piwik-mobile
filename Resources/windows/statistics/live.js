@@ -74,7 +74,9 @@ function window (params) {
             interval = null;
         }
         
-        countdownLabel.text = '-';
+        if (countdownLabel) {
+            countdownLabel.text = '-';
+        }
     };
 
     var startRefreshTimer = function (timeoutInMs) {
