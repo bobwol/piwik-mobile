@@ -118,7 +118,7 @@ ReportsRequest.prototype.send = function (params) {
 
     piwikRequest.setMethod('API.getReportMetadata');
     piwikRequest.setAccount(account);
-    piwikRequest.setParameter({idSites: this.site.idsite});
+    piwikRequest.setParameter({idSites: this.site.idsite, hideMetricsDoc: 1});
     piwikRequest.setCallback(this, this.loaded);
     piwikRequest.send();
     

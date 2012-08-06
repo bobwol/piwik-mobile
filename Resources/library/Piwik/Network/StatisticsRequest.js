@@ -257,7 +257,8 @@ StatisticsRequest.prototype.send = function (params) {
     this.accessUrl = account.accessUrl;
 
     var parameter  = {idSite: this.site.idsite,
-                      date: this.date, 
+                      date: this.date,
+                      hideMetricsDoc: 1,
                       filter_sort_column: this.sortOrderColumn,
                       apiModule: this.report.module,
                       apiAction: this.report.action,
