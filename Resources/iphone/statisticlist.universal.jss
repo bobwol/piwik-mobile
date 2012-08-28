@@ -25,6 +25,16 @@
     selectionStyle: 0;
 }
 
+.statisticListTableViewRowHasSubtable {
+    backgroundColor: '#ffffff';
+    height: 'SIZE';
+    left: 0;
+    right: 0;
+    /** Ti.UI.iPhone.TableViewCellSelectionStyle.NONE **/
+    selectionStyle: 0;
+    hasChild: true;
+}
+
 .statisticListTitleLabel {
     height: 'SIZE';
     left: 10;

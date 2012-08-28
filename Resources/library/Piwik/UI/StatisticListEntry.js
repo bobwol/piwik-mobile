@@ -20,6 +20,7 @@ var stringUtils = Piwik.require('Utils/String');
  * @param     {Object}  params                  See {@link Piwik.UI.View#setParams}
  * @param     {string}  params.title            The title of the entry.
  * @param     {string}  [params.value]          The value of the entry.
+ * @param     {string}  [params.idSubtable]     The id of a subtable if one exists.
  * @param     {string}  [params.logo]           The url to the icon.
  * @param     {string}  [params.logoWidth=16]   The width of the icon.
  * @param     {string}  [params.logoHeight=16]  The height of the icon.
@@ -49,11 +50,19 @@ StatisticListEntry.prototype = Piwik.require('UI/View');
  */
 StatisticListEntry.prototype.init = function () {
 
-    this.row  = Ti.UI.createTableViewRow({className: 'statisticListTableViewRow'});
+    var idSubtable = this.getParam('idSubtable');
+    var value      = this.getParam('value', ' - ');
+    var title      = this.getParam('title', '');
+    var logo       = this.getParam('logo', '');
 
-    var value = this.getParam('value', ' - ');
-    var title = this.getParam('title', '');
-    var logo  = this.getParam('logo', '');
+    var className  = 'statisticListTableViewRow';
+    if (!!idSubtable) {
+        className += 'HasSubtable';
+    }
+    
+    this.row  = Ti.UI.createTableViewRow({className: className, 
+                                          idSubtable: idSubtable,
+                                          reportName: title});
 
     var titleLabel = Ti.UI.createLabel({text: title ? ('' + title) : '',
                                         className: 'statisticListTitleLabel' + (logo ? 'WithLogo' : '')});

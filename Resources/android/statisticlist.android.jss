@@ -20,6 +20,13 @@
     right: 0;
 }
 
+.statisticListTableViewRowHasSubtable {
+    backgroundColor: '#ffffff';
+    left: 0;
+    right: 0;
+    hasChild: true;
+}
+
 .statisticListTitleLabel {
     height: 'size';
     left: '16dp';

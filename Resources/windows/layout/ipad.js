@@ -99,6 +99,17 @@ function layout () {
     this._modalNav = null;
 
     /**
+     * An instance of the detail navigation group. 
+     *
+     * @default  null
+     *
+     * @type     null|Ti.UI.iPhone.NavigationGroup
+     * 
+     * @private
+     */
+    this._detailNav = null;
+
+    /**
      * @private
      */
     var layout    = this;
@@ -228,17 +239,19 @@ function layout () {
     };
     
     /**
-     * Adds a new window to the detail view of the split window. The detail view is the right view of the split window.
+     * Replaces the detail view of the split window. The detail view is the right view of the split window.
+     * All currently opened windows within detail view will be closed/removed.
      *
-     * @param  {Piwik.UI.Window}  newWin  The window that shall be added.
+     * @param  {Piwik.UI.Window}  newWin  The window that shall be replaced with the currently displayed.
      * 
      * @private
      */
-    this._addWindowToDetailView = function (newWin) {
-        var currentWindow = this._getCurrentWindow();
-        if (currentWindow) {
-            
+    this._replaceDetailView = function (newWin) {
+        
+        while (this.windows.length) {
+            // remove possible existing detail windows
             try {
+                var currentWindow = this.windows[this.windows.length - 1];
                 currentWindow.fireEvent('blurWindow', {});
                 currentWindow.close();
                 currentWindow = null;
@@ -259,6 +272,52 @@ function layout () {
         
         newWin = null;
     };
+    
+    /**
+     * Adds a new window to the detail view of the split window. The detail view is the right view of the split window.
+     *
+     * @param  {Piwik.UI.Window}  newWin  The window that shall be added.
+     * 
+     * @private
+     */
+    this._addWindowToDetailView = function (newWin) {
+ 
+        var detailWindow  = Ti.UI.createWindow({barColor: '#B2AEA5'});
+        newWin.target     = 'detail';
+        newWin.rootWindow = detailWindow;
+        
+        newWin.fireEvent('focusWindow', {});
+
+        Piwik.getUI().currentWindow = newWin;
+        
+        this.windows.push(newWin);
+        
+        detailWindow.add(newWin);
+        
+        this._detailNav.open(detailWindow);
+
+        detailWindow.addEventListener('close', function () {
+            // window was closed via navigation group
+            if (this.url || !newWin) {
+                // this == newWin
+                
+                return;
+            }
+            // this == detailWin
+            newWin.close();
+        });
+        
+        newWin.addEventListener('closeWindow', function () {
+            // if newWin closes, do also remove the window from detail navigation.
+            if (layout && layout._detailNav && this && this.rootWindow) {
+                try {
+                    layout._detailNav.close(this.rootWindow);
+                } catch (e) {
+                    Piwik.getLog().warn('Failed to remove rootWin from Navigation', 'iPadLayout::_addWindowToDetailSubView');
+                }
+            }
+        });
+    }
     
     /**
      * Add a new window to the layout so that it will be visible afterwards. Does also add a property named
@@ -283,10 +342,15 @@ function layout () {
             newWin = null;
             
             return;
+        } else if (newWin && newWin.target && 'detail' == newWin.target) {
+            
+            this._addWindowToDetailView(newWin);
+            newWin = null;
+            
+            return;
         }
 
-        // target == 'detailView'
-        this._addWindowToDetailView(newWin);
+        this._replaceDetailView(newWin);
         newWin = null;
     };
 
@@ -320,8 +384,10 @@ function layout () {
                 if (this._modalWindows.length && this._modalWindows[this._modalWindows.length - 1]) {
                     this._modalWindows[this._modalWindows.length - 1].fireEvent('focusWindow', {type: 'focusWindow'});
                 }
+            } else if ('detail' == piwikWindow.target && this.windows && this.windows.length) {
+                this.windows.pop();
             }
-            
+
             // remove window from main window so that it will be no longer visible
             piwikWindow.rootWindow.remove(piwikWindow);
             
@@ -352,7 +418,7 @@ function layout () {
         this._masterWin.leftNavButton = settingsButton;
         settingsButton                = null;
 
-        var navDetail   = Ti.UI.iPhone.createNavigationGroup({
+        this._detailNav = Ti.UI.iPhone.createNavigationGroup({
             window: Ti.UI.currentWindow
         });
         
@@ -364,7 +430,7 @@ function layout () {
         });
 
         var splitwin    = Titanium.UI.iPad.createSplitWindow({
-            detailView: navDetail,
+            detailView: this._detailNav,
             masterView: navMaster,
             showMasterInPortrait: true
         });

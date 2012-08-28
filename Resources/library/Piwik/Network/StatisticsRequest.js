@@ -264,6 +264,10 @@ StatisticsRequest.prototype.send = function (params) {
                       apiAction: this.report.action,
                       period: this.period};
 
+    if (this.report.idSubtable) {
+        parameter.idSubtable = this.report.idSubtable;
+    }
+
     if (this.report.parameters) {
         for (var index in this.report.parameters) {
             parameter[index]   = this.report.parameters[index];
@@ -391,6 +395,7 @@ StatisticsRequest.prototype._getSortOrder = function (report) {
  *                                      [logo]       => [An absolute path to the logo if one is defined in reportMetadata]
  *                                      [logoWidth]  => [Width of the logo if one is defined in reportMetadata]
  *                                      [logoHeight] => [Height of the logo if one is defined in reportMetadata]
+ *                                      [idSubtable] => [The id of the subtable if the report has subtables]
  *                                  )
  *                     )
  */
@@ -410,6 +415,7 @@ StatisticsRequest.prototype._formatReportData = function (response, account) {
     
     var reportData     = response.reportData;
     var reportMetadata = response.reportMetadata;
+    var hasSubtables   = response.metadata && response.metadata.actionToLoadSubTables;
 
     if (Piwik.isArray(reportData) && 0 < reportData.length) {
 
@@ -448,6 +454,10 @@ StatisticsRequest.prototype._formatReportData = function (response, account) {
                 if (metadata.logoHeight) {
                     row.logoHeight = metadata.logoHeight;
                 }
+            }
+            
+            if (hasSubtables && metadata && metadata.idsubdatatable) {
+                row.idSubtable = metadata.idsubdatatable;
             }
         
             reportRow.push(row);

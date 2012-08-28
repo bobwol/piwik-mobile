@@ -33,6 +33,7 @@ var _     = require('library/underscore');
  * @param     {string}       [params.metric]   Optional. The current selected metric. For example 'nb_visits'.
  * @param     {boolean}      [params.showAll]  Optional. True if all (is slow), false if only the top most (paging)
  *                                             statistics shall be fetched.
+ * @param     {string|}      [params.backButtonTitle]     An optional back button title. Only for iOS.
  *
  * @exports   window as WindowStatisticsShow
  * @this      Piwik.UI.Window
@@ -51,7 +52,7 @@ function window (params) {
     this.menuOptions  = {};
     
     if (this.rootWindow) {
-        this.rootWindow.backButtonTitle = _('General_Reports');
+        this.rootWindow.backButtonTitle = params.backButtonTitle ? params.backButtonTitle : _('General_Reports');
     }
     
     var that          = this;
@@ -82,10 +83,10 @@ function window (params) {
                                        url: '/statistic-change/date-period/' + period});
 
         if (event && event.date) {
-            params.date   = event.date;
+            params.date = event.date;
         }
 
-        params.showAll    = false;
+        params.showAll = false;
 
         refresh.refresh();
     });
@@ -149,22 +150,23 @@ function window (params) {
         if (event.columns) {
             metrics = event.columns;
         }
-        
-        var dateCommand   = that.createCommand('ChooseDateCommand', {date: event.date, period: event.period});
-        var siteCommand   = that.createCommand('ChooseSiteCommand');
-        var metricCommand = that.createCommand('ChooseMetricCommand', {metrics: metrics});
-        
-        that.menuOptions  = {commands: [dateCommand, siteCommand, refreshCommand], window: that};
+
+        that.menuOptions  = {commands: [refreshCommand], window: that};
 
         // update menu after each request cause of a possibly period and/or date change.
         Piwik.getUI().layout.menu.refresh(that.menuOptions);
 
         tableViewRows = [];
 
-        tableViewRows.push(that.create('TableViewRow', {title: site ? site.name : '', 
-                                                        hasChild: true, 
-                                                        className: 'tableViewRowSelectable',
-                                                        command: siteCommand}));
+        if (!event || !event.metadata || !event.metadata.isSubtableReport) {
+            // only display site command if it is not a subtable report
+            // a website selector makes no sense here cause the same subtable won't exist for another website
+            var siteCommand   = that.createCommand('ChooseSiteCommand');
+            tableViewRows.push(that.create('TableViewRow', {title: site ? site.name : '', 
+                                                            hasChild: true, 
+                                                            className: 'tableViewRowSelectable',
+                                                            command: siteCommand}));
+        }
 
         var graph    = null;
         var graphUi  = null;
@@ -213,15 +215,18 @@ function window (params) {
             // For example 'VisitsSummary.get' is a report having no dimension.
             // It makes also sence to display metric if a graph is displayed. The changed metric will not effect the
             // displayed statistics but the graph (mostly evolution graphs)
-
-            var headlineRow = that.create('TableViewRow', {title: statsticValueLabel,
-                                                           command:  metricCommand,
-                                                           className: 'tableViewRowSelectable',
-                                                           hasChild: true});
+        
+            var metricCommand = that.createCommand('ChooseMetricCommand', {metrics: metrics});
+            var headlineRow   = that.create('TableViewRow', {title: statsticValueLabel,
+                                                             command:  metricCommand,
+                                                             className: 'tableViewRowSelectable',
+                                                             hasChild: true});
             tableViewRows.push(headlineRow);
-            headlineRow     = null;
+            headlineRow   = null;
+            metricCommand = null;
         }
 
+        var dateCommand = that.createCommand('ChooseDateCommand', {date: event.date, period: event.period});
         tableViewRows.push(that.create('TableViewRow', {title:  event.reportDate, 
                                                         hasChild: true,
                                                         className: 'tableViewRowSelectable',
@@ -236,9 +241,31 @@ function window (params) {
         refresh.refreshDone();
         tableView.setData(tableViewRows);
         
+        if (event && event.metadata && event.metadata.actionToLoadSubTables) {
+            
+            var actionToLoadSubTables = event.metadata.actionToLoadSubTables;
+            
+            tableView.addEventListener('click', function (event) {
+                if (!event || !event.row || !event.row.idSubtable) {
+                    
+                    return;
+                }
+                
+                // make a simple copy of params
+                var newParams               = JSON.parse(JSON.stringify(params));
+                newParams.report.action     = actionToLoadSubTables;
+                newParams.report.idSubtable = event.row.idSubtable;
+                newParams.report.name       = event.row.reportName;
+                newParams.url               = 'statistics/show';
+                newParams.backButtonTitle   = _('Mobile_NavigationBack');
+                newParams.target            = 'detail';
+                
+                that.create('Window', newParams);
+            });
+        }
+        
         dateCommand   = null;
         siteCommand   = null;
-        metricCommand = null;
         event         = null;
         metrics       = null;
     });
