@@ -147,7 +147,9 @@ function layout () {
 
         try {
 
-            this.navigation.close(window.rootWindow);
+            if (window.rootWindow) {
+                this.navigation.close(window.rootWindow);
+            }
 
             window.rootWindow = null;
             window            = null;

@@ -84,10 +84,14 @@ function UiWindow () {
             var len = this.cleanups.length;
             for (var index = 0; index < len; index++) {
             
-                var rel    = this.cleanups.pop();
+                var rel = this.cleanups.pop();
                 
-                if (rel && rel.cleanup) {
-                    rel.cleanup();
+                try {
+                    if (rel && rel.cleanup) {
+                        rel.cleanup();
+                    }
+                } catch (e) {
+                    Piwik.getLog().warn(e, 'Failed to cleanup rel ' + rel)
                 }
 
                 rel.window = null;

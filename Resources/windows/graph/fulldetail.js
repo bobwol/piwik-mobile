@@ -163,7 +163,11 @@ function window (params) {
     };
     
     this.cleanup = function () {
-        this.remove(imageView);
+        
+        if (imageView) {
+            this.remove(imageView);
+        }
+        
         imageView         = null;
 
         graph             = null;
