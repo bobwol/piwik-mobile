@@ -241,35 +241,36 @@ function window (params) {
         refresh.refreshDone();
         tableView.setData(tableViewRows);
         
-        if (event && event.metadata && event.metadata.actionToLoadSubTables) {
-            
-            var actionToLoadSubTables = event.metadata.actionToLoadSubTables;
-            
-            tableView.addEventListener('click', function (event) {
-                if (!event || !event.row || !event.row.idSubtable) {
-                    
-                    return;
-                }
-                
-                // make a simple copy of params
-                var newParams               = JSON.parse(JSON.stringify(params));
-                newParams.report.action     = actionToLoadSubTables;
-                newParams.report.idSubtable = event.row.idSubtable;
-                newParams.report.name       = event.row.reportName;
-                newParams.url               = 'statistics/show';
-                newParams.backButtonTitle   = _('Mobile_NavigationBack');
-                newParams.target            = 'detail';
-                
-                that.create('Window', newParams);
-            });
-        }
-        
         dateCommand   = null;
         siteCommand   = null;
         event         = null;
         metrics       = null;
     });
 
+    if (params && params.report && params.report.actionToLoadSubTables) {
+        
+        var actionToLoadSubTables = params.report.actionToLoadSubTables;
+        
+        tableView.addEventListener('click', function (event) {
+
+            if (!event || !event.row || !event.row.idSubtable) {
+                
+                return;
+            }
+
+            // make a simple copy of params
+            var newParams               = JSON.parse(JSON.stringify(params));
+            newParams.report.action     = actionToLoadSubTables;
+            newParams.report.idSubtable = event.row.idSubtable;
+            newParams.report.name       = event.row.reportName;
+            newParams.url               = 'statistics/show';
+            newParams.backButtonTitle   = _('Mobile_NavigationBack');
+            newParams.target            = 'detail';
+            
+            that.create('Window', newParams);
+        });
+    }
+    
     /**
      * Request statistics async.
      *
