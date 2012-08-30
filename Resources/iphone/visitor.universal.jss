@@ -78,7 +78,7 @@
 }
 
 #visitorActionDefaultTypeLabel {
-    top: 3;
+    top: 0;
     left: 10;
     font-size: 13;
     width: 'SIZE';
@@ -90,7 +90,7 @@
     color: '#808080';
     bottom: 5;
     left: 10;
-    top: 0;
+    top: 4;
     font-size: 13;
     width: 'SIZE';
     height: 'SIZE';
@@ -121,7 +121,7 @@
 }
 
 #visitorActionEcommerceTypeLabel {
-    top: 3;
+    top: 1;
     left: 10;
     font-size: 13;
     width: 'SIZE';
@@ -135,6 +135,7 @@
     height: 'SIZE';
     left: 0;
     bottom: 5;
+    top: 4;
 }
 
 #visitorActionEcommerceDetailsItemView {

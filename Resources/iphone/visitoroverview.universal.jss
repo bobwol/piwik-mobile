@@ -28,7 +28,7 @@
 }
 
 #visitorOverviewReferrerLabel {
-    top: 0;
+    top: 4;
     font-size: 13;
     width: 'SIZE';
     left: 10;
