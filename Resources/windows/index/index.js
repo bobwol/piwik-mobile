@@ -41,7 +41,7 @@ function window () {
 
     var that          = this;
 
-    var websitesList  = this.create('WebsitesList', {handleOnlyOneSiteAvailableEvent: !Piwik.getPlatform().isIpad,
+    var websitesList  = this.create('WebsitesList', {handleOnlyOneSiteAvailableEvent: true,
                                                      view: this});
 
     websitesList.addEventListener('onChooseSite', function (event) {
