@@ -59,7 +59,6 @@ function Storage () {
      *
      * The store entry is stored in JSON as a string and contains following values:
      * 'value'   The stored value
-     * 'date'    The date in ms since 1.1.1970
      * 'version' The current version of the mobile app.
      *
      * @param   {string}                              key    An unique key which identifies the stored value. The same
@@ -83,14 +82,10 @@ function Storage () {
             throw new Error('Missing parameter key');
         }
 
-        key            = this._addStorageKeyPrefix(key);
+        var storeEntry = {value: value, version: Ti.App.version};
 
-        var now        = new Date();
-        var storeEntry = {value: value,
-                          date: Date.parse(now.toGMTString()),
-                          version: Ti.App.version};
-
-        value          = JSON.stringify(storeEntry);
+        key   = this._addStorageKeyPrefix(key);
+        value = JSON.stringify(storeEntry);
 
         Ti.App.Properties.setString(key, value);
 

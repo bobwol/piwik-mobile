@@ -293,7 +293,7 @@ StatisticsRequest.prototype.send = function (params) {
     statsRequest.setCallback(this, function (response) {
         if (!response) {
             this.loaded();
-        
+
             return;
         }
 
@@ -416,6 +416,11 @@ StatisticsRequest.prototype._formatReportData = function (response, account) {
     var reportData     = response.reportData;
     var reportMetadata = response.reportMetadata;
     var hasSubtables   = response.metadata && response.metadata.actionToLoadSubTables;
+    
+    if (!account || !account.version || 184 > account.version) {
+        // Piwik 1.8.3 and earlier don't support subtable calls via Metadata API
+        hasSubtables = false;
+    }
 
     if (Piwik.isArray(reportData) && 0 < reportData.length) {
 

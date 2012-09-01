@@ -342,48 +342,11 @@ AccountRequest.prototype.requestVersion = function () {
                                       title: 'Piwik Server Version'};
             Piwik.getTracker().trackEvent(serverVersionEvent);
         } 
-
-        // response.value is for example "0.6.4-rc1" or "0.6.3"
-        var version       = response.value + '';
-        var latestVersion = that.latestVersion + '';
-
-        // compare only first six chars and ignore all dots -> from 0.6.4-rc1 to 064
-        // if version was '1.4-rc1', it is '14-rc' now
-        version           = version.substr(0, 5).replace(/\./g, '');
-        latestVersion     = latestVersion.substr(0, 5).replace(/\./g, '');
-
-        // make sure they contain only numbers.
-        version           = version.replace(/[^\d]/g, '');
-        latestVersion     = latestVersion.replace(/[^\d]/g, '');
-
-        // version and latestVersion now contains only numbers. We are now going to make sure that each version
-        // number contains 3 numbers
-
-        if ((version + '').length == 2) {
-            // if version is e.g. '0.7' it would be interpreted as 07 (7), but it should be 0.7.0 = 70.
-            // Otherwise we run into a bug where 0.6.4 (64) is greater than 0.7 (7).
-            version       = version * 10;
-        }
-        if ((version + '').length == 1) {
-            // if version is e.g. '2' it would be interpreted as 2, but it should be 2.0.0 = 200.
-            // Otherwise we run into a bug where 0.6.4 (64) is greater than 2 (2).
-            version       = version * 100;
-        }
-
-        if ((latestVersion + '').length == 2) {
-            // if version is e.g. '0.7' it would be interpreted as 07 (7), but it should be 0.7.0 = 70.
-            // Otherwise we run into a bug where 0.6.4 (64) is greater than 0.7 (7).
-            latestVersion = latestVersion * 10;
-        }
-        if ((latestVersion + '').length == 1) {
-            // if version is e.g. '2' it would be interpreted as 2, but it should be 2.0.0 = 200.
-            // Otherwise we run into a bug where 0.6.4 (64) is greater than 2 (2).
-            latestVersion = latestVersion * 100;
-        }
-
-        // radix is very important in this case, otherwise eg. 064 octal is 52 decimal
-        version           = parseInt(version, 10);
-        latestVersion     = parseInt(latestVersion, 10);
+        
+        var stringUtils   = Piwik.require('Utils/String');
+        var version       = stringUtils.toPiwikVersion(response.value);
+        var latestVersion = stringUtils.toPiwikVersion(that.latestVersion);
+        stringUtils       = null;
 
         if (version && latestVersion && latestVersion > version) {
             Piwik.getLog().debug('Version is out of date: ' + version,

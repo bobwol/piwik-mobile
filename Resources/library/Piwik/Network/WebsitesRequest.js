@@ -187,6 +187,9 @@ WebsitesRequest.prototype.send = function (params) {
 
         // attach the request to the request pool. So all attached requests will be send in parallel
         requestPool.attach(piwikRequest);
+        
+        this.updatePiwikVersion(this.accounts[index]);
+        
         piwikRequest = null;
     }
 
@@ -196,6 +199,73 @@ WebsitesRequest.prototype.send = function (params) {
     params      = null;
     parameter   = null;
 };
+
+/**
+ * Requests the current Piwik core version and updates the account. The Piwik server version will be cached and only
+ * requested once per session.
+ * 
+ * @param  {Object}  account  A piwik account. See {@link Piwik.App.Accounts}
+ */
+WebsitesRequest.prototype.updatePiwikVersion = function(account) {
+    
+    if (!account) {
+        
+        return;
+    }
+    
+    var session       = Piwik.require('App/Session');
+    var sessionKey    = 'piwik_version_' + account.id;
+    var cachedVersion = session.get(sessionKey, null);
+    session           = null;
+    
+    if (null !== cachedVersion) {
+        // 0 is a valid value. Only check for null
+
+        this.piwikVersion = cachedVersion;
+        
+        return;
+    }
+
+    var piwikRequest = Piwik.require('Network/PiwikApiRequest');
+
+    piwikRequest.setMethod('API.getPiwikVersion');
+    piwikRequest.setAccount(account);
+    piwikRequest.setCallback(this, function (response) {
+        
+        if (!account) {
+            
+            return;
+        }
+  
+        account.version = 0;
+        
+        if (response) {
+            var stringUtils = Piwik.require('Utils/String');
+            account.version = stringUtils.toPiwikVersion(response.value);
+            stringUtils     = null;
+        }
+
+        var accountManager = Piwik.require('App/Accounts');
+        accountManager.updateAccount(account.id, {version: account.version});
+        accountManager     = null;
+        
+        // cache it, so we'll no longer request it as long as app is opened
+        var session = Piwik.require('App/Session');
+        session.set(sessionKey, account.version);
+        
+        session  = null;
+        response = null;
+    });
+    
+    // older Piwik versions < 1.8 don't support API.getPiwikVersion. Makes sure those users won't get an error meesage.
+    piwikRequest.sendErrors = false;
+    
+    // execute the request directly. We don't have to add it to a request pool since it doesn't matter when the request
+    // finishes. In the worst case the Piwik server version could be outdated for a few seconds
+    piwikRequest.send();
+    
+    piwikRequest = null;
+}
 
 /**
  * Abort all previous fired requests. No callback method will be called.

@@ -20,6 +20,7 @@ var Piwik = require('library/Piwik');
  *           piwik_report_metadata_{accountId}_{idSite}_{lang}   Report metadata for a specific account
  *           modal_window_opened                                 Whether currently a modal window is opened or not
  *           current_site                                        The current active/selected site
+ *           piwik_version_{accountId}                           The piwik core version number of the account
  *
  * @example
  * var session = require('Session');
