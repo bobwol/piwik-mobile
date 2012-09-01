@@ -66,6 +66,17 @@
     color: '#385487';
 }
 
+.statisticListValueLabelHasSubtable {
+    height: 'SIZE';
+    right: 3;
+    width: 67;
+    top: 13;
+    bottom: 10;
+    font-size: 16;
+    font-weight: 'bold';
+    color: '#385487';
+}
+
 .statisticListLogoImage {
     left: 10;
 }

@@ -55,12 +55,14 @@ StatisticListEntry.prototype.init = function () {
     var title      = this.getParam('title', '');
     var logo       = this.getParam('logo', '');
 
-    var className  = 'statisticListTableViewRow';
+    var rowClassName    = 'statisticListTableViewRow';
+    var valueClassName  = 'statisticListValueLabel';
     if (!!idSubtable) {
-        className += 'HasSubtable';
+        rowClassName   += 'HasSubtable';
+        valueClassName += 'HasSubtable';
     }
     
-    this.row  = Ti.UI.createTableViewRow({className: className, 
+    this.row  = Ti.UI.createTableViewRow({className: rowClassName, 
                                           idSubtable: idSubtable,
                                           reportName: title});
 
@@ -70,8 +72,7 @@ StatisticListEntry.prototype.init = function () {
     this.row.add(titleLabel);
     titleLabel = null;
 
-    var valueLabel = Ti.UI.createLabel({text: value ? ('' + value) : ' - ', 
-                                        className: 'statisticListValueLabel'});
+    var valueLabel = Ti.UI.createLabel({text: value ? ('' + value) : ' - ', className: valueClassName});
     
     this.row.add(valueLabel);
     valueLabel = null;

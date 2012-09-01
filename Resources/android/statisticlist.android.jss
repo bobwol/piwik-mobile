@@ -30,7 +30,7 @@
 .statisticListTitleLabel {
     height: 'size';
     left: '16dp';
-    right: '95dp';
+    right: '100dp';
     color: '#333333';
     top: '10dp';
     bottom: '10dp';
@@ -40,7 +40,7 @@
 .statisticListTitleLabelWithLogo {
     height: 'size';
     left: '30dp';
-    right: '87dp';
+    right: '92dp';
     color: '#333333';
     top: '10dp';
     bottom: '10dp';
@@ -50,7 +50,18 @@
 .statisticListValueLabel {
     height: 'size';
     right: '16dp';
-    width: '70dp';
+    width: '75dp';
+    color: '#0099CC';
+    top: '10dp';
+    bottom: '10dp';
+    font-size: '16sp';
+    font-weight: 'bold';
+}
+
+.statisticListValueLabelHasSubtable {
+    height: 'size';
+    right: '16dp';
+    width: '49dp';
     color: '#0099CC';
     top: '10dp';
     bottom: '10dp';
