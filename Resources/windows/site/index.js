@@ -40,6 +40,15 @@ function window (params) {
 
     var site          = params.site ? params.site : null;
     
+    if (site && site.accountId) {
+
+        var account      = Piwik.require('App/Accounts').getAccountById(this.site.accountId);
+        var piwikVersion = (account && account.version) ? account.version : 0;
+        account          = null;
+        Piwik.getTracker().setCustomVariable(1, 'piwikVersion', piwikVersion, 'page');
+
+    }
+    
     var currentRequestedSite = site;
     
     /**
