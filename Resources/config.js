@@ -55,7 +55,7 @@ config.piwik = {
     filterLimit: 30,
     multiChartEnabled: false,
     defaultLocale: 'en',
-    latestServerVersion: '1.8.1',
+    latestServerVersion: '1.9.0',
     graphsEnabled: true,
     trackingEnabled: false,
     numDisplayedWebsites: 50,
