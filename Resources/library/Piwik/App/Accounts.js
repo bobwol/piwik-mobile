@@ -60,9 +60,11 @@ function Accounts () {
      *     [createVersionNumber]  => [{string} The current version number of the app when the account was created. Will be set automatically]
      *     [changeVersionNumber]  => [{string} The current version number of the app when the account was changed at last. Will be set automatically]
      *     [version]              => [{int}    The Piwik Core Server version, eg. 183, 151, 160, 80]
+     *     [dateVersionUpdated]   => [{string} Stores the date/time when the Piwik server version was updated. For example 'Sun Sep 02 2012 20:01:02 GMT+0200 (CEST)']
      * )
      */
-    this.optionalFields  = ['id', 'name', 'active', 'createVersionNumber', 'changeVersionNumber', 'version'];
+    this.optionalFields  = ['id', 'name', 'active', 'createVersionNumber', 'changeVersionNumber', 'version',
+                            'dateVersionUpdated'];
 }
 
 /**
@@ -77,6 +79,7 @@ function Accounts () {
  *                   [createVersionNumber]  => [See {@link Piwik.App.Accounts#optionalFields}]
  *                   [changeVersionNumber]  => [See {@link Piwik.App.Accounts#optionalFields}]
  *                   [version]              => [See {@link Piwik.App.Accounts#optionalFields}]
+ *                   [dateVersionUpdated]   => [See {@link Piwik.App.Accounts#optionalFields}]
  *                   [accessUrl]            => [See {@link Piwik.App.Accounts#mandatoryFields}]
  *                   [username]             => [See {@link Piwik.App.Accounts#mandatoryFields}]
  *                   [tokenAuth]            => [See {@link Piwik.App.Accounts#mandatoryFields}]
@@ -174,6 +177,7 @@ Accounts.prototype.hasActivedAccount = function () {
  *       [createVersionNumber]  => [See {@link Piwik.App.Accounts#optionalFields}]
  *       [changeVersionNumber]  => [See {@link Piwik.App.Accounts#optionalFields}]
  *       [version]              => [See {@link Piwik.App.Accounts#optionalFields}]
+ *       [dateVersionUpdated]   => [See {@link Piwik.App.Accounts#optionalFields}]
  *       [accessUrl]            => [See {@link Piwik.App.Accounts#mandatoryFields}]
  *       [username]             => [See {@link Piwik.App.Accounts#mandatoryFields}]
  *       [tokenAuth]            => [See {@link Piwik.App.Accounts#mandatoryFields}]
@@ -286,6 +290,7 @@ Accounts.prototype.createAccount = function (account) {
  * @param    {string}   [account.name]       Optional, see {@link Piwik.App.Accounts#optionalFields}
  * @param    {int}      [account.active]     Optional, see {@link Piwik.App.Accounts#optionalFields}
  * @param    {int}      [account.version]    Optional, see {@link Piwik.App.Accounts#optionalFields}
+ * @param    {string}   [account.dateVersionUpdated]  Optional, see {@link Piwik.App.Accounts#optionalFields}
  *
  * @returns  {boolean}  true on success, false otherwise.
  */

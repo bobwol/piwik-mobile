@@ -201,8 +201,8 @@ WebsitesRequest.prototype.send = function (params) {
 };
 
 /**
- * Requests the current Piwik core version and updates the account. The Piwik server version will be cached and only
- * requested once per session.
+ * Requests the current Piwik core version and updates the account. The Piwik server version will be requested max once
+ * per day.
  * 
  * @param  {Object}  account  A piwik account. See {@link Piwik.App.Accounts}
  */
@@ -213,15 +213,17 @@ WebsitesRequest.prototype.updatePiwikVersion = function(account) {
         return;
     }
     
-    var session       = Piwik.require('App/Session');
-    var sessionKey    = 'piwik_version_' + account.id;
-    var cachedVersion = session.get(sessionKey, null);
-    session           = null;
-    
-    if (null !== cachedVersion) {
-        // 0 is a valid value. Only check for null
+    if (!account.dateVersionUpdated) {
+        // version not updated yet. Set it to null. new Date(null) will be Jan 01 1970 and therefore force an update
+        account.dateVersionUpdated = null;
+    }
 
-        this.piwikVersion = cachedVersion;
+    var dateNow             = (new Date()).toDateString();
+    var lastUpdatedDate     = new Date(account.dateVersionUpdated);
+    var alreadyUpdatedToday = dateNow == lastUpdatedDate.toDateString();
+
+    if (alreadyUpdatedToday) {
+        // request it max once per day
         
         return;
     }
@@ -237,7 +239,8 @@ WebsitesRequest.prototype.updatePiwikVersion = function(account) {
             return;
         }
   
-        account.version = 0;
+        account.version            = 0;
+        account.dateVersionUpdated = (new Date()) + '';
         
         if (response) {
             var stringUtils = Piwik.require('Utils/String');
@@ -246,14 +249,10 @@ WebsitesRequest.prototype.updatePiwikVersion = function(account) {
         }
 
         var accountManager = Piwik.require('App/Accounts');
-        accountManager.updateAccount(account.id, {version: account.version});
+        accountManager.updateAccount(account.id, {version: account.version, 
+                                                  dateVersionUpdated: account.dateVersionUpdated});
         accountManager     = null;
         
-        // cache it, so we'll no longer request it as long as app is opened
-        var session = Piwik.require('App/Session');
-        session.set(sessionKey, account.version);
-        
-        session  = null;
         response = null;
     });
     
