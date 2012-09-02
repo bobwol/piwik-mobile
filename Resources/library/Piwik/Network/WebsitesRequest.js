@@ -233,19 +233,23 @@ WebsitesRequest.prototype.updatePiwikVersion = function(account) {
     piwikRequest.setMethod('API.getPiwikVersion');
     piwikRequest.setAccount(account);
     piwikRequest.setCallback(this, function (response) {
-        
+
         if (!account) {
             
             return;
         }
   
-        account.version            = 0;
         account.dateVersionUpdated = (new Date()) + '';
         
         if (response) {
             var stringUtils = Piwik.require('Utils/String');
             account.version = stringUtils.toPiwikVersion(response.value);
             stringUtils     = null;
+        } else if (!account.version) {
+            account.version = 0;
+        } else {
+            // there went something wrong with the request. For example the network connection broke up.
+            // do not set account version to 0 in such a case. We would overwrite an existing version, eg 183
         }
 
         var accountManager = Piwik.require('App/Accounts');
