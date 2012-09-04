@@ -13,7 +13,7 @@
 var Piwik = require('library/Piwik');
 
 // do not close a Ti.UI.Window when user presses the hardware back button, remove our own windows. only android
-Ti.UI.currentWindow.addEventListener('android:back', function () {
+Ti.UI.currentWindow.addEventListener('androidback', function () {
     Piwik.getLog().debug('android:back event', 'bootstrap.js');
 
     if (Piwik.getUI().currentWindow) {
