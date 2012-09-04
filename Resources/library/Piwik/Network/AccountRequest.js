@@ -269,8 +269,11 @@ AccountRequest.prototype.verifyAccess = function (account) {
         var accountManager = Piwik.require('App/Accounts');
 
         if (this.accountId) {
+            
             action         = 'update';
             success        = accountManager.updateAccount(this.accountId, account);
+            account        = accountManager.resetPiwikVersion(account);
+            accountManager.updatePiwikVersion(account);
         } else {
             this.accountId = accountManager.createAccount(account);
             success        = Boolean(this.accountId);

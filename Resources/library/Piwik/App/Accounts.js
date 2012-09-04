@@ -367,5 +367,95 @@ Accounts.prototype.deactivateAccount = function (id) {
     
     return this.updateAccount(id, {active: 0});
 };
+
+/**
+ * Resets all information about the Piwik version.
+ * 
+ * @param    {Object}  account  A piwik account. See {@link Piwik.App.Accounts}
+ * 
+ * @returns  {Object}  The updated piwik account
+ */
+Accounts.prototype.resetPiwikVersion = function(account) {
+    
+    if (!account) {
+        
+        return account;
+    }
+    
+    account.version            = 0;
+    account.dateVersionUpdated = null;
+    
+    return account;
+};
+
+/**
+ * Requests the current Piwik core version and updates the account. The Piwik server version will be requested max once
+ * per day.
+ * 
+ * @param  {Object}  account  A piwik account. See {@link Piwik.App.Accounts}
+ */
+Accounts.prototype.updatePiwikVersion = function(account) {
+    
+    if (!account) {
+        
+        return;
+    }
+    
+    if (!account.dateVersionUpdated) {
+        // version not updated yet. Set it to null. new Date(null) will be Jan 01 1970 and therefore force an update
+        account.dateVersionUpdated = null;
+    }
+
+    var dateNow             = (new Date()).toDateString();
+    var lastUpdatedDate     = new Date(account.dateVersionUpdated);
+    var alreadyUpdatedToday = dateNow == lastUpdatedDate.toDateString();
+
+    if (alreadyUpdatedToday) {
+        // request it max once per day
+        
+        return;
+    }
+
+    var piwikRequest = Piwik.require('Network/PiwikApiRequest');
+
+    piwikRequest.setMethod('API.getPiwikVersion');
+    piwikRequest.setAccount(account);
+    piwikRequest.setCallback(this, function (response) {
+
+        if (!account) {
+            
+            return;
+        }
+  
+        account.dateVersionUpdated = (new Date()) + '';
+        
+        if (response) {
+            var stringUtils = Piwik.require('Utils/String');
+            account.version = stringUtils.toPiwikVersion(response.value);
+            stringUtils     = null;
+        } else if (!account.version) {
+            account.version = 0;
+        } else {
+            // there went something wrong with the request. For example the network connection broke up.
+            // do not set account version to 0 in such a case. We would overwrite an existing version, eg 183
+        }
+
+        var accountManager = Piwik.require('App/Accounts');
+        accountManager.updateAccount(account.id, {version: account.version, 
+                                                  dateVersionUpdated: account.dateVersionUpdated});
+        accountManager     = null;
+        
+        response = null;
+    });
+    
+    // older Piwik versions < 1.8 don't support API.getPiwikVersion. Makes sure those users won't get an error meesage.
+    piwikRequest.sendErrors = false;
+    
+    // execute the request directly. We don't have to add it to a request pool since it doesn't matter when the request
+    // finishes. In the worst case the Piwik server version could be outdated for a few seconds
+    piwikRequest.send();
+    
+    piwikRequest = null;
+};
     
 module.exports = Accounts;
