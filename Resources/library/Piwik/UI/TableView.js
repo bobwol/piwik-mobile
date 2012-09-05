@@ -210,6 +210,22 @@ TableView.prototype.get = function () {
  */
 TableView.prototype.reset = function () {
 
+    this.resetRows();
+
+    if (!this.tableView) {
+        
+        return;
+    }
+
+    this.tableView.setData([]);
+};
+
+/**
+ * Resets the tableview's rows. Removes all added rows and sections from the tableview and cleans them up to free 
+ * memory.
+ */
+TableView.prototype.resetRows = function () {
+
     if (this.data) {
         for (var index = 0; index < this.data.length; index++) {
            
@@ -223,20 +239,13 @@ TableView.prototype.reset = function () {
     
     this.data = null;
     this.data = [];
-
-    if (!this.tableView) {
-        
-        return;
-    }
-
-    this.tableView.setData([]);
 };
 
 /**
  * Resets the tableview as well as cleans up the tableview itself.
  */
 TableView.prototype.cleanup = function () {
-    this.reset();
+    this.resetRows();
     
     if (this.tableView && this.tableView.headerPullView) {
         this.tableView.headerPullView = null;
