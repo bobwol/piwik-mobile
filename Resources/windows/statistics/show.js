@@ -161,7 +161,7 @@ function window (params) {
         if (!event || !event.metadata || !event.metadata.isSubtableReport) {
             // only display site command if it is not a subtable report
             // a website selector makes no sense here cause the same subtable won't exist for another website
-            var siteCommand   = that.createCommand('ChooseSiteCommand');
+            var siteCommand = that.createCommand('ChooseSiteCommand');
             tableViewRows.push(that.create('TableViewRow', {title: site ? site.name : '', 
                                                             hasChild: true, 
                                                             className: 'tableViewRowSelectable',
