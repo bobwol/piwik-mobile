@@ -257,6 +257,8 @@ function window (params) {
                 
                 return;
             }
+            
+            var backTitle = (params.report && params.report.name) ? params.report.name : _('Mobile_NavigationBack');
 
             // make a simple copy of params
             var newParams               = JSON.parse(JSON.stringify(params));
@@ -264,7 +266,7 @@ function window (params) {
             newParams.report.idSubtable = event.row.idSubtable;
             newParams.report.name       = event.row.reportName;
             newParams.url               = 'statistics/show';
-            newParams.backButtonTitle   = _('Mobile_NavigationBack');
+            newParams.backButtonTitle   = backTitle;
             newParams.target            = 'detail';
             
             that.create('Window', newParams);
