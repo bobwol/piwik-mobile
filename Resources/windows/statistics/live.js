@@ -137,9 +137,9 @@ function window (params) {
 
         Piwik.getTracker().trackEvent({title: 'Site changed', url: '/statistic-change/site'});
 
-        params.site    = event.site;
-        site           = event.site;
-        account        = accountManager.getAccountById(event.site.accountId);
+        params.site = event.site;
+        site        = event.site;
+        account     = accountManager.getAccountById(event.site.accountId);
         latestRequestedTimestamp = 0;
         
         if (!account) {
@@ -147,7 +147,11 @@ function window (params) {
             return;
         }
         
-        accessUrl      = Piwik.getNetwork().getBasePath('' + account.accessUrl);
+        // quick fix to force redraw of websiteRow if selected website has no visitors
+        that.lastMinutes = null;
+        that.lastHours   = null;
+        
+        accessUrl = Piwik.getNetwork().getBasePath('' + account.accessUrl);
 
         if (refresh) {
             refresh.refresh();
@@ -176,8 +180,7 @@ function window (params) {
         }
     });
     
-    // ios
-    Ti.App.addEventListener('resume', function () {
+    var onResume = function () {
         if (params && params.autoRefresh && tableView && tableView.data && tableView.data.length && that) {
             
             if (stopRefreshTimer) {
@@ -187,12 +190,17 @@ function window (params) {
             // start auto refresh again if user returns to this window from a previous displayed window
             startRefreshTimer(3000);
         }
-    });
-
+    };
+    
+    var onPause = function () {
+        if (stopRefreshTimer) {
+            stopRefreshTimer();
+        }
+    }
+    
     // ios
-    Ti.App.addEventListener('pause', function () {
-        stopRefreshTimer();
-    });
+    Ti.App.addEventListener('resume', onResume);
+    Ti.App.addEventListener('pause', onPause);
 
     var activity = null;
     
@@ -281,8 +289,13 @@ function window (params) {
                 // make sure at least live overview will be rendered
                 that.lastMinutes = that.create('LiveOverview', {title: String.format(_('Live_LastMinutes'), '30')});
                 that.lastHours   = that.create('LiveOverview', {title: String.format(_('Live_LastHours'), '24')});
+                        
+                var websiteRow   = that.create('TableViewRow', {title: site ? site.name : '', 
+                                                                hasChild: true, 
+                                                                className: 'tableViewRowSelectable',
+                                                                command: siteCommand});
 
-                tableView.setData([that.lastMinutes.getRow(), that.lastHours.getRow()]);
+                tableView.setData([websiteRow, that.lastMinutes.getRow(), that.lastHours.getRow()]);
             }
 
             if (event.lastMinutes) {
@@ -295,7 +308,7 @@ function window (params) {
                                         visits: event.lastHours.visits});
             }
             
-            if (params && params.autoRefresh && that) {
+            if (params && params.autoRefresh) {
                 if (stopRefreshTimer) {
                     stopRefreshTimer();
                 }
@@ -420,17 +433,28 @@ function window (params) {
     };
     
     this.cleanup = function () {
-        stopRefreshTimer();
+        
+        if (stopRefreshTimer) {
+            stopRefreshTimer();
+        }
         
         if (tableView && tableView.get()) {
             this.remove(tableView.get());
         }
 
         try {
+            // android, prevent memory leaks
             if (activity && stopRefreshTimer) {
                 activity.removeEventListener('pause', stopRefreshTimer);
                 activity.removeEventListener('stop', stopRefreshTimer);
             }
+
+            // ios, prevent memory leaks
+            Ti.App.removeEventListener('resume', onResume);
+            Ti.App.removeEventListener('pause', onPause);
+            onResume = null;
+            onPause = null;
+            
         } catch (e) {
             Piwik.getLog().warn('Failed to remove event listener from activity' + e, 'statistics/live::window');
         }
