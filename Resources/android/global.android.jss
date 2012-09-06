@@ -212,7 +212,7 @@
  */
 #statisticsTableView {
     maxRowHeight: '300dp';
-    separatorColor: '#B8B4AB';
+    separatorColor: '#CDCAC4';
 }
 
 /**
