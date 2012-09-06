@@ -162,14 +162,20 @@ ActivityIndicator.prototype.show = function (message) {
                 return;
             }
 
-            if (!win.waitIndicatorImage || !win.waitIndicatorImage.show) {
+            if (!win.waitIndicatorImage) {
                 // the waitIndicator does not exist, create it
 
                 win.waitIndicatorImage = Ti.UI.createActivityIndicator({
                     id: 'activityWaitIndicator',
                     message: message ? message : '',
-                    style: Ti.UI.iPhone ? Ti.UI.iPhone.ActivityIndicatorStyle.BIG : ''
+                    style: Ti.UI.iPhone ? Ti.UI.iPhone.ActivityIndicatorStyle.DARK : ''
                 });
+                
+                if (Piwik.getPlatform().isIos) {
+                    // On iOS and Mobile Web, the activity indicator is a view like any other view, and must be added 
+                    // to a window or other top-level view before it can be shown
+                    win.add(win.waitIndicatorImage);
+                }
             }
 
             win.waitIndicatorImage.show();
@@ -241,6 +247,12 @@ ActivityIndicator.prototype.hide = function (force) {
     // remove style 'waiting'
     if (win && win.waitIndicatorImage && win.waitIndicatorImage.hide) {
         win.waitIndicatorImage.hide();
+        
+        if (Piwik.getPlatform().isIos) {
+            // On iOS and Mobile Web, the activity indicator is a view like any other view, and must be added 
+            // to a window or other top-level view before it can be shown
+            win.remove(win.waitIndicatorImage);
+        }
     }
 
     // remove style 'loading'
