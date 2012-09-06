@@ -1,4 +1,4 @@
-/*
+/**
  * Piwik - Web Analytics
  *
  * @link http://piwik.org
@@ -18,8 +18,7 @@
 @import "iphone/modalwindow.universal.jss";
 
 #activityWaitIndicator {
-    height: 40;
-    width: 40;
+    color: '#333333';
 }
 
 #loadingActivityIndicatorLabel {
