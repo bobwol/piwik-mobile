@@ -105,6 +105,12 @@ function UiWindow () {
 
     
     this.addEventListener('focusWindow', function (event) {
+        
+        if (!that || !that.url) {
+            Piwik.getLog().warn('url or window no longer exists, ignoring focus', 'Piwik.UI.Window::focusWindowEvent');
+            
+            return;
+        }
     
         var urlParams  = ('' + that.url).split('/');
         var controller = urlParams[0];
