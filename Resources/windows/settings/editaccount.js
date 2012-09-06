@@ -154,8 +154,8 @@ function window (params) {
 
         if (event.value) {
             // anonymous was activated and is deactivated now
-            piwikUser.value                  = '';
-            piwikPassword.value              = '';
+            piwikUser.value     = '';
+            piwikPassword.value = '';
         }
         
         // we need to visualize that textfields are enbabled/disabled on iOS. On Android this happens automatically.
@@ -384,6 +384,7 @@ function window (params) {
     });
 
     request.addEventListener('onload', function (event) {
+
         if (activityIndicator) {
             activityIndicator.hide();
         }
@@ -406,18 +407,18 @@ function window (params) {
 
         alertDialog.addEventListener('click', function () {
 
-            if (Piwik.getPlatform().isIpad) {
+            if (that && Piwik.getPlatform().isIpad) {
                 
                 // update list of available websites and close currentwindow
                 that.create('Window', {url: 'index/index',
                                        closeWindow: that});
                                        
-            } else if (1 === Piwik.getUI().layout.windows.length) {
+            } else if (that && 1 === Piwik.getUI().layout.windows.length) {
                 // this screen is the first Piwik window (in most cases the user started the app the first time),
                 // open websites overview instead of closing this window.
                 that.create('Window', {url: 'index/index',
                                        closeWindow: that});
-            } else {
+            } else if (that) {
 
                 // close this window, so user has the possibility to add another account or
                 // something else. settings/manageaccounts will be visible afterwards.
