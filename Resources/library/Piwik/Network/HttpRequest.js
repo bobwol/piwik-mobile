@@ -212,10 +212,8 @@ HttpRequest.prototype.handle = function () {
 
     var settings     = Piwik.require('App/Settings');
     
-    // override the iPhone default timeout -> this timeout should never occur since we have implemented our own
-    // timeout which is lower than this timeout.
+    // override the iPhone default timeout
     var timeoutValue = parseInt(settings.getHttpTimeout(), 10);
-    this.xhr.timeout = timeoutValue;
     this.xhr.setTimeout(timeoutValue);
 
     this.xhr.open("GET", requestUrl);
