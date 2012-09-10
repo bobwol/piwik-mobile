@@ -63,6 +63,7 @@
     top: 0;
     autocorrect: false;
     autocapitalization: 0;
+    focusable: false;
 }
 
 /**

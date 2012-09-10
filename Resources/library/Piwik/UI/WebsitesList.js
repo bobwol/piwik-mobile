@@ -72,7 +72,7 @@ WebsitesList.prototype.init = function () {
     var refresh   = null;
     var rows      = [];
 
-    var searchBar = Ti.UI.createSearchBar({id: 'websiteSearchBar',
+    var searchBar = Ti.UI.createSearchBar({id: 'websiteSearchBar', 
                                            hintText: _('Mobile_SearchWebsite')});
 
     searchBar.addEventListener('return', function (event) {
@@ -172,30 +172,36 @@ WebsitesList.prototype.init = function () {
     this.websitesRequest.addEventListener('onload', function (event) {
         
         onLoadEventFired = true;
-        
-        if (Piwik.getPlatform().isAndroid) {
-            searchBar.show();
-        } 
-        
+
         if (refresh) {
             refresh.refreshDone();
         }
 
         if (!event || !event.sites || !event.sites.length) {
+              
+            // not 100% working workaround for:
+            // https://jira.appcelerator.org/browse/TIMOB-7609 
+            // Android: Searchbar gets the focus when inside the tableview showing keyboard by default
+            if (Piwik.getPlatform().isAndroid) {
+                setTimeout(function () { searchBar.show(); }, 800);
+            } 
             
             rows = [that.create('TableViewRow', {title: _('Mobile_NoWebsiteFound'),
                                                  className: 'websitesNotFoundTableViewRow'})];
             tableview.setData(rows);
             rows = null;
-
+      
             return;
         }
-
+        
         if (that.getParam('handleOnlyOneSiteAvailableEvent', false) &&
             !event.filterUsed && 1 == event.sites.length && event.sites[0]) {
             // fire only if this event is enabled.
             // do not fire this event if user has used the filter/searchBar. Maybe that is not the site
             // he was looking for.
+            
+            // do not show searchBar in this case, otherwise the keyboard may be opened each time the user 
+            // closes another window. See workarounds above and below
 
             var session = Piwik.require('App/Session');
             session.set('current_site', event.sites[0]);
@@ -203,6 +209,13 @@ WebsitesList.prototype.init = function () {
             that.fireEvent('onOnlyOneSiteAvailable', {site: event.sites[0], type: 'onOnlyOneSiteAvailable'});
             return;
         }
+  
+        // not 100% working workaround for:
+        // https://jira.appcelerator.org/browse/TIMOB-7609 
+        // Android: Searchbar gets the focus when inside the tableview showing keyboard by default
+        if (Piwik.getPlatform().isAndroid) {
+            setTimeout(function () { searchBar.show(); }, 350);
+        } 
 
         rows = [];
         
