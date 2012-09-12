@@ -26,6 +26,7 @@
     zIndex: 999;
     font-weight: 'bold';
     font-size: '14sp';
+    backgroundColor: '#ffffff';
 }
 
 .piwikWindow {
