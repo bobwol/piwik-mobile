@@ -46,4 +46,5 @@
 #datePickerToPicker {
     top: '8dp';
     left: '16dp';
+    bottom: '16dp';
 }
