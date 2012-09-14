@@ -366,7 +366,7 @@ function window () {
         tableData = [that.create('TableViewRow', {className: 'settingsTableViewRowHasDetail',
                                                   title: _('UsersManager_ManageAccess'),
                                                   onClick: onManageAccess,
-                                                  hasDetail: true}),
+                                                  hasDetail: Piwik.getPlatform().isIos}),
                      that.create('TableViewSection', {title: _('General_GeneralSettings'), 
                                                       style: 'native'}),
                      that.create('TableViewRow', {className: Piwik.getPlatform().isIos ? 'settingsTableViewRowHasChild' : 'settingsTableViewRow',
@@ -403,15 +403,15 @@ function window () {
                      that.create('TableViewRow', {className: 'settingsTableViewRowHasDetail',
                                                   title: String.format(_('General_AboutPiwikX'), 'Mobile'),
                                                   onClick: onShowHelpAbout,
-                                                  hasDetail: true}),
+                                                  hasDetail: Piwik.getPlatform().isIos}),
                      that.create('TableViewRow', {className: 'settingsTableViewRowHasDetail',
                                                   title: _('General_GiveUsYourFeedback'),
                                                   onClick: onShowHelpFeedback,
-                                                  hasDetail: true}),
+                                                  hasDetail: Piwik.getPlatform().isIos}),
                      that.create('TableViewRow', {className: 'settingsTableViewRowHasDetail',
                                                   title: _('General_Faq'),
                                                   command: this.createCommand('OpenFaqCommand'),
-                                                  hasDetail: true})];
+                                                  hasDetail: Piwik.getPlatform().isIos})];
 
         if (tableview) {
             tableview.setData(tableData);
