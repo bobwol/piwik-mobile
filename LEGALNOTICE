@@ -49,10 +49,20 @@ Name: pull_arrow.png
 Link: https://github.com/andmej/PullToRefresh
 License: See tools/Licenses/MIT-LICENSE-pulltorefresh.txt
 
-
-Name: ic_action_mail.png
-Name: ic_action_refresh.png
-Name: ic_action_search.png
-Name: ic_action_user_add.png
-Link: http://developer.android.com/design/static/download/action_bar_icons-v4.0.zip
-License: Apache License, Version 2.0. See tools/Licenses/APACHEV2-LICENSE-Android.txt
+Name: btn_default_normal_holo_light.9.png
+Name: btn_default_focused_holo_light.9.png
+Name: btn_default_disabled_holo_light.9.png
+Name: btn_check_off_holo_light.png
+Name: btn_check_on_holo_light.png
+Name: btn_check_on_focused_holo_light.png
+Name: spinner_default_holo_light.png
+Name: textfield_activated_holo_light.9.png
+Name: textfield_disabled_holo_light.9.png
+Name: textfield_default_holo_light.9.png
+Name: ic_action_arrow_right.png
+Name: ic_action_arrow_down.png
+Name: ic_action_arrow_help.png
+Name: ic_action_arrow_refresh.png
+Name: ic_action_arrow_user_add.png
+Link: http://android-ui-utils.googlecode.com/hg/asset-studio/dist/index.html
+License: Creative Commons Attribution 3.0 Unported License. See tools/Licenses/CC30UNPORTED-LICENSE-AndroidAssetStudio.txt
