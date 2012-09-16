@@ -67,13 +67,13 @@ function window () {
         
         var onChangeAnonymousTracking = function (event) {
 
-            this.hasCheck = !this.hasCheck;
+            this.setHasCheck(!this.getHasCheck());
 
             var settings  = Piwik.require('App/Settings');
-            settings.setTrackingEnabled(this.hasCheck);
+            settings.setTrackingEnabled(this.getHasCheck());
             settings      = null;
   
-            var action    = this.hasCheck ? 'enable' : 'disable';
+            var action    = this.getHasCheck() ? 'enable' : 'disable';
             Piwik.getTracker().trackEvent({title: 'Anonymous Tracking ' + action,
                                            url: '/settings/anonymous-tracking/' + action});
 
@@ -88,27 +88,27 @@ function window () {
 
         var onChangeSparkline = function (event) {
 
-            this.hasCheck = !this.hasCheck;
+            this.setHasCheck(!this.getHasCheck());
 
-            var action    = this.hasCheck ? 'enable' : 'disable';
+            var action    = this.getHasCheck() ? 'enable' : 'disable';
             Piwik.getTracker().trackEvent({title: 'Multisite Graphs ' + action,
                                            url: '/settings/multisite-graphs/' + action});
 
             var settings  = Piwik.require('App/Settings');
-            settings.setPiwikMultiChart(this.hasCheck);
+            settings.setPiwikMultiChart(this.getHasCheck());
             settings      = null;
         };
 
         var onChangeGraphs = function (event) {
 
-            this.hasCheck = !this.hasCheck;
+            this.setHasCheck(!this.getHasCheck());
 
-            var action    = this.hasCheck ? 'enable' : 'disable';
+            var action    = this.getHasCheck() ? 'enable' : 'disable';
             Piwik.getTracker().trackEvent({title: 'Graphs ' + action,
                                            url: '/settings/graphs/' + action});
 
             var settings  = Piwik.require('App/Settings');
-            settings.setGraphsEnabled(this.hasCheck);
+            settings.setGraphsEnabled(this.getHasCheck());
             settings      = null;
         };
 

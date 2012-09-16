@@ -97,7 +97,9 @@ ModalWindow.prototype.init = function () {
         _ = null;
 
         cancelButton.addEventListener('click', function () {
-            that.close();
+            if (that) {
+                that.close();
+            }
         });
 
         win.leftNavButton = cancelButton;
@@ -128,7 +130,9 @@ ModalWindow.prototype.init = function () {
         view = null;
         
         win.addEventListener('android:back', function () {
-           that.close();
+           if (that) {
+               that.close();
+           }
         });
 
         win.addEventListener('close', function () {

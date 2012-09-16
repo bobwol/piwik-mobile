@@ -24,7 +24,6 @@
     backgroundColor: '#ffffff';
     left: 0;
     right: 0;
-    hasChild: true;
 }
 
 .statisticListTitleLabel {
@@ -60,8 +59,8 @@
 
 .statisticListValueLabelHasSubtable {
     height: 'size';
-    right: '16dp';
-    width: '49dp';
+    right: '32dp';
+    width: '59dp';
     color: '#0099CC';
     top: '10dp';
     bottom: '10dp';

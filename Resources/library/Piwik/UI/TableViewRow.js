@@ -63,6 +63,20 @@ TableViewRow.prototype.init = function (params) {
     var rightImage  = params.rightImage || null;
     var command     = params.command || null;
 
+    var hasChild = false;
+    if (Piwik.getPlatform().isAndroid && params.hasChild) {
+        hasChild = true;
+        // do not render native hasChild indicator, we render our own indicator
+        delete params.hasChild;
+    }
+    
+    var hasCheck = null;
+    if (Piwik.getPlatform().isAndroid && (false === params.hasCheck || true === params.hasCheck)) {
+        hasCheck = params.hasCheck;
+        // do not render native hasChild indicator, we render our own indicator
+        delete params.hasCheck;
+    }
+
     // we handle those parameters ourselves... therefore we delete them and don't pass them to TableViewRow creation
     delete params.title;
     delete params.value;
@@ -99,6 +113,35 @@ TableViewRow.prototype.init = function (params) {
         descriptionLabel = null;
     }
 
+    if (hasChild) {
+        row.add(Ti.UI.createImageView({className: 'tableViewRowArrowDownImage'}));
+    }
+    
+    if (null !== hasCheck) {
+        row.checkedOn  = Ti.UI.createImageView({className: 'tableViewRowCheckOn'});
+        row.checkedOff = Ti.UI.createImageView({className: 'tableViewRowCheckOff'});
+        row.add(row.checkedOn);
+        row.add(row.checkedOff);
+        
+        row.getHasCheck = function () {
+            return !!this.myHasChecked;
+        };
+        
+        row.setHasCheck = function (checked){
+            this.myHasChecked = !!checked;
+            
+            if (this.myHasChecked) {
+                row.checkedOn.setVisible(true);
+                row.checkedOff.setVisible(false);
+            } else {
+                row.checkedOff.setVisible(true);
+                row.checkedOn.setVisible(false);
+            }
+        }
+        
+        row.setHasCheck(hasCheck);
+    }
+    
     /** 
      * @memberOf  Piwik.UI.TableViewRow
      * @function 
@@ -140,6 +183,16 @@ TableViewRow.prototype.init = function (params) {
     row.changeTitle = changeTitle;
     
     row.cleanup = function () {
+        
+        if (this.checkedOn) {
+            this.remove(this.checkedOn);
+            this.checkedOn = null;
+        }
+        if (this.checkedOff) {
+            this.remove(this.checkedOff);
+            this.checkedOff = null;
+        }
+        
         this.titleLabel       = null;
         this.valueLabel       = null;
         this.onShowOptionMenu = null;

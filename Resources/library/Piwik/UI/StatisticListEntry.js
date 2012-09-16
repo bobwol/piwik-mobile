@@ -68,7 +68,7 @@ StatisticListEntry.prototype.init = function () {
 
     var titleLabel = Ti.UI.createLabel({text: title ? ('' + title) : '',
                                         className: 'statisticListTitleLabel' + (logo ? 'WithLogo' : '')});
-    
+
     this.row.add(titleLabel);
     titleLabel = null;
 
@@ -76,7 +76,11 @@ StatisticListEntry.prototype.init = function () {
     
     this.row.add(valueLabel);
     valueLabel = null;
-
+                                        
+    if (Piwik.getPlatform().isAndroid && !!idSubtable) {
+        this.row.add(Ti.UI.createImageView({className: 'tableViewRowArrowRightImage'}));
+    }
+    
     if (logo) {
         var imageView = Ti.UI.createImageView({height: this.getParam('logoHeight', 16),
                                                width: this.getParam('logoWidth', 16),

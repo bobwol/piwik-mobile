@@ -58,7 +58,7 @@ function window () {
         this.optionMenuOpened = true;
         var menuItems         = [];
         
-        if (this.hasCheck) {
+        if (this.getHasCheck()) {
             menuItems.push(_('CorePluginsAdmin_Deactivate'));
         } else {
             menuItems.push(_('CorePluginsAdmin_Activate'));
@@ -75,7 +75,7 @@ function window () {
             cancel: 3
         });
         
-        var row    = this;
+        var row = this;
         
         dialog.addEventListener('click', function (event) {
             // close option menu
@@ -98,14 +98,14 @@ function window () {
                     var success        = false;
                     var accountManager = Piwik.require('App/Accounts');
                     
-                    if (row.hasCheck) {
+                    if (row.getHasCheck()) {
                         success      = accountManager.deactivateAccount(row.accountId);
                     } else {
                         success      = accountManager.activateAccount(row.accountId);
                     }
 
                     if (success) {
-                        row.hasCheck = !row.hasCheck;
+                        row.setHasCheck(!row.getHasCheck());
                     }
                         
                     break;

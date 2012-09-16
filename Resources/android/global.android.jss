@@ -105,6 +105,11 @@
     top: '8dp';
     left: '16dp';
     right: '16dp';
+    height: '45dp';
+    backgroundImage: '/images/btn_default_normal_holo_light.9.png';
+    backgroundFocusedImage: '/images/btn_default_focused_holo_light.9.png';
+    backgroundSelectedImage: '/images/btn_default_focused_holo_light.9.png';
+    backgroundDisabledImage: '/images/btn_default_disabled_holo_light.9.png';
 }
 
 #aboutPiwikLogo {
@@ -132,8 +137,8 @@
 .settingsTableViewRowHasChild {
     hasChild: true;
 }
+
 .settingsTableViewRowHasDetail {
-    hasChild: true;
 }
 
 .settingsTableViewRowHasCheck{
@@ -161,7 +166,7 @@
  * window settings/editaccount.js
  */
 #editAccountTableView {
-    separatorColor: '#eeedeb';
+    separatorColor: '#ffffff';
 }
 
 .editAccountTableFooterView {
@@ -182,6 +187,10 @@
     right: '16dp';
     focusable: true;
     top: '8dp';
+    backgroundImage: '/images/btn_default_normal_holo_light.9.png';
+    backgroundFocusedImage: '/images/btn_default_focused_holo_light.9.png';
+    backgroundSelectedImage: '/images/btn_default_focused_holo_light.9.png';
+    backgroundDisabledImage: '/images/btn_default_disabled_holo_light.9.png';
 }
 
 .editAccountTextField {
@@ -192,6 +201,9 @@
     bottom: '5dp';
     left: '16dp';
     right: '16dp';
+    backgroundImage: '/images/textfield_default_holo_light.9.png';
+    backgroundFocusedImage: '/images/textfield_activated_holo_light.9.png';
+    backgroundDisabledImage: '/images/textfield_disabled_holo_light.9.png';
 }
 
 .editAccountSwitch {
@@ -208,13 +220,12 @@
     top: 20;
 }
 
-
 /**
  * window statistics/show.js
  */
 #statisticsTableView {
     maxRowHeight: '300dp';
-    separatorColor: '#CDCAC4';
+    separatorColor: '#eeedeb';
 }
 
 /**

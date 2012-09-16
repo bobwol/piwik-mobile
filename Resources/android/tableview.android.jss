@@ -55,6 +55,7 @@ tableviewrow {
     wordWrap: false;
     font-size: '16sp';
     font-weight: 'normal';
+    zIndex: 2;
 }
 
 #tableViewRowTitleLabel {
@@ -69,6 +70,7 @@ tableviewrow {
     wordWrap: false;
     font-size: '16sp';
     font-weight: 'normal';
+    zIndex: 2;
 }
 
 #tableViewRowDescriptionLabel {
@@ -83,6 +85,7 @@ tableviewrow {
     color: '#808080';
     ellipsize: false;
     wordWrap: true;
+    zIndex: 3;
 }
 
 #tableViewRowDescriptionLabelvertical {
@@ -97,6 +100,7 @@ tableviewrow {
     color: '#808080';
     ellipsize: false;
     wordWrap: true;
+    zIndex: 3;
 }
 
 #tableViewRowValueLabel {
@@ -107,6 +111,45 @@ tableviewrow {
     width: 'size';
     height: 'size';
     color: '#0099CC';
+    backgroundColor: 'white';
+    zIndex: 5;
+}
+
+.tableViewRowArrowRightImage {
+    image: '/images/ic_action_arrow_right.png';
+    right: '2dp';
+    width: '32dp';
+    height: '32dp';
+    zIndex: 7;
+}
+
+.tableViewRowArrowDownImage {
+    image: '/images/spinner_default_holo_light.png';
+    right: '8dp';
+    width: '24dp';
+    height: '34dp';
+    bottom: '0dp';
+    zIndex: 8;
+}
+
+.tableViewRowCheckOn {
+    image: '/images/btn_check_on_holo_light.png';
+    backgroundColor: 'white';
+    width: '32dp'; 
+    height: '32dp';
+    right: '12dp';
+    visible: false;
+    zIndex: 9;
+}
+
+.tableViewRowCheckOff {
+    image: '/images/btn_check_off_holo_light.png';
+    backgroundColor: 'white';
+    width: '32dp'; 
+    height: '32dp';
+    right: '12dp';
+    visible: false;
+    zIndex: 10;
 }
 
 #tableViewRowRightImage {

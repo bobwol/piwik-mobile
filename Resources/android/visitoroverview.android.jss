@@ -8,14 +8,14 @@
 
 .visitorOverviewTableViewRow {
     layout: 'vertical';
-    hasChild: true;
     focusable: true;
+    hasChild: true;
 }
 
 .visitorOverviewAchievedGoalTableViewRow {
     layout: 'vertical';
-    hasChild: true;
     focusable: true;
+    hasChild: true;
     backgroundColor: '#FFFFC4';
 }
 
