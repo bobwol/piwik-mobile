@@ -43,69 +43,6 @@ function Translation () {
     this.DEFAULT_TRANSLATION = require('i18n/default');
 
     /**
-     * Available languages.
-     * This list should be updated every time a new language is released to piwik. We could also automatically fetch a
-     * list of all available languages via api before releasing a new version. But not each language is supported/works
-     * on each platform. We have to test each new language before adding it.
-     *
-     * @type  Object
-     *
-     * Object ( [code] => [language name] )
-     *
-     * @constant
-     */
-    this.AVAILABLE_LANGUAGES = {
-        be:         'Беларуская',
-        bg:         'Български',
-        ca:         'Català',
-        cs:         'Česky',
-        da:         'Dansk',
-        de:         'Deutsch',
-        el:         'Ελληνικά',
-        en:         'English',
-        es:         'Español',
-        et:         'Eesti keel',
-        eu:         'Euskara',
-        fa:         '\u0641\u0627\u0631\u0633\u06cc',
-        fi:         'Suomi',
-        fr:         'Français',
-        gl:         'Galego',
-        hu:         'Magyar',
-        id:         'Bahasa Indonesia',
-        it:         'Italiano',
-        is:         '\u00cdslenska',
-        ja:         '日本語',
-        ko:         '한국어',
-        lt:         'Lietuvių',
-        lv:         'Latvie\u0161u',
-        nb:         'Norsk (bokmål)',
-        nl:         'Nederlands',
-        nn:         'Nynorsk',
-        pl:         'Polski',
-        'pt-br':    'Português brasileiro',
-        pt:         'Português',
-        ro:         'Română',
-        ru:         'Русский',
-        sk:         'Slovensky',
-        sq:         'Shqip',
-        sr:         'Srpski',
-        sv:         'Svenska',
-        tr:         'Türkçe',
-        uk:         'Українська',
-        'zh-cn':    '简体中文',
-        'zh-tw':    '台灣語'
-    };
-
-    // these languages are not supported / don't work on android
-    if (Piwik.getPlatform().isIos) {
-        this.AVAILABLE_LANGUAGES.ar = '\u0627\u0644\u0639\u0631\u0628\u064a\u0629';
-        this.AVAILABLE_LANGUAGES.ka = '\u10e5\u10d0\u10e0\u10d7\u10e3\u10da\u10d8';
-        this.AVAILABLE_LANGUAGES.he = '\u05e2\u05d1\u05e8\u05d9\u05ea';
-        this.AVAILABLE_LANGUAGES.te = '\u0c24\u0c46\u0c32\u0c41\u0c17\u0c41';
-        this.AVAILABLE_LANGUAGES.th = 'ไทย';
-    }
-
-    /**
      * Returns the translation for the given key if one exists or the key itself if not.
      *
      * @param    {string}  key  key to translation
@@ -141,13 +78,6 @@ function Translation () {
         var locale = Piwik.require('Locale');
         locale     = locale.getLocale();
 
-        if (!this.AVAILABLE_LANGUAGES || !this.AVAILABLE_LANGUAGES[locale]) {
-            // no valid locale
-            var config = require('config');
-            locale     = config.piwik.defaultLocale;
-            config     = null;
-        }
-
         try {
             this.translations = require('i18n/' + locale);
         } catch (e) {
@@ -156,18 +86,6 @@ function Translation () {
             var uiError = Piwik.getUI().createError({exception: e, errorCode: 'PiTrLo35'});
             uiError.showErrorMessageToUser();
         }
-    };
-
-    /**
-     * Returns a map of all available/supported languages.
-     *
-     * @see      Piwik.Locale.Translation#AVAILABLE_LANGUAGES
-     *
-     * @returns  {Object}  All available languages
-     */
-    this.getAvailableLanguages = function () {
-
-        return this.AVAILABLE_LANGUAGES;
     };
 }
 

@@ -428,8 +428,8 @@ function window () {
      */
     this.open = function () {
 
-        var settings    = Piwik.require('App/Settings');
-        var translation = Piwik.require('Locale/Translation');
+        var settings = Piwik.require('App/Settings');
+        var locale   = Piwik.require('Locale');
 
         var eventResult = {type: 'onopen'};
 
@@ -437,12 +437,12 @@ function window () {
         eventResult.piwikLanguage      = settings.getLanguage();
         eventResult.graphsEnabled      = settings.getGraphsEnabled();
         eventResult.trackingEnabled    = settings.isTrackingEnabled();
-        eventResult.availableLanguages = translation.getAvailableLanguages();
+        eventResult.availableLanguages = locale.getAvailableLanguages();
 
         this.fireEvent('onopen', eventResult);
         
         settings    = null;
-        translation = null;
+        locale      = null;
         eventResult = null;
     };
     
