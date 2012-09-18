@@ -231,9 +231,17 @@ Refresh.prototype.refreshDone = function () {
         tableView.setContentInsets({top: 0});
     }
     
-    this.statusLabel.text = _('Mobile_PullDownToRefresh');
-    this.pullViewArrow.show();
-    this.actInd.hide();
+    if (this.statusLabel) {
+        this.statusLabel.text = _('Mobile_PullDownToRefresh');
+    }
+    
+    if (this.pullViewArrow) {
+        this.pullViewArrow.show();
+    }
+    
+    if (this.actInd) {
+        this.actInd.hide();
+    }
     
     tableView = null;
 };
