@@ -2,7 +2,7 @@
 <ti:app xmlns:ti="http://ti.appcelerator.org">
     <modules/>
     <property name="ti.android.runtime">v8</property>
-    <sdk-version>2.1.3.v20120904133113</sdk-version>
+    <sdk-version>2.1.3.v20120915120319</sdk-version>
     <deployment-targets>
         <target device="mobileweb">true</target>
         <target device="iphone">true</target>
