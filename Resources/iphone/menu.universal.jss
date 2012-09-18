@@ -7,8 +7,7 @@
  */
 #menuButtonBar {
    bottom: 0;
-   style: 4;
-   barColor: '#999';
-   width: 'SIZE';
-   height: 'SIZE';
+   /* Titanium.UI.iPhone.SystemButtonStyle.BAR */
+   style: 2;
+   backgroundColor: '#B2AEA5';
 }
