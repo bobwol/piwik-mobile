@@ -208,7 +208,7 @@ function window (params) {
                 continue;
             }
             
-            if ('MultiSites' == report.module) {
+            if ('MultiSites_getOne' == report.uniqueId) {
                 continue;
             }
 
