@@ -174,26 +174,31 @@ function window (params) {
 
         if (event.graphsEnabled && event.metadata && event.metadata.imageGraphUrl && that) {
 
-            graph               = Piwik.require('PiwikGraph');
-            var accountManager  = Piwik.require('App/Accounts');
-            var account         = accountManager.getAccountById(event.site.accountId);
-            accountManager      = null;
-            graphUrl            = event.metadata.imageGraphUrl;
+            graph              = Piwik.require('PiwikGraph');
+            var accountManager = Piwik.require('App/Accounts');
+            var account        = accountManager.getAccountById(event.site.accountId);
+            accountManager     = null;
+            graphUrl           = event.metadata.imageGraphUrl;
             
-            if (event.sortOrderColumn) {
-                graphUrl        = graph.setParams(graphUrl, {filter_sort_column: event.sortOrderColumn, 
-                                                             column: event.sortOrderColumn});
+            if (event.metadata.imageGraphEvolutionUrl) {
+                graphUrl       = event.metadata.imageGraphEvolutionUrl;
             }
             
-            graphUrl            = graph.generateUrl(graphUrl, account, event.site, event.report);
-            graphUi             = that.create('Graph', {graphUrl: graphUrl, graph: graph});
-            account             = null;
+            if (event.sortOrderColumn) {
+                graphUrl       = graph.setParams(graphUrl, {filter_sort_column: event.sortOrderColumn, 
+                                                            column: event.sortOrderColumn,
+                                                            columns: event.sortOrderColumn});
+            }
+            
+            graphUrl = graph.generateUrl(graphUrl, account, event.site, event.report);
+            graphUi  = that.create('Graph', {graphUrl: graphUrl});
+            account  = null;
             
             if (graphUi) {
                 tableViewRows.push(graphUi.getRow());
             }
-            graph               = null;
-            graphUi             = null;
+            graph   = null;
+            graphUi = null;
         }
         
         var hasDimension = false;

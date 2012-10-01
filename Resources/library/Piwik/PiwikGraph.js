@@ -61,6 +61,12 @@ function PiwikGraph () {
      * @returns  {string}  Url to the graph including the needed size information.
      */
     this.generateUrl = function (graphUrl, account, site) {
+        
+        if (!graphUrl) {
+            
+            return '';
+        }
+        
         var parameter   = {token_auth: account.tokenAuth,
                            idSite:     site.idsite,
                            language:   locale};
@@ -88,6 +94,11 @@ function PiwikGraph () {
      * @returns  {string}  The updated Piwik graph url which now includes the given parameters
      */
     this.setParams = function (graphUrl, params) {
+        
+        if (!graphUrl) {
+            
+            return '';
+        }
         
         var urlGetParams      = '';
         for (var paramName in params) {
@@ -134,10 +145,12 @@ function PiwikGraph () {
         }
         
         if (hires && Piwik.getPlatform().isIos) {
+            parameter.legendFontSize = parameter.fontSize * 2;
             parameter.fontSize = parameter.fontSize * 2;
             parameter.width    = parameter.width * 2;
             parameter.height   = parameter.height * 2;
         } else if (hires && Piwik.getPlatform().isAndroid) {
+            parameter.legendFontSize = Math.round(parameter.fontSize * 1.5);
             parameter.fontSize = Math.round(parameter.fontSize * 1.5);
         } 
         

@@ -68,7 +68,7 @@ function window (params) {
 
     // fixme display graph in portrait mode and then rotating screen causes graph is not fully displayed
     var graphUrlWithSize = graph.appendSize(graphUrl, pictureWidth, pictureHeight, true);
-    graphUrlWithSize     = graph.setParams(graphUrlWithSize, {showMetricTitle: 1});
+    graphUrlWithSize     = graph.setParams(graphUrlWithSize, {showMetricTitle: 1, legendAppendMetric: 1});
 
     Piwik.getLog().debug('piwik graphUrl is ' + graphUrlWithSize, 'graph/fulldetail::window');
 

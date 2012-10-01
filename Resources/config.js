@@ -62,7 +62,8 @@ config.piwik = {
     graph: {
           fontSize: 9,
           showMetricTitle: 0,
-          aliasedGraph: 1
+          aliasedGraph: 1,
+          legendAppendMetric: 0
     }
 };
 
