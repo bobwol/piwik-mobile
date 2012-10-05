@@ -121,7 +121,7 @@ HttpRequest.prototype.setBaseUrl = function (baseUrl) {
     if (baseUrl && 'string' === (typeof baseUrl).toLowerCase() && 4 < baseUrl.length) {
         this.baseUrl = baseUrl;
     }
-    
+
     baseUrl = null;
 };
 
@@ -208,7 +208,14 @@ HttpRequest.prototype.handle = function () {
     var that         = this;
     
     this.xhr.onload  = function () { that.load(this); that = null; };
-    this.xhr.onerror = function () { that.error({error: 'Timeout'}); that = null; };
+    this.xhr.onerror = function (e) { 
+        if ('undefined' == (typeof e)) {
+            e = null;
+        }
+        
+        that.error(e); 
+        that = null; 
+    };
 
     var settings     = Piwik.require('App/Settings');
     
@@ -339,10 +346,33 @@ HttpRequest.prototype.load = function (xhr) {
  * @param  {Object}  e  An Error Object that contains at least a property named error.
  */
 HttpRequest.prototype.error = function (e) {
+    
+    if ('undefined' == (typeof e)) {
+        e = null;
+    }
 
     Piwik.getLog().warn(e, 'Piwik.Network.HttpRequest::error');
+    
+    if ((!e || !e.error) && this.displayErrorAllowed() && this.xhr && 200 != this.xhr.status) {
 
-    if (e && e.error && '' !== e.error && this.displayErrorAllowed()) {
+        this.errorMessageSent = true;
+        
+        var _ = require('library/underscore');
+        
+        var alertDialog = Ti.UI.createAlertDialog({
+            title: _('General_Error'),
+            message: _('General_ErrorRequest') + ' Error Code: ' + this.xhr.statusText,
+            buttonNames: [_('General_Ok')]
+        });
+
+        alertDialog.show();
+        alertDialog = null;
+        
+        Piwik.getUI().createError({exception: this.xhr.statusText, type: 'Unknown',
+                                   file: 'Piwik/Network/HttpRequest.js', 
+                                   errorCode: 'PiHrLe36'});
+        
+    } else if (e && e.error && '' !== e.error && this.displayErrorAllowed()) {
 
         if ('Host is unresolved' == e.error.substr(0, 18)) {
             // convert error message "Host is unresolved: notExistingDomain.org:80" to: "Host is unresolved"
@@ -421,8 +451,16 @@ HttpRequest.prototype.error = function (e) {
                 if (!e.error) {
                     e.error = 'Unknown';
                 }
-
-                Piwik.getUI().createError({exception: e, type: e.error,
+                
+                var errorCode     = ' Error Code: ' + e.error;
+                var trackingError = e.error;
+                
+                if (this.xhr && this.xhr.statusText) {
+                    errorCode     += ' ' + this.xhr.statusText;
+                    trackingError += this.xhr.status;
+                }
+                
+                Piwik.getUI().createError({exception: e, type: trackingError,
                                            file: 'Piwik/Network/HttpRequest.js', 
                                            errorCode: 'PiHrLe39'});
                     
@@ -430,7 +468,7 @@ HttpRequest.prototype.error = function (e) {
 
                 var alertDialog = Ti.UI.createAlertDialog({
                     title: _('General_Error'),
-                    message: _('General_ErrorRequest') + ' Error Code: ' + e.error,
+                    message: _('General_ErrorRequest') + errorCode,
                     buttonNames: [_('General_Ok')]
                 });
 
