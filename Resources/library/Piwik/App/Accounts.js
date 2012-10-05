@@ -89,28 +89,31 @@ function Accounts () {
 Accounts.prototype.getAccounts = function () {
 
     var accountIds  = storage.get('accounts_available');
-    
+
     if (!accountIds || storage.KEY_NOT_FOUND == accountIds || 0 === accountIds.length) {
         
         return [];
     }
     
-    var accounts    = [];
+    var accounts      = [];
+    var newAccountIds = [];
     
     for (var index  = 0; index < accountIds.length; index++) {
         var account = this.getAccountById(accountIds[index]);
         
-        if (!account || storage.KEY_NOT_FOUND == account) {
+        if (!account || !account.id || storage.KEY_NOT_FOUND == account) {
 
-            // this account is no longer available, update accounts_available.
-            delete accountIds[index];
-            storage.set('accounts_available', accountIds);
-            
             continue;
         }
     
         accounts.push(account);
+        newAccountIds.push(account.id);
         account = null;
+    }
+    
+    if (accounts.length < accountIds.length && accounts.length == newAccountIds.length) {
+        // at least one account was removed.
+        storage.set('accounts_available', newAccountIds);
     }
     
     accountIds  = null;
