@@ -76,6 +76,15 @@ function HttpRequest () {
      * @type     string
      */
     this.handleAs         = 'text';
+    
+    /**
+     * The user agent used when sending requests.
+     * 
+     * @default  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1"
+     *
+     * @type     string
+     */
+    this.userAgend        = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1';
 
     /**
      * An object containing key/value pairs. These are used as GET parameters when executing the request.
@@ -225,8 +234,8 @@ HttpRequest.prototype.handle = function () {
 
     this.xhr.open("GET", requestUrl);
 
-    if (Piwik.getPlatform().isAndroid && Ti.userAgent) {
-        this.xhr.setRequestHeader('User-Agent', Ti.userAgent);
+    if (this.userAgend) {
+        this.xhr.setRequestHeader('User-Agent', this.userAgent);
     }
 
     this.xhr.send({});

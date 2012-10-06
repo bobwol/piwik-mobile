@@ -22,6 +22,8 @@ function TrackerRequest () {
     this.baseUrl    = config.tracking.piwikServerUrl;
     
     this.sendErrors = false;
+    
+    this.userAgend  = Ti.userAgent;
 }
 
 /**
