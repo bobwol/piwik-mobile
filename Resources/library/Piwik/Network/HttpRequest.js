@@ -363,23 +363,28 @@ HttpRequest.prototype.error = function (e) {
     Piwik.getLog().warn(e, 'Piwik.Network.HttpRequest::error');
     
     var _         = require('library/underscore');
+    // if set, the user will see a dialog containing this message
     var message   = '';
+    // the title of the message
     var title     = _('General_Error');
+    // null|string|Error if set, the error will be tracked
     var exception = null;
-    var errorType = 'Unknown';
+    // the type of the error, for example TypeError, SyntaxError, ...
+    var errorType = 'RequestError';
     var baseUrl   = '' + this.baseUrl;
     
     if ((!e || !e.error) && this.xhr && 200 != this.xhr.status) {
         
-        var statusText = this.xhr.statusText ? this.xhr.statusText : this.xhr.status;
-
-        message   = String.format(_('Mobile_NetworkErrorWithStatusCode'), '', '' + statusText, baseUrl);
-        exception = this.xhr.statusText;
+        exception = this.xhr.statusText ? this.xhr.statusText : this.xhr.status;
+        message   = String.format(_('Mobile_NetworkErrorWithStatusCode'), 'Unknown', '' + exception, baseUrl);
         
-    } else if (e && e.error && '' !== e.error) {
+    } else if (e && e.error) {
+        
+        e.error = '' + e.error;
 
-        if (-1 != e.error.indexOf('Host is unresolved')) {
-            // convert error message "Host is unresolved: notExistingDomain.org:80" to: "Host is unresolved"
+        if (-1 != e.error.indexOf('Host is unresolved') || -1 != e.error.indexOf('Unable to resolve host')) {
+            // convert error message "Host is unresolved: notExistingDomain.org:80" to: "Host is unresolved" and 
+            // Unable to resolve host "example.com": No address associated with hostname.
             e.error = 'Host is unresolved';
         }
         
@@ -400,7 +405,7 @@ HttpRequest.prototype.error = function (e) {
             e.error = 'SSL problem (Possible causes may include a bad/expired/self-signed certificate, clock set to wrong date)';
         }
 
-        switch (('' + e.error).toLowerCase()) {
+        switch (e.error.toLowerCase()) {
 
             case 'no connection':
                 // apple requires that we inform the user if no network connection is available
@@ -441,9 +446,6 @@ HttpRequest.prototype.error = function (e) {
                  * 'Timeout waiting for connection' 
                  * 'Connection not obtained from this manager.'
                  */
-                if (!e.error) {
-                    e.error = 'Unknown';
-                }
                 
                 var statusText = '';
                 errorType      = e.error;
@@ -451,7 +453,7 @@ HttpRequest.prototype.error = function (e) {
 
                 if (this.xhr && 'undefined' != (typeof this.xhr.status)) {
                     statusText  = '' + (this.xhr.statusText ? this.xhr.statusText : this.xhr.status);
-                    errorType  += '' + this.xhr.status;
+                    errorType  += '-' + this.xhr.status;
                 }
                 
                 message = String.format(_('Mobile_NetworkErrorWithStatusCode'), e.error, statusText, baseUrl);
