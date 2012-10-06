@@ -353,93 +353,75 @@ HttpRequest.prototype.error = function (e) {
 
     Piwik.getLog().warn(e, 'Piwik.Network.HttpRequest::error');
     
-    if ((!e || !e.error) && this.displayErrorAllowed() && this.xhr && 200 != this.xhr.status) {
+    var _         = require('library/underscore');
+    var message   = '';
+    var title     = _('General_Error');
+    var exception = null;
+    var errorType = 'Unknown';
+    var baseUrl   = '' + this.baseUrl;
+    
+    if ((!e || !e.error) && this.xhr && 200 != this.xhr.status) {
+        
+        var statusText = this.xhr.statusText ? this.xhr.statusText : this.xhr.status;
 
-        this.errorMessageSent = true;
+        message   = String.format(_('Mobile_NetworkErrorWithStatusCode'), '', '' + statusText, baseUrl);
+        exception = this.xhr.statusText;
         
-        var _ = require('library/underscore');
-        
-        var alertDialog = Ti.UI.createAlertDialog({
-            title: _('General_Error'),
-            message: _('General_ErrorRequest') + ' Error Code: ' + this.xhr.statusText,
-            buttonNames: [_('General_Ok')]
-        });
+    } else if (e && e.error && '' !== e.error) {
 
-        alertDialog.show();
-        alertDialog = null;
-        
-        Piwik.getUI().createError({exception: this.xhr.statusText, type: 'Unknown',
-                                   file: 'Piwik/Network/HttpRequest.js', 
-                                   errorCode: 'PiHrLe36'});
-        
-    } else if (e && e.error && '' !== e.error && this.displayErrorAllowed()) {
-
-        if ('Host is unresolved' == e.error.substr(0, 18)) {
+        if (-1 != e.error.indexOf('Host is unresolved')) {
             // convert error message "Host is unresolved: notExistingDomain.org:80" to: "Host is unresolved"
-
             e.error = 'Host is unresolved';
         }
+        
+        // ASIHTTPRequestErrorDomain errors
+        if (-1 != e.error.indexOf('A connection failure occurred')) {
+            e.error = 'A connection failure occurred';
+        } else if (-1 != e.error.indexOf('The request timed out')) {
+            e.error = 'The request timed out';
+        } else if (-1 != e.error.indexOf('Authentication needed')) {
+            e.error = 'Authentication needed';
+        } else if (-1 != e.error.indexOf('Unable to create request')) {
+            e.error = 'Unable to create request (bad url?)';
+        } else if (-1 != e.error.indexOf('The request failed because it redirected too many times')) {
+            e.error = 'The request failed because it redirected too many times';
+        } else if (-1 != e.error.indexOf('Unable to start HTTP connection')) {
+            e.error = 'Unable to start HTTP connection';
+        } else if (-1 != e.error.indexOf('SSL problem')) {
+            e.error = 'SSL problem (Possible causes may include a bad/expired/self-signed certificate, clock set to wrong date)';
+        }
 
-        var _ = require('library/underscore');
+        switch (('' + e.error).toLowerCase()) {
 
-        switch (e.error) {
-
-            case 'No connection':
-
+            case 'no connection':
                 // apple requires that we inform the user if no network connection is available
-                this.errorMessageSent = true;
-
-                var alertDialog = Ti.UI.createAlertDialog({
-                    title: _('Mobile_NetworkNotReachable'),
-                    message: _('Mobile_YouAreOffline'),
-                    buttonNames: [_('General_Ok')]
-                });
-
-                alertDialog.show();
-                alertDialog = null;
-
+                
+                title   = _('Mobile_NetworkNotReachable');
+                message = _('Mobile_YouAreOffline');
+    
                 break;
-
-            case 'Request aborted':
-            case 'Timeout':
-            case 'Chunked stream ended unexpectedly':
-
-                this.errorMessageSent = true;
-
-                var alertDialog = Ti.UI.createAlertDialog({
-                    title: _('General_Error'),
-                    message: String.format(_('General_RequestTimedOut'), '' + this.baseUrl),
-                    buttonNames: [_('General_Ok')]
-                });
-
-                alertDialog.show();
-                alertDialog = null;
-
+    
+            case 'request aborted':
+            case 'timeout':
+            case 'the request timed out':
+            case 'chunked stream ended unexpectedly':
+    
+                message = String.format(_('General_RequestTimedOut'), baseUrl);
+    
                 break;
-
-            case 'Host is unresolved':
-            case 'Not Found':
-
-                this.errorMessageSent = true;
-
-                var alertDialog = Ti.UI.createAlertDialog({
-                    title: _('General_Error'),
-                    message: String.format(_('General_NotValid'), '' + this.baseUrl),
-                    buttonNames: [_('General_Ok')]
-                });
-
-                // @todo go directly to settings after user has confirmed the ok button?
-
-                alertDialog.show();
-                alertDialog = null;
-
+    
+            case 'host is unresolved':
+            case 'not found':
+    
+                message = String.format(_('General_NotValid'), baseUrl);
+    
                 break;
-
-            case 'Missing base url':
-
+    
+            case 'missing base url':
+    
                 // ignore this error, user has not already set up the app
                 break;
-
+    
             default:
                 /**
                  * further known error codes:
@@ -447,33 +429,42 @@ HttpRequest.prototype.error = function (e) {
                  * 'Manager is shut down.'    -> don't know what this exactly means
                  * 'No wrapped connection'    -> don't know what this exactly means
                  * 'Adapter is detached'      -> don't know what this exactly means
+                 * 'Timeout waiting for connection' 
+                 * 'Connection not obtained from this manager.'
                  */
                 if (!e.error) {
                     e.error = 'Unknown';
                 }
                 
-                var errorCode     = ' Error Code: ' + e.error;
-                var trackingError = e.error;
-                
-                if (this.xhr && this.xhr.statusText) {
-                    errorCode     += ' ' + this.xhr.statusText;
-                    trackingError += this.xhr.status;
+                var statusText = '';
+                errorType      = e.error;
+                exception      = e;
+
+                if (this.xhr && 'undefined' != (typeof this.xhr.status)) {
+                    statusText  = '' + (this.xhr.statusText ? this.xhr.statusText : this.xhr.status);
+                    errorType  += '' + this.xhr.status;
                 }
                 
-                Piwik.getUI().createError({exception: e, type: trackingError,
-                                           file: 'Piwik/Network/HttpRequest.js', 
-                                           errorCode: 'PiHrLe39'});
-                    
-                this.errorMessageSent = true;
+                message = String.format(_('Mobile_NetworkErrorWithStatusCode'), e.error, statusText, baseUrl);
+        }
+    }
+    
+    if (message && this.displayErrorAllowed()) {
+        this.errorMessageSent = true;
 
-                var alertDialog = Ti.UI.createAlertDialog({
-                    title: _('General_Error'),
-                    message: _('General_ErrorRequest') + errorCode,
-                    buttonNames: [_('General_Ok')]
-                });
+        var alertDialog = Ti.UI.createAlertDialog({
+            title: title,
+            message: message,
+            buttonNames: [_('General_Ok')]
+        });
 
-                alertDialog.show();
-                alertDialog = null;
+        alertDialog.show();
+        alertDialog = null;
+        
+        if (exception) {
+            Piwik.getUI().createError({exception: exception, type: errorType,
+                                       file: 'Piwik/Network/HttpRequest.js', 
+                                       errorCode: 'PiHrLe39'});
         }
     }
 

@@ -142,6 +142,7 @@ valid_translations =  {
         'Mobile_LoginUseHttps':                                               'Use https',
         'Mobile_MultiChartLabel':                                             'Display sparklines',
         'Mobile_NavigationBack':                                              'Back',
+        'Mobile_NetworkErrorWithStatusCode':                                  'There was an error "%s". The request returned the status "%s". URL was "%s". Please check your entered URL and the error logs on this server for more information about the error and how to resolve it.',
         'Mobile_NetworkNotReachable':                                         'Network not reachable',
         'Mobile_NoPiwikAccount':                                              'No Piwik Account?',
         'Mobile_NoVisitorFound':                                              'No visitor found',
