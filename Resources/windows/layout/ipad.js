@@ -175,7 +175,6 @@ function layout () {
         this._createModalRootWindow();
 
         var modalWin = Ti.UI.createWindow();
-        modalWin.open();
         modalWin.add(newWin);
         
         newWin.rootWindow = modalWin;
@@ -405,8 +404,7 @@ function layout () {
      */
     this.init = function () {
 
-        this._masterWin     = Ti.UI.createWindow({barColor: '#B2AEA5', title: _('General_Reports')});
-        this._masterWin.open();
+        this._masterWin    = Ti.UI.createWindow({barColor: '#B2AEA5', title: _('General_Reports')});
 
         var settingsButton = Ti.UI.createButton({image: 'images/ic_action_settings.png',
                                                  width: 37});
