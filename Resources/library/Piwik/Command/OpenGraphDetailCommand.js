@@ -91,17 +91,21 @@ OpenGraphDetailCommand.prototype.execute = function () {
         
         var width  = (win.size && win.size.width) ? win.size.width : Ti.Platform.displayCaps.platformWidth;
         var height = (win.size && win.size.height) ? win.size.height : Ti.Platform.displayCaps.platformHeight;
-        width      = width - 20;    // 10px space left and right
-        height     = height - 20;   // 10px space top and bottom
+
+         var pictureHeight = height - 20;   // 10px space top and bottom
+         var pictureWidth  = width - 20;    // 10px space left and right
+
+         if (Piwik.getPlatform().isIpad) {
+             pictureHeight = Math.floor(height / 2);
+         }
 
         var graph            = Piwik.require('PiwikGraph');
-        var graphUrlWithSize = graph.appendSize(graphUrl, width, height, true);
+        var graphUrlWithSize = graph.appendSize(graphUrl, pictureWidth, pictureHeight, true);
         graphUrlWithSize     = graph.setParams(graphUrlWithSize, {showMetricTitle: 1, legendAppendMetric: 1});
     
         Piwik.getLog().debug('piwik graphUrl is ' + graphUrlWithSize, 'OpenGraphDetailCommand::execute');
     
-        var imageView = this.create('ImageView', {top: 10, left: 10,
-                                                  width: width, height: height,
+        var imageView = this.create('ImageView', {width: pictureWidth, height: pictureHeight,
                                                   canScale: true,
                                                   hires: true,
                                                   enableZoomControls: false,
@@ -112,8 +116,29 @@ OpenGraphDetailCommand.prototype.execute = function () {
             win.close({transform: Ti.UI.create2DMatrix().scale(0), duration: 300});
             win = null;
         });
+        
+        if (Piwik.getPlatform().isIpad) {
+            var quarter = Math.floor(height / 4); // 25%
+            var labelView = Ti.UI.createView({layout: 'vertical', height: 'SIZE', width: 'SIZE', left: 0, right: 0});
+            //  "Read the 'Please read' post - Days to conversion"  -  'Week 12 November - 19 November 2012'
+            var topView = Ti.UI.createImageView({top: 0, height: quarter, left: 0, right: 0, backgroundColor: '#bbbbbb'});
+            labelView.add(Ti.UI.createLabel({text: 'Page URLs', ellipsize: true, wordWrap: false, color: '#333333', textAlign: 'center', left: 20, right: 20, font: {fontSize: 48}}));
+            labelView.add(Ti.UI.createLabel({text: 'Saturday 6th October 2012', ellipsize: true, wordWrap: false, textAlign: 'center', top: 25, left: 20, right: 20, color: '#777777', font: {fontSize: 36}}));
+            
+            topView.add(labelView);
+            topView.add(Ti.UI.createImageView({bottom: 0, height: 2, backgroundColor: '#aaaaaa', left: 0, right: 0}));
+            
+            win.add(topView);
+            
+            var bottomView = Ti.UI.createImageView({top: quarter, bottom: 0, left: 0, right: 0});
+            
+            bottomView.add(imageView);
+            win.add(bottomView);
+        } else {
+            
+            win.add(imageView);
+        }
     
-        win.add(imageView);
         
         graph          = null;
         imageView      = null;
