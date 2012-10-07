@@ -96,8 +96,7 @@ function layout () {
         }
 
         var win = Ti.UI.createWindow({className: 'piwikRootWindow', backButtonTitle: _('Mobile_NavigationBack')});
-        win.open();
-        
+
         win.add(newWin);
         win.addEventListener('close', function () {
             newWin.close();
