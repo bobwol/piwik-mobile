@@ -79,6 +79,9 @@ OpenGraphDetailCommand.prototype.execute = function () {
 
     } else {
         
+        var reportName = this.getParam('reportName', '');
+        var reportDate = this.getParam('reportDate', '');
+    
         var fromTransform  = Ti.UI.create2DMatrix().scale(0);
         var toTransform    = Ti.UI.create2DMatrix().scale(1.0);
         var startAnimation = Ti.UI.createAnimation({transform: toTransform, duration: 400});
@@ -89,6 +92,49 @@ OpenGraphDetailCommand.prototype.execute = function () {
                                       backgroundColor: 'white'});
         win.open(startAnimation);
         
+        var closeButton = Titanium.UI.createButton({
+            title:'Close',
+            style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED,
+            color: '#333333'
+        });
+        
+        var revert = Titanium.UI.createButton({
+            title:'Show Evolution',
+            style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
+            color: '#333333'
+        });
+        
+        var revert2 = Titanium.UI.createButton({
+            title:'Evolution Graphs Enabled',
+            style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
+            color: '#333333'
+        });
+        
+        var flexSpace = Titanium.UI.createButton({
+            systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+        });
+        
+        var toolbar = Titanium.UI.iOS.createToolbar({
+            items:[closeButton,flexSpace,revert, revert2],
+            top: 0,
+            borderTop:true,
+            borderBottom:true,
+            barColor:'#bbb',
+            opacity:0.7,
+            translucent: true,
+            zIndex: 999,
+            height: 20
+        });
+        
+        win.add(toolbar);
+
+        closeButton.addEventListener('click', function () {
+            if (win) {
+                win.close({transform: Ti.UI.create2DMatrix().scale(0), duration: 300});
+                win = null;
+            }
+        });
+
         var width  = (win.size && win.size.width) ? win.size.width : Ti.Platform.displayCaps.platformWidth;
         var height = (win.size && win.size.height) ? win.size.height : Ti.Platform.displayCaps.platformHeight;
 
@@ -96,7 +142,7 @@ OpenGraphDetailCommand.prototype.execute = function () {
          var pictureWidth  = width - 20;    // 10px space left and right
 
          if (Piwik.getPlatform().isIpad) {
-             pictureHeight = Math.floor(height / 2);
+             pictureHeight = height -  Math.floor(height / 4) - 20;
          }
 
         var graph            = Piwik.require('PiwikGraph');
@@ -112,18 +158,20 @@ OpenGraphDetailCommand.prototype.execute = function () {
                                                   image: graphUrlWithSize});
                                               
         imageView.addEventListener('click', function () {
-
-            win.close({transform: Ti.UI.create2DMatrix().scale(0), duration: 300});
-            win = null;
+            if (toolbar && toolbar.visible) {
+                toolbar.hide();
+            } else if (toolbar && !toolbar.visible) {
+                toolbar.show();
+            }
         });
-        
+
         if (Piwik.getPlatform().isIpad) {
             var quarter = Math.floor(height / 4); // 25%
             var labelView = Ti.UI.createView({layout: 'vertical', height: 'SIZE', width: 'SIZE', left: 0, right: 0});
             //  "Read the 'Please read' post - Days to conversion"  -  'Week 12 November - 19 November 2012'
             var topView = Ti.UI.createImageView({top: 0, height: quarter, left: 0, right: 0, backgroundColor: '#bbbbbb'});
-            labelView.add(Ti.UI.createLabel({text: 'Page URLs', ellipsize: true, wordWrap: false, color: '#333333', textAlign: 'center', left: 20, right: 20, font: {fontSize: 48}}));
-            labelView.add(Ti.UI.createLabel({text: 'Saturday 6th October 2012', ellipsize: true, wordWrap: false, textAlign: 'center', top: 25, left: 20, right: 20, color: '#777777', font: {fontSize: 36}}));
+            labelView.add(Ti.UI.createLabel({text: reportName, ellipsize: true, wordWrap: false, color: '#333333', textAlign: 'center', left: 20, right: 20, font: {fontSize: 48}}));
+            labelView.add(Ti.UI.createLabel({text: reportDate, ellipsize: true, wordWrap: false, textAlign: 'center', top: 25, left: 20, right: 20, color: '#777777', font: {fontSize: 36}}));
             
             topView.add(labelView);
             topView.add(Ti.UI.createImageView({bottom: 0, height: 2, backgroundColor: '#aaaaaa', left: 0, right: 0}));
