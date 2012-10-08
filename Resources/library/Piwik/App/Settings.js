@@ -121,6 +121,31 @@ function Settings () {
     };
 
     /**
+     * Sets (overwrites) whether we should prefer evolution graphs or not.
+     *
+     * @param  {boolean}  value  true if app should prefer evolution graphs, false otherwise.
+     *
+     * @type   null
+     */
+    this.setPreferEvoltuionGraphs = function (value) {
+
+        value = Boolean(value);
+
+        this._set('preferEvolutionGraphs', 'Bool', value);
+        
+        value = null;
+    };
+
+    /**
+     * Retrieve the stored preferEvolutionGraphs value.
+     *
+     * @returns  {boolean}  true if graphs are enabled, false otherwise.
+     */
+    this.getPreferEvoltuionGraphs = function () {
+        return this._get('preferEvolutionGraphs', 'Bool', config.piwik.preferEvolutionGraphs);
+    };
+
+    /**
      * Sets (overwrites) the http timeout value.
      *
      * @param  {int}  value  The timeout value in ms.

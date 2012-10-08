@@ -137,6 +137,7 @@ module.exports = {
     Mobile_NoPiwikAccount:                                              'No Piwik Account?',
     Mobile_NoVisitorFound:                                              'No visitor found',
     Mobile_NoWebsiteFound:                                              'No website found',
+    Mobile_PreferEvolutionGraphs:                                       'Prefer evolution graphs',
     Mobile_PullDownToRefresh:                                           'Pull down to refresh...',
     Mobile_RatingNotNow:                                                'Not now',
     Mobile_RatingNow:                                                   "OK, I'll rate it now",

@@ -180,14 +180,14 @@ function window (params) {
             accountManager     = null;
             graphUrl           = event.metadata.imageGraphUrl;
             
-            if (event.metadata.imageGraphEvolutionUrl) {
-                graphUrl       = event.metadata.imageGraphEvolutionUrl;
+            if (Piwik.require('App/Settings').getPreferEvoltuionGraphs() && event.metadata.imageGraphEvolutionUrl) {
+                graphUrl = event.metadata.imageGraphEvolutionUrl;
             }
             
             if (event.sortOrderColumn) {
-                graphUrl       = graph.setParams(graphUrl, {filter_sort_column: event.sortOrderColumn, 
-                                                            column: event.sortOrderColumn,
-                                                            columns: event.sortOrderColumn});
+                graphUrl = graph.setParams(graphUrl, {filter_sort_column: event.sortOrderColumn, 
+                                                      column: event.sortOrderColumn,    // column = Piwik 1.8 and older
+                                                      columns: event.sortOrderColumn}); // columns = Piwik 1.9 and newer
             }
             
             graphUrl = graph.generateUrl(graphUrl, account, event.site, event.report);
@@ -197,6 +197,7 @@ function window (params) {
             if (graphUi) {
                 tableViewRows.push(graphUi.getRow());
             }
+            
             graph   = null;
             graphUi = null;
         }
