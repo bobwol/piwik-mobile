@@ -191,7 +191,9 @@ function window (params) {
             }
             
             graphUrl = graph.generateUrl(graphUrl, account, event.site, event.report);
-            graphUi  = that.create('Graph', {graphUrl: graphUrl});
+            graphUi  = that.create('Graph', {graphUrl: graphUrl, 
+                                             reportName: event.metadata.name ? event.metadata.name : '', 
+                                             reportDate: event.reportDate ? event.reportDate : ''});
             account  = null;
             
             if (graphUi) {

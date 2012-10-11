@@ -91,7 +91,7 @@ Graph.prototype.addGraph = function (view) {
     var height       = 150;
 
     var graphUrl     = this.getParam('graphUrl', '');
-    var graph        = this.getParam('graph');
+    var graph        = Piwik.require('PiwikGraph');
     var fullGraphUrl = graph.appendSize(graphUrl, width, height, !Piwik.getPlatform().isAndroid);
     
     Piwik.getLog().debug(fullGraphUrl, 'Piwik.UI.Graph::addGraph');
@@ -107,23 +107,19 @@ Graph.prototype.addGraph = function (view) {
 
     view.add(graphImage);
     graphImage = null;
+
+    var showDetailImage = Ti.UI.createImageView({className: 'graphShowDetailImage'});
     
-    if (!Piwik.getPlatform().isIpad) {
-        
-        var showDetailImage = Ti.UI.createImageView({className: 'graphShowDetailImage'});
-        
-        var that = this;
-        // event to open graph in fullscreen
-        showDetailImage.addEventListener('click', function () {
-            that.create('Window', {url: 'graph/fulldetail',
-                                   target: 'modal',
-                                   graphUrl: graphUrl});
-        });
-        
-        view.add(showDetailImage);
-        showDetailImage = null;
-    }
+    var that = this;
+    // event to open graph in fullscreen
+    showDetailImage.addEventListener('click', function () {
+        that.createCommand('OpenGraphDetailCommand', that.getParams()).execute();
+    });
     
+    view.add(showDetailImage);
+    showDetailImage = null;
+    
+    graph = null;
 };
 
 /**

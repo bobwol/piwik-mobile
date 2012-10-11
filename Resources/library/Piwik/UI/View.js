@@ -141,8 +141,14 @@ UiView.prototype.create = function (widget, params) {
     if (window) {
         return window.create(widget, params);
     }
+};
+
+UiView.prototype.createCommand = function (commandName, params) {
     
-    return;
+    var window = this.getParam('window');
+    if (window) {
+        return window.createCommand(commandName, params);
+    }
 };
 
 /**
