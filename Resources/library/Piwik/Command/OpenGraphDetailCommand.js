@@ -87,12 +87,13 @@ OpenGraphDetailCommand.prototype.execute = function () {
                                       backgroundColor: 'white'});
         win.open({opacity: 1, duration: 400});
         
+          /*
         var closeButton = Titanium.UI.createButton({
             title:'Close',
             style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED,
             color: '#333333'
         });
-        /*
+      
         var revert = Titanium.UI.createButton({
             title:'Show Evolution',
             style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
@@ -108,7 +109,7 @@ OpenGraphDetailCommand.prototype.execute = function () {
         var flexSpace = Titanium.UI.createButton({
             systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
         });
-        */
+       
         var toolbar = Titanium.UI.iOS.createToolbar({
             items:[closeButton],
             top: 0,
@@ -129,16 +130,16 @@ OpenGraphDetailCommand.prototype.execute = function () {
                 win = null;
             }
         });
-
+ */
         var width  = (win.size && win.size.width) ? win.size.width : Ti.Platform.displayCaps.platformWidth;
         var height = (win.size && win.size.height) ? win.size.height : Ti.Platform.displayCaps.platformHeight;
 
-         var pictureHeight = height - 20;   // 10px space top and bottom
-         var pictureWidth  = width - 20;    // 10px space left and right
+        var pictureHeight = height - 20;   // 10px space top and bottom
+        var pictureWidth  = width - 20;    // 10px space left and right
 
-         if (Piwik.getPlatform().isIpad) {
-             pictureHeight = height -  Math.floor(height / 4) - 20;
-         }
+        if (Piwik.getPlatform().isIpad) {
+            pictureHeight = height -  Math.floor(height / 4) - 20;
+        }
 
         var graph            = Piwik.require('PiwikGraph');
         var graphUrlWithSize = graph.appendSize(graphUrl, pictureWidth, pictureHeight, true);
@@ -153,18 +154,22 @@ OpenGraphDetailCommand.prototype.execute = function () {
                                                   image: graphUrlWithSize});
                                               
         imageView.addEventListener('click', function () {
-            if (toolbar && toolbar.visible) {
-                toolbar.hide();
-            } else if (toolbar && !toolbar.visible) {
-                toolbar.show();
+            if (win) {
+                win.close({opacity: 0, duration: 300});
+                win = null;
             }
         });
-
+                                              
+        win.addEventListener('click', function () {
+            if (win) {
+                win.close({opacity: 0, duration: 300});
+                win = null;
+            }
+        });
         if (Piwik.getPlatform().isIpad) {
-            var quarter = Math.floor(height / 4); // 25%
+            var quarter   = Math.floor(height / 4); // 25%
             var labelView = Ti.UI.createView({layout: 'vertical', height: 'SIZE', width: 'SIZE', left: 0, right: 0});
-            //  "Read the 'Please read' post - Days to conversion"  -  'Week 12 November - 19 November 2012'
-            var topView = Ti.UI.createImageView({top: 0, height: quarter, left: 0, right: 0, backgroundColor: '#bbbbbb'});
+            var topView   = Ti.UI.createImageView({top: 0, height: quarter, left: 0, right: 0, backgroundColor: '#bbbbbb'});
             labelView.add(Ti.UI.createLabel({text: reportName, ellipsize: true, wordWrap: false, color: '#333333', textAlign: 'center', left: 20, right: 20, font: {fontSize: 48}}));
             labelView.add(Ti.UI.createLabel({text: reportDate, ellipsize: true, wordWrap: false, textAlign: 'center', top: 25, left: 20, right: 20, color: '#777777', font: {fontSize: 36}}));
             
@@ -181,8 +186,7 @@ OpenGraphDetailCommand.prototype.execute = function () {
             
             win.add(imageView);
         }
-    
-        
+
         graph     = null;
         imageView = null;
     }
