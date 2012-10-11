@@ -14,6 +14,18 @@
     backgroundColor: '#8a8780';
 }
 
+#headerViewSeparator1 {
+    height: '1dp';
+    backgroundColor: '#86837D';
+    bottom: '1dp';
+}
+
+#headerViewSeparator2 {
+    height: '1dp';
+    backgroundColor: '#ABA9A4';
+    bottom: '0dp';
+}
+
 #headerTitleLabel {
     height: '38dp';
     left: '16dp';

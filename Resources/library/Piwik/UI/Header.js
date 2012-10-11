@@ -68,6 +68,9 @@ Header.prototype.createHeader = function () {
     this.titleLabel = Ti.UI.createLabel({id: 'headerTitleLabel', text: ''});
 
     this.headerView.add(this.titleLabel);
+    this.headerView.add(Ti.UI.createView({id: 'headerViewSeparator1'}));
+    this.headerView.add(Ti.UI.createView({id: 'headerViewSeparator2'}));
+    
     Ti.UI.currentWindow.add(this.headerView);
 };
 
