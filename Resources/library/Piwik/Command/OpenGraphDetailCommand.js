@@ -81,23 +81,18 @@ OpenGraphDetailCommand.prototype.execute = function () {
         
         var reportName = this.getParam('reportName', '');
         var reportDate = this.getParam('reportDate', '');
-    
-        var fromTransform  = Ti.UI.create2DMatrix().scale(0);
-        var toTransform    = Ti.UI.create2DMatrix().scale(1.0);
-        var startAnimation = Ti.UI.createAnimation({transform: toTransform, duration: 400});
-        
-        var win = Ti.UI.createWindow({top: 0, left: 0, right: 0, bottom: 0,
-                                      transform: fromTransform,
+
+        var win = Ti.UI.createWindow({top: 0, left: 0, right: 0, bottom: 0, opacity: 0,
                                       orientationModes: [Ti.UI.orientation],
                                       backgroundColor: 'white'});
-        win.open(startAnimation);
+        win.open({opacity: 1, duration: 400});
         
         var closeButton = Titanium.UI.createButton({
             title:'Close',
             style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED,
             color: '#333333'
         });
-        
+        /*
         var revert = Titanium.UI.createButton({
             title:'Show Evolution',
             style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
@@ -113,12 +108,12 @@ OpenGraphDetailCommand.prototype.execute = function () {
         var flexSpace = Titanium.UI.createButton({
             systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
         });
-        
+        */
         var toolbar = Titanium.UI.iOS.createToolbar({
-            items:[closeButton,flexSpace,revert, revert2],
+            items:[closeButton],
             top: 0,
-            borderTop:true,
-            borderBottom:true,
+            borderTop:false,
+            borderBottom:false,
             barColor:'#bbb',
             opacity:0.7,
             translucent: true,
@@ -130,7 +125,7 @@ OpenGraphDetailCommand.prototype.execute = function () {
 
         closeButton.addEventListener('click', function () {
             if (win) {
-                win.close({transform: Ti.UI.create2DMatrix().scale(0), duration: 300});
+                win.close({opacity: 0, duration: 300});
                 win = null;
             }
         });
@@ -188,11 +183,8 @@ OpenGraphDetailCommand.prototype.execute = function () {
         }
     
         
-        graph          = null;
-        imageView      = null;
-        fromTransform  = null;
-        toTransform    = null;
-        startAnimation = null;
+        graph     = null;
+        imageView = null;
     }
     
 };
