@@ -170,20 +170,20 @@ OpenGraphDetailCommand.prototype.execute = function () {
         if (Piwik.getPlatform().isIpad) {
             var quarter   = Math.floor(height / 4); // 25%
             var labelView = Ti.UI.createView({layout: 'vertical', height: 'SIZE', width: 'SIZE', left: 0, right: 0});
-            var topView   = Ti.UI.createImageView({top: 0, height: quarter, left: 0, right: 0, backgroundColor: '#bbbbbb'});
+            var topView   = Ti.UI.createImageView({top: 0, height: quarter, left: 0, right: 0, backgroundColor: '#cccccc'});
             
             if (reportName) {
                 labelView.add(Ti.UI.createLabel({text: reportName, ellipsize: true, wordWrap: false, color: '#333333', textAlign: 'center', left: 20, right: 20, font: {fontSize: 48}}));
             }
             
             if (reportDate) {
-                labelView.add(Ti.UI.createLabel({text: reportDate, ellipsize: true, wordWrap: false, textAlign: 'center', top: 25, left: 20, right: 20, color: '#777777', font: {fontSize: 36}}));
+                labelView.add(Ti.UI.createLabel({text: reportDate, ellipsize: true, wordWrap: false, textAlign: 'center', top: 25, left: 20, right: 20, color: '#666666', font: {fontSize: 36}}));
             }
             
             topView.add(labelView);
             labelView = null;
             
-            topView.add(Ti.UI.createImageView({bottom: 0, height: 2, backgroundColor: '#aaaaaa', left: 0, right: 0}));
+            topView.add(Ti.UI.createImageView({bottom: 0, height: 2, backgroundColor: '#bbbbbb', left: 0, right: 0}));
             
             win.add(topView);
             topView = null;
