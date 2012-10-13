@@ -179,11 +179,11 @@ function window (params) {
             var account        = accountManager.getAccountById(event.site.accountId);
             accountManager     = null;
             graphUrl           = event.metadata.imageGraphUrl;
-            
+         /*   
             if (Piwik.require('App/Settings').getPreferEvoltuionGraphs() && event.metadata.imageGraphEvolutionUrl) {
                 graphUrl = event.metadata.imageGraphEvolutionUrl;
             }
-            
+            */
             if (event.sortOrderColumn) {
                 graphUrl = graph.setParams(graphUrl, {filter_sort_column: event.sortOrderColumn, 
                                                       column: event.sortOrderColumn,    // column = Piwik 1.8 and older
@@ -192,7 +192,7 @@ function window (params) {
             
             graphUrl = graph.generateUrl(graphUrl, account, event.site, event.report);
             graphUi  = that.create('Graph', {graphUrl: graphUrl, 
-                                             reportName: event.metadata.name ? event.metadata.name : '', 
+                                             reportName: (params && params.report) ? params.report.name : '', 
                                              reportDate: event.reportDate ? event.reportDate : ''});
             account  = null;
             
