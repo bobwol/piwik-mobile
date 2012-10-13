@@ -113,7 +113,7 @@ OpenGraphDetailCommand.prototype.execute = function () {
                                                   enableZoomControls: false,
                                                   image: graphUrlWithSize});
                                                   
-        if (!Piwik.getPlatform.isIpad) {
+        if (!Piwik.getPlatform().isIpad) {
                     
             function rotateImage (event) {
                 if (!imageView || !win || !graph) {
