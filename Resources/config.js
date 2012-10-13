@@ -57,6 +57,7 @@ config.piwik = {
     defaultLocale: 'en',
     latestServerVersion: '1.9.0',
     graphsEnabled: true,
+    preferEvolutionGraphs: false,
     trackingEnabled: false,
     numDisplayedWebsites: 50,
     graph: {
