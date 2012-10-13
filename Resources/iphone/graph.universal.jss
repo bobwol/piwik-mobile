@@ -41,3 +41,53 @@
     left: 10;
     zIndex: 1;
 }
+
+.graphiPadDetailReportName {
+    ellipsize: true;
+    wordWrap: false;
+    color: '#333333';
+    textAlign: 'center';
+    left: 20;
+    right: 20;
+    font-size: 48;
+}
+
+.graphiPadDetailReportDate {
+    ellipsize: true;
+    wordWrap: false;
+    textAlign: 'center';
+    top: 25;
+    left: 20;
+    right: 20;
+    color: '#666666';
+    font-size: 36;
+}
+
+.graphiPadDetailTopContainerView {
+    top: 0;
+    left: 0;
+    right: 0;
+    backgroundColor: '#cccccc';
+}
+
+.graphiPadDetailLabelContainerView {
+    layout: 'vertical';
+    height: 'SIZE';
+    width: 'SIZE';
+    left: 0;
+    right: 0;
+}
+
+.graphiPadDetailTopViewSeparator {
+    bottom: 0;
+    height: 2;
+    backgroundColor: '#bbbbbb';
+    left: 0;
+    right: 0;
+}
+
+.graphiPadDetailBottomContainerView {
+    bottom: 0;
+    left: 0;
+    right: 0;
+}

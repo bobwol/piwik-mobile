@@ -81,56 +81,16 @@ OpenGraphDetailCommand.prototype.execute = function () {
         
         var reportName = this.getParam('reportName', '');
         var reportDate = this.getParam('reportDate', '');
+        
+        var winParams  = {opacity: 0,backgroundColor: 'white'};
+        
+        if (Piwik.getPlatform().isIpad) {
+            winParams.orientationModes = [Ti.UI.orientation];
+        }
 
-        var win = Ti.UI.createWindow({top: 0, left: 0, right: 0, bottom: 0, opacity: 0,
-                                      orientationModes: [Ti.UI.orientation],
-                                      backgroundColor: 'white'});
+        var win = Ti.UI.createWindow(winParams);
         win.open({opacity: 1, duration: 400});
         
-          /*
-        var closeButton = Titanium.UI.createButton({
-            title:'Close',
-            style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED,
-            color: '#333333'
-        });
-      
-        var revert = Titanium.UI.createButton({
-            title:'Show Evolution',
-            style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
-            color: '#333333'
-        });
-        
-        var revert2 = Titanium.UI.createButton({
-            title:'Evolution Graphs Enabled',
-            style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
-            color: '#333333'
-        });
-        
-        var flexSpace = Titanium.UI.createButton({
-            systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
-        });
-       
-        var toolbar = Titanium.UI.iOS.createToolbar({
-            items:[closeButton],
-            top: 0,
-            borderTop:false,
-            borderBottom:false,
-            barColor:'#bbb',
-            opacity:0.7,
-            translucent: true,
-            zIndex: 999,
-            height: 20
-        });
-        
-        win.add(toolbar);
-
-        closeButton.addEventListener('click', function () {
-            if (win) {
-                win.close({opacity: 0, duration: 300});
-                win = null;
-            }
-        });
- */
         var width  = (win.size && win.size.width) ? win.size.width : Ti.Platform.displayCaps.platformWidth;
         var height = (win.size && win.size.height) ? win.size.height : Ti.Platform.displayCaps.platformHeight;
 
@@ -144,8 +104,7 @@ OpenGraphDetailCommand.prototype.execute = function () {
         var graph            = Piwik.require('PiwikGraph');
         var graphUrlWithSize = graph.appendSize(graphUrl, pictureWidth, pictureHeight, true);
         graphUrlWithSize     = graph.setParams(graphUrlWithSize, {showMetricTitle: 1, legendAppendMetric: 1});
-        graph = null;
-    
+
         Piwik.getLog().debug('piwik graphUrl is ' + graphUrlWithSize, 'OpenGraphDetailCommand::execute');
     
         var imageView = this.create('ImageView', {width: pictureWidth, height: pictureHeight,
@@ -153,44 +112,93 @@ OpenGraphDetailCommand.prototype.execute = function () {
                                                   hires: true,
                                                   enableZoomControls: false,
                                                   image: graphUrlWithSize});
+                                                  
+        if (!Piwik.getPlatform.isIpad) {
+                    
+            function rotateImage (event) {
+                if (!imageView || !win || !graph) {
+                    
+                    return;
+                }
+                
+                var width  = (win.size && win.size.width) ? win.size.width : Ti.Platform.displayCaps.platformWidth;
+                var height = (win.size && win.size.height) ? win.size.height : Ti.Platform.displayCaps.platformHeight;
+        
+                pictureWidth       = width - 20;
+                pictureHeight      = height - 20;
+
+                imageView.width    = pictureWidth;
+                imageView.height   = pictureHeight;
+                graphUrlWithSize   = graph.appendSize(graphUrl, pictureWidth, pictureHeight, true);
+                graphUrlWithSize   = graph.setParams(graphUrlWithSize, {showMetricTitle: 1, legendAppendMetric: 1});
+            
+                imageView.image    = graphUrlWithSize;
+            }
+            
+            Ti.Gesture.addEventListener('orientationchange', rotateImage);
+        }
                                               
         imageView.addEventListener('click', function () {
-            if (win) {
-                win.close({opacity: 0, duration: 300});
-                win = null;
+            if (!win) {
+                return;
+            }
+            
+            win.close({opacity: 0, duration: 300});
+            graph     = null;
+            imageView = null;
+            win       = null;
+            
+            try {
+                if (!Piwik.getPlatform.isIpad) {
+                    Ti.Gesture.removeEventListener('orientationchange', rotateImage);
+                }
+            } catch (e) {
+                Piwik.getLog().warn('Failed to remove orientationchange event listener', 'OpenGraphDetailCommand::execute');
             }
         });
-                                              
+
         win.addEventListener('click', function () {
-            if (win) {
-                win.close({opacity: 0, duration: 300});
-                win = null;
+            if (!win) {
+                return;
+            }
+            
+            win.close({opacity: 0, duration: 300});
+            graph     = null;
+            imageView = null;
+            win       = null;
+            
+            try {
+                if (!Piwik.getPlatform.isIpad) {
+                    Ti.Gesture.removeEventListener('orientationchange', rotateImage);
+                }
+            } catch (e) {
+                Piwik.getLog().warn('Failed to remove orientationchange event listener', 'OpenGraphDetailCommand::execute');
             }
         });
+        
         if (Piwik.getPlatform().isIpad) {
             var quarter   = Math.floor(height / 4); // 25%
-            var labelView = Ti.UI.createView({layout: 'vertical', height: 'SIZE', width: 'SIZE', left: 0, right: 0});
-            var topView   = Ti.UI.createImageView({top: 0, height: quarter, left: 0, right: 0, backgroundColor: '#cccccc'});
+            var labelView = Ti.UI.createView({className: 'graphiPadDetailLabelContainerView'});
+            var topView   = Ti.UI.createImageView({height: quarter, className: 'graphiPadDetailTopContainerView'});
             
             if (reportName) {
-                labelView.add(Ti.UI.createLabel({text: reportName, ellipsize: true, wordWrap: false, color: '#333333', textAlign: 'center', left: 20, right: 20, font: {fontSize: 48}}));
+                labelView.add(Ti.UI.createLabel({text: reportName, className: 'graphiPadDetailReportName'}));
             }
             
             if (reportDate) {
-                labelView.add(Ti.UI.createLabel({text: reportDate, ellipsize: true, wordWrap: false, textAlign: 'center', top: 25, left: 20, right: 20, color: '#666666', font: {fontSize: 36}}));
+                labelView.add(Ti.UI.createLabel({text: reportDate, className: 'graphiPadDetailReportDate'}));
             }
             
             topView.add(labelView);
             labelView = null;
             
-            topView.add(Ti.UI.createImageView({bottom: 0, height: 2, backgroundColor: '#bbbbbb', left: 0, right: 0}));
+            topView.add(Ti.UI.createImageView({className: 'graphiPadDetailTopViewSeparator'}));
             
             win.add(topView);
             topView = null;
             
-            var bottomView = Ti.UI.createImageView({top: quarter, bottom: 0, left: 0, right: 0});
+            var bottomView = Ti.UI.createImageView({top: quarter, className: 'graphiPadDetailBottomContainerView'});
             bottomView.add(imageView);
-            imageView = null;
             
             win.add(bottomView);
             bottomView = null;
@@ -198,7 +206,7 @@ OpenGraphDetailCommand.prototype.execute = function () {
         } else {
             
             win.add(imageView);
-            imageView = null;
+         
         }
         
     }
