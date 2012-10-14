@@ -15,8 +15,10 @@ var Piwik = require('library/Piwik');
  *            content. The rendered row is accessible via getRow(). Does automatically display an information that
  *            no data is available if graphUrl is not defined.
  *
- * @param     {Object}  [params]           See {@link Piwik.UI.View#setParams}
- * @param     {string}  [params.graphUrl]  Optional. The url to the graph without any sizes
+ * @param     {Object}  [params]             See {@link Piwik.UI.View#setParams}
+ * @param     {string}  [params.graphUrl]    Optional. The url to the graph without any sizes
+ * @param     {string}  [params.reportName]  An optional report nam.
+ * @param     {string}  [params.reportDate]  An optional report date
  *
  * @example
  * var graph = Piwik.getUI().createGraph({graphUrl: 'http://...'});
@@ -113,7 +115,10 @@ Graph.prototype.addGraph = function (view) {
     var that = this;
     // event to open graph in fullscreen
     showDetailImage.addEventListener('click', function () {
-        that.createCommand('OpenGraphDetailCommand', that.getParams()).execute();
+        that.create('FullscreenWindow', {url: 'graph/fulldetail', 
+                                         graphUrl: that.getParam('graphUrl'), 
+                                         reportName: that.getParam('reportName'), 
+                                         reportDate: that.getParam('reportDate')});
     });
     
     view.add(showDetailImage);

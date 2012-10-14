@@ -153,6 +153,85 @@ UI.createWindow = function (params) {
 };
 
 /**
+ * Creates a new full window and displays it in front of the currently displayed window. Therefore it creates a new
+ * Titanium.UI.Window. The specified url defines which content is displayed within the window.
+ * Titanium differences between lightweight and heavyweight windows. We don't use heavyweight windows cause heavyweight
+ * windows has there own JavaScript subcontext. It is much faster to just work with one context. The disadvantage is
+ * that we have to care a bit more about leaks and so on.
+ *
+ * @param  {Object}           params                      All needed params to display the window and process the 
+ *                                                        request.
+ * @param  {string}           params.url                  The url to the window with the windows instructions. The url
+ *                                                        has to be relative to the 'Resources/windows' directory.
+ * @param  {string}           [params.exitOnClose=false]  if true, it makes sure android exits the app when this
+ * @param  {*}                params.*                    You can pass other parameters as you need it. The created
+ *                                                        view can access those values. You can use this for example if 
+ *                                                        you want to pass a site, date, period parameter or something 
+ *                                                        else.
+ *
+ * @see      <a href="http://developer.appcelerator.com/apidoc/mobile/latest/Titanium.UI.Window-object">Titanium.UI.Window</a>
+ */
+UI.createFullscreenWindow = function (params) {
+
+    if (!params) {
+        params = {};
+    }
+    
+    params.window     = null;
+    params.rootWindow = null;
+    delete params.window;
+    delete params.rootWindow;
+
+    try {
+        var winParams  = {opacity: 0, backgroundColor: 'white'};
+        
+        if (Piwik.getPlatform().isIpad) {
+            winParams.orientationModes = [Ti.UI.orientation];
+        } else if (Piwik.getPlatform().isAndroid) {
+            // animation not supported by android, zIndex makes sure window is visible
+            winParams.opacity = 1;
+            winParams.zIndex  = 9999;
+        } 
+    
+        // newWin is the will we will render everything into
+        var newWin = Ti.UI.createWindow(winParams);
+        newWin.open({opacity: 1, duration: 400});
+        
+        if (Piwik.getPlatform().isAndroid) {
+            newWin.addEventListener('androidback', function () {
+                Piwik.getLog().debug('android:back event', 'Piwik.UI::createFullscreenWindow');
+            
+                if (newWin) {
+                    newWin.close();
+                }
+            });
+        }
+    
+        // load the requested template
+        var winTemplate = Piwik.requireWindow(params.url);
+        // extend newWin and render the requested template
+        winTemplate.apply(newWin, [params]);
+        
+        newWin.addEventListener('close', function () {
+            Piwik.getLog().debug('close', 'Piwik.UI::createFullscreenWindow');
+        
+            if (newWin && newWin.cleanup) {
+                newWin.cleanup();
+                newWin = null;
+            }
+        });
+        
+        params      = null;
+        winTemplate = null;
+
+    } catch (exception) {
+
+        var uiError = UI.createError({exception: exception, errorCode: 'PiUiCw12'});
+        uiError.showErrorMessageToUser();
+    }
+};
+
+/**
  * Creates a new modal window instance.
  *
  * @see      Piwik.UI.ModalWindow
