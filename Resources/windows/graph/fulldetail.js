@@ -43,6 +43,8 @@ function window (params) {
         return (this.size && this.size.height) ? this.size.height : Ti.Platform.displayCaps.platformHeight;
     };
     
+    var navBarHeight = Ti.Platform.displayCaps.platformHeight - this.getViewHeight();
+
     /**
      * Gets the calculated width of the graph.
      * 
@@ -76,28 +78,8 @@ function window (params) {
      * 
      * @returns {int} The width in px 
      */
-    this.getOrientationSpecificWidth = function (isLandscape) {
-        
-        var width  = win.getViewWidth();
-        var height = win.getViewHeight();
-        var pictureWidth  = 0;
-
-        // we have to detect current width/height after orientation change... 
-        if (isLandscape) {
-            if (width > height) {
-                pictureWidth  = width - 20;
-            } else {
-                pictureWidth  = height - 20;
-            }
-        } else {
-            if (width > height) {
-                pictureWidth  = height - 20
-            } else {
-                pictureWidth  = width - 20;
-            }
-        }
-        
-        event = null;
+    this.getOrientationSpecificWidth = function () {
+        var pictureWidth = Ti.Platform.displayCaps.platformWidth - navBarHeight - 20;
         
         return pictureWidth;
     }
@@ -108,26 +90,8 @@ function window (params) {
      * 
      * @returns {int} The height in px 
      */
-    this.getOrientationSpecificHeight = function (isLandscape) {
-        
-        var width  = win.getViewWidth();
-        var height = win.getViewHeight();
-        var pictureHeight = 0;
-
-        // we have to detect current width/height after orientation change... 
-        if (isLandscape) {
-            if (width > height) {
-                pictureHeight = height - 20;
-            } else {
-                pictureHeight = width - 40;
-            }
-        } else {
-            if (width > height) {
-                pictureHeight = width - 40;
-            } else {
-                pictureHeight = height - 20;
-            }
-        }
+    this.getOrientationSpecificHeight = function () {
+        var pictureHeight = Ti.Platform.displayCaps.platformHeight - navBarHeight - 20;
         
         return pictureHeight;
     }
@@ -193,10 +157,8 @@ function window (params) {
             }
 
             try {
-                
-                var isLandscape   = Ti.Gesture.isLandscape(event.orientation);
-                var pictureWidth  = win.getOrientationSpecificWidth(isLandscape);
-                var pictureHeight = win.getOrientationSpecificHeight(isLandscape);
+                var pictureWidth  = win.getOrientationSpecificWidth();
+                var pictureHeight = win.getOrientationSpecificHeight();
                 
                 win.remove(imageView);
                 imageView = null;
