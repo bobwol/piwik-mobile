@@ -25,18 +25,38 @@ var Piwik = require('library/Piwik');
  */
 function window (params) {
     
+    /**
+     * Gets the width of the window.
+     * 
+     * @returns {int} The width in px 
+     */
     this.getViewWidth = function () {
         return (this.size && this.size.width) ? this.size.width : Ti.Platform.displayCaps.platformWidth;
     };
     
+    /**
+     * Gets the height of the window.
+     * 
+     * @returns {int} The height in px 
+     */
     this.getViewHeight = function () {
         return (this.size && this.size.height) ? this.size.height : Ti.Platform.displayCaps.platformHeight;
     };
     
+    /**
+     * Gets the calculated width of the graph.
+     * 
+     * @returns {int} The width in px 
+     */
     this.getPictureWidth = function () {
         return this.getViewWidth() - 20; // 10px space top and bottom
     };
     
+    /**
+     * Gets the calculated height of the graph.
+     * 
+     * @returns {int} The height in px 
+     */
     this.getPictureHeight = function () {
         var height        = this.getViewHeight();
         var pictureHeight = 0;
@@ -50,6 +70,12 @@ function window (params) {
         return pictureHeight;
     };
     
+    /**
+     * Gets the calculated width of the graph after a window orientation change on Android. We have to detect 
+     * current width/height cause 'this.size' is not correct after an orientation change.
+     * 
+     * @returns {int} The width in px 
+     */
     this.getOrientationSpecificWidth = function (isLandscape) {
         
         var width  = win.getViewWidth();
@@ -75,6 +101,13 @@ function window (params) {
         
         return pictureWidth;
     }
+    
+    /**
+     * Gets the calculated height of the graph after a window orientation change on Android. We have to detect 
+     * current width/height cause 'this.size' is not correct after an orientation change.
+     * 
+     * @returns {int} The height in px 
+     */
     this.getOrientationSpecificHeight = function (isLandscape) {
         
         var width  = win.getViewWidth();
@@ -99,6 +132,11 @@ function window (params) {
         return pictureHeight;
     }
     
+    /**
+     * Gets the graph url for the given width and height.
+     * 
+     * @returns {string}  The url to request the graph.
+     */
     this.getGraphUrlWithSize = function (width, height) {
 
         if (!params || !params.graphUrl) {
@@ -113,7 +151,12 @@ function window (params) {
         
         return graphUrlWithSize;
     }
-    
+        
+    /**
+     * Gets the image view for the given url, width and height.
+     * 
+     * @returns {Ti.UI.ImageView}  The created ImageView instance.
+     */
     this.getImageView = function (url, width, height) {
 
         Piwik.getLog().debug('piwik graphUrl is ' + url, 'graph/fulldetail::getImageView');
