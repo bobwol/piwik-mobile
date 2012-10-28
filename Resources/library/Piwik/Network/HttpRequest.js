@@ -381,6 +381,7 @@ HttpRequest.prototype.error = function (e) {
     } else if (e && e.error) {
         
         e.error = '' + e.error;
+        var originalErrorMessage = e.error;
 
         if (-1 != e.error.indexOf('Host is unresolved') || -1 != e.error.indexOf('Unable to resolve host')) {
             // convert error message "Host is unresolved: notExistingDomain.org:80" to: "Host is unresolved" and 
@@ -403,6 +404,34 @@ HttpRequest.prototype.error = function (e) {
             e.error = 'Unable to start HTTP connection';
         } else if (-1 != e.error.indexOf('SSL problem')) {
             e.error = 'SSL problem (Possible causes may include a bad/expired/self-signed certificate, clock set to wrong date)';
+        } else if (-1 != e.error.indexOf('Service Temporarily Unavailable')) {
+            e.error = 'Service Temporarily Unavailable';
+        } else if (-1 != e.error.indexOf('Internal Server Error')) {
+            e.error = 'Internal Server Error';
+        } else if (-1 != e.error.indexOf('Connection reset by peer')) {
+            // recvfrom failed: ECONNRESET (Connection reset by peer
+            e.error = 'Connection reset by peer';
+        } else if (-1 != e.error.indexOf('Cannot convert host to URI')) {
+            e.error = 'Cannot convert host to URI';
+        } else if (-1 != e.error.indexOf('The target server failed to respond')) {
+            e.error = 'The target server failed to respond';
+        } else if (-1 != e.error.indexOf('Gateway Time-out')) {
+            e.error = 'Gateway Time-out';
+        } else if (-1 != e.error.indexOf('The target server failed to respond')) {
+            e.error = 'The target server failed to respond';
+        } else if (-1 != e.error.indexOf('SSL handshake aborted')) {
+            e.error = 'SSL handshake aborted: Failure in SSL library, usually a protocol error';
+        } else if (-1 != e.error.indexOf('java.net.SocketTimeoutException')) {
+            e.error = 'SocketTimeoutException';
+        } else if (-1 != e.error.indexOf('SSL shutdown failed')) {
+            e.error = 'SSL shutdown failed I/O error during system call';
+        } else if (-1 != e.error.indexOf('Connection timed out')) {
+            // recvfrom failed: 
+            e.error = 'ETIMEDOUT Connection timed out';
+        } else if (-1 != e.error.indexOf('Connect to') && -1 != e.error.indexOf('timed out')) {
+            e.error = 'Connect timed out';
+        } else if (-1 != e.error.indexOf('Connect to') && -1 != e.error.indexOf('refused')) {
+            e.error = 'Connect refused';
         }
 
         switch (e.error.toLowerCase()) {
@@ -449,7 +478,7 @@ HttpRequest.prototype.error = function (e) {
                 
                 var statusText = '';
                 errorType      = e.error;
-                exception      = e;
+                exception      = originalErrorMessage;
 
                 if (this.xhr && 'undefined' != (typeof this.xhr.status)) {
                     statusText  = '' + (this.xhr.statusText ? this.xhr.statusText : this.xhr.status);
