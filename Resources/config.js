@@ -50,7 +50,7 @@ config.debugging      = false;
  */
 config.piwik = {
     timeout: 60000,
-    preferredMetrics: ['nb_hits', 'nb_visits', 'nb_pageviews', 'nb_uniq_pageviews', 'nb_actions', 'revenue'],
+    preferredMetrics: ['nb_hits', 'nb_visits', 'nb_pageviews', 'nb_uniq_pageviews', 'nb_actions', 'nb_conversions', 'revenue'],
     defaultReportDate: 'day##yesterday',
     filterLimit: 30,
     multiChartEnabled: false,
