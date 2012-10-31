@@ -97,8 +97,7 @@ ChooseSiteCommand.prototype.execute = function (params) {
     var win  = this.create('ModalWindow', {openView: params.source ? params.source : null, 
                                            title: _('General_ChooseWebsite')});
 
-    var websitesList = this.create('WebsitesList', {view: win.getView(),
-                                                    displaySparklines: false});
+    var websitesList = this.create('WebsitesList', {view: win.getView()});
 
     websitesList.addEventListener('onChooseSite', function (event) {
         if (!event || !event.site) {
