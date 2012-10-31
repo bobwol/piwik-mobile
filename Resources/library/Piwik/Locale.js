@@ -144,6 +144,11 @@ function Locale () {
         if (Ti.Platform.locale) {
 
             var locale = Ti.Platform.locale;
+            
+            if (locale && locale.getCurrentLocale) {
+                // mobile web
+                return locale.getCurrentLocale();
+            }
 
             if (locale && locale.substr) {
 
