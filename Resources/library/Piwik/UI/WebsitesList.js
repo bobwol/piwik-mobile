@@ -255,10 +255,6 @@ WebsitesList.prototype.init = function () {
                 continue;
             }
 
-            if (!that.getParam('displaySparklines', true)) {
-                site.sparklineUrl = null;
-            }
-
             rows.push(that.create('TableViewRow', {title: '' + site.name,
                                                    id: site.idsite,
                                                    name: 'site' + site.idsite,
