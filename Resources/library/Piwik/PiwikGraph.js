@@ -76,13 +76,35 @@ function PiwikGraph () {
             requestUrl += paramName + '=' + parameter[paramName] + '&';
         }
         
-        graphUrl        = graphUrl + '&' + Piwik.getNetwork().encodeUrlParams(requestUrl);
-        graphUrl        = Piwik.getNetwork().getBasePath('' + account.accessUrl) + graphUrl;
+        graphUrl = graphUrl + '&' + Piwik.getNetwork().encodeUrlParams(requestUrl);
+        graphUrl = Piwik.getNetwork().getBasePath('' + account.accessUrl) + graphUrl;
         
-        account = null;
-        site    = null;
+        account  = null;
+        site     = null;
         
         return graphUrl;
+    };
+    
+    /**
+     * Adds the current selected sort order to the given graph url.
+     * 
+     * @param    {string}  graphUrl   A Piwik graph url.
+     * @param    {string}  sortORder  The sort order that should be used, for example 'actions' or 'visits'
+     *
+     * @returns  {string}  The updated Piwik graph url which will include the sort order
+     */
+    this.addSortOrder = function (graphUrl, sortOrder) {
+        
+        if (!sortOrder) {
+            
+            return graphUrl;
+        }
+        
+        var sortOrderParams = {filter_sort_column: sortOrder, 
+                               column: sortOrder,   // column = Piwik 1.8 and older
+                               columns: sortOrder}; // columns = Piwik 1.9 and newer
+                               
+        return this.setParams(graphUrl, sortOrderParams);
     };
     
     /**

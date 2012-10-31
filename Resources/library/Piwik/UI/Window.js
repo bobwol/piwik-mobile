@@ -90,6 +90,10 @@ function UiWindow () {
                     if (rel && rel.cleanup) {
                         rel.cleanup();
                     }
+                    
+                    if (!rel) {
+                        continue;
+                    }
                 } catch (e) {
                     Piwik.getLog().warn(e, 'Failed to cleanup rel ' + rel)
                 }
@@ -111,17 +115,11 @@ function UiWindow () {
             
             return;
         }
-    
-        var urlParams  = ('' + that.url).split('/');
-        var controller = urlParams[0];
-        var action     = ('' + urlParams[1]).split('.js')[0];
-        var title      = controller + ' ' + action;
-        var url        = '/window/' + controller + '/' + action;
-    
+
         // do not track a page view if just a modal window was closed
         if (!event || 'undefined' == (typeof event.modal) || !event.modal) {
             // track a page view
-            Piwik.getTracker().setDocumentTitle(title).setCurrentUrl(url).trackPageView();
+            Piwik.getTracker().trackWindow(that.url);
         }
     
         var titleOptions    = that.titleOptions;

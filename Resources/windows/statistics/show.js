@@ -168,33 +168,33 @@ function window (params) {
                                                             command: siteCommand}));
         }
 
-        var graph    = null;
-        var graphUi  = null;
-        var graphUrl = null;
+        var graph   = null;
+        var graphUi = null;
+        var imageGraphUrl = null;
+        var imageGraphEvolutionUrl = null;
 
-        if (event.graphsEnabled && event.metadata && event.metadata.imageGraphUrl && that) {
+        if (event.graphsEnabled && event.metadata && that
+            && (event.metadata.imageGraphUrl || event.metadata.imageGraphEvolutionUrl)) {
 
-            graph              = Piwik.require('PiwikGraph');
-            var accountManager = Piwik.require('App/Accounts');
-            var account        = accountManager.getAccountById(event.site.accountId);
-            accountManager     = null;
-            graphUrl           = event.metadata.imageGraphUrl;
-         /*   
-            if (Piwik.require('App/Settings').getPreferEvoltuionGraphs() && event.metadata.imageGraphEvolutionUrl) {
-                graphUrl = event.metadata.imageGraphEvolutionUrl;
-            }
-            */
-            if (event.sortOrderColumn) {
-                graphUrl = graph.setParams(graphUrl, {filter_sort_column: event.sortOrderColumn, 
-                                                      column: event.sortOrderColumn,    // column = Piwik 1.8 and older
-                                                      columns: event.sortOrderColumn}); // columns = Piwik 1.9 and newer
-            }
+            graph       = Piwik.require('PiwikGraph');
+            var account = Piwik.require('App/Accounts').getAccountById(event.site.accountId);
             
-            graphUrl = graph.generateUrl(graphUrl, account, event.site, event.report);
-            graphUi  = that.create('Graph', {graphUrl: graphUrl, 
-                                             reportName: (params && params.report) ? params.report.name : '', 
-                                             reportDate: event.reportDate ? event.reportDate : ''});
-            account  = null;
+            imageGraphUrl          = event.metadata.imageGraphUrl ? event.metadata.imageGraphUrl : '';
+            imageGraphEvolutionUrl = event.metadata.imageGraphEvolutionUrl ? event.metadata.imageGraphEvolutionUrl : '';
+            
+            if (event.sortOrderColumn) {
+                imageGraphUrl          = graph.addSortOrder(imageGraphUrl, event.sortOrderColumn);
+                imageGraphEvolutionUrl = graph.addSortOrder(imageGraphEvolutionUrl, event.sortOrderColumn);
+            }
+
+            imageGraphUrl          = graph.generateUrl(imageGraphUrl, account, event.site, event.report);
+            imageGraphEvolutionUrl = graph.generateUrl(imageGraphEvolutionUrl, account, event.site, event.report);
+            
+            graphUi = that.create('Graph', {imageGraphUrl: imageGraphUrl, 
+                                            imageGraphEvolutionUrl: imageGraphEvolutionUrl,
+                                            reportName: (params && params.report) ? params.report.name : '', 
+                                            reportDate: event.reportDate ? event.reportDate : ''});
+            account = null;
             
             if (graphUi) {
                 tableViewRows.push(graphUi.getRow());
@@ -218,7 +218,7 @@ function window (params) {
             statsticValueLabel = event.columns.value;
         }
 
-        if ((graphUrl || hasDimension) && statsticValueLabel) {
+        if ((imageGraphUrl || hasDimension) && statsticValueLabel) {
             // Display metric only where it makes sence. It generally makes sence for all reports having a dimension.
             // For example 'VisitsSummary.get' is a report having no dimension.
             // It makes also sence to display metric if a graph is displayed. The changed metric will not effect the
@@ -240,8 +240,8 @@ function window (params) {
                                                         className: 'tableViewRowSelectable',
                                                         command: dateCommand}));
 
-        var visitorStats  = that.create('StatisticList', {values:   event.reportData,
-                                                          showAll:  event.showAll});
+        var visitorStats  = that.create('StatisticList', {values:  event.reportData,
+                                                          showAll: event.showAll});
 
         tableViewRows     = tableViewRows.concat(visitorStats.getRows());
         visitorStats      = null;

@@ -28,12 +28,21 @@
     backgroundSelectedColor: '#FFC700';
     backgroundFocusedColor: '#FFC700';
     backgroundColor: '#ffffff';
-    focusable: true;
     bottom: 8;
     right: 8;
     width: 32;
     height: 32;
     zIndex: 2;
+}
+
+.graphSwitchGraphToolbar {
+    top: 0;
+    borderTop: false;
+    borderBottom: false;
+    barColor: '#bbb';
+    translucent: true;
+    zIndex: 999;
+    height: 20;
 }
 
 #graphImage {

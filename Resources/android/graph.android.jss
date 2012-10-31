@@ -36,3 +36,23 @@
     zIndex: 1;
     defaultImage: '/images/graphDefault.png';
 }
+
+.graphSwitchGraphButton {
+    color: '#333333';
+    right: '16dp';
+    top: '1dp';
+    height: '38dp';
+    backgroundImage: '/images/btn_default_normal_holo_light.9.png';
+    backgroundFocusedImage: '/images/btn_default_focused_holo_light.9.png';
+    backgroundSelectedImage: '/images/btn_default_focused_holo_light.9.png';
+    backgroundDisabledImage: '/images/btn_default_disabled_holo_light.9.png';
+}
+
+.graphSwitchGraphContainerView {
+    top: 0;
+    left: 0;
+    right: 0;
+    backgroundColor: '#bbbbbb';
+    height: '40dp';
+    zIndex: 999;
+}

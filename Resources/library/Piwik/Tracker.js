@@ -216,6 +216,30 @@ function Tracker () {
 
         return visitCount;
     };
+    
+    /**
+     * Tracks a window. It'll always detect the controller / action depending on the given url. Call this method if 
+     * a window gets focus. For more information see {@link Piwik.Tracker#trackPageView}.
+     * 
+     * @param  {string}  windowUrl  A window url, for example "site/index". In this case, "site" is the controller
+     *                              and "index" is the action. It'll track the Title "site index" and the url
+     *                              "/window/site/index".
+     */
+    this.trackWindow = function (windowUrl) {
+        
+        if (!windowUrl) {
+            
+            return;
+        }
+        
+        var urlParams  = ('' + windowUrl).split('/');
+        var controller = urlParams[0];
+        var action     = ('' + urlParams[1]).split('.js')[0];
+        var title      = controller + ' ' + action;
+        var url        = '/window/' + controller + '/' + action;
+        
+        this.setDocumentTitle(title).setCurrentUrl(url).trackPageView();
+    };
 
     /**
      * Log a page view. A page view is for example a new opened window or navigating to an already opened window.

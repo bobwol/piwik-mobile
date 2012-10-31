@@ -183,9 +183,10 @@ UI.createFullscreenWindow = function (params) {
     delete params.rootWindow;
 
     try {
-        var winParams  = {opacity: 0, backgroundColor: 'white'};
+        var winParams = {opacity: 0, backgroundColor: 'white'};
         
         if (Piwik.getPlatform().isIpad) {
+            // we do not support orientation on iPad at this moment
             winParams.orientationModes = [Ti.UI.orientation];
         } else if (Piwik.getPlatform().isAndroid) {
             // animation not supported by android, zIndex makes sure window is visible
@@ -206,6 +207,9 @@ UI.createFullscreenWindow = function (params) {
                 }
             });
         }
+        
+        var urlParams = ('' + params.url).split('/');
+        Piwik.getTracker().trackEvent({title: urlParams[0] + ' ' + urlParams[1], url: '/' + params.url});
     
         // load the requested template
         var winTemplate = Piwik.requireWindow(params.url);
@@ -226,7 +230,7 @@ UI.createFullscreenWindow = function (params) {
 
     } catch (exception) {
 
-        var uiError = UI.createError({exception: exception, errorCode: 'PiUiCw12'});
+        var uiError = UI.createError({exception: exception, errorCode: 'PiUiFw23'});
         uiError.showErrorMessageToUser();
     }
 };
@@ -476,6 +480,35 @@ UI.createGraph = function (params) {
     } catch (exception) {
 
         var uiError  = UI.createError({exception: exception, errorCode: 'PiUiCg27'});
+        uiError.showErrorMessageToUser();
+    }
+};
+
+/**
+ * Creates a new switch graph instance.
+ *
+ * @see      Piwik.UI.SwitchGraph
+ *
+ * @param    {Object}  params  A dictionary object properties defined in Piwik.UI.SwitchGraph.
+ *
+ * @type     Piwik.UI.SwitchGraph
+ *
+ * @returns  The created switch graph instance.
+ */
+UI.createSwitchGraph = function (params) {
+
+    try {
+        var instance = Piwik.require('UI/SwitchGraph');
+        instance.setParams(params);
+        instance.init();
+        
+        params = null;
+
+        return instance;
+
+    } catch (exception) {
+
+        var uiError  = UI.createError({exception: exception, errorCode: 'PiUiSg51'});
         uiError.showErrorMessageToUser();
     }
 };

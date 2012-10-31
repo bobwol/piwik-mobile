@@ -112,19 +112,6 @@ function window () {
             settings      = null;
         };
 
-        var onChangePreferEvolutionGraphs = function (event) {
-
-            this.setHasCheck(!this.getHasCheck());
-
-            var action    = this.getHasCheck() ? 'enable' : 'disable';
-            Piwik.getTracker().trackEvent({title: 'Prefer Evolution Graphs ' + action,
-                                           url: '/settings/prefer-evolution-graphs/' + action});
-
-            var settings  = Piwik.require('App/Settings');
-            settings.setPreferEvoltuionGraphs(this.getHasCheck());
-            settings      = null;
-        };
-
         // an array like ['English', 'German', ...]
         var availableLanguageOptions = [];
         var currentLanguage          = 'English';
@@ -404,10 +391,6 @@ function window () {
                                                   title: _('Mobile_EnableGraphsLabel'),
                                                   onClick: onChangeGraphs,
                                                   hasCheck: Boolean(indexEvent.graphsEnabled)}),
-              //       that.create('TableViewRow', {className: 'settingsTableViewRowHasCheck',
-              //                                    title: _('Mobile_PreferEvolutionGraphs'),
-              //                                    onClick: onChangePreferEvolutionGraphs,
-              //                                    hasCheck: Boolean(indexEvent.preferEvolutionGraphs)}),
                      that.create('TableViewSection', {title: _('Mobile_Advanced'), 
                                                       style: 'native'}),
                      that.create('TableViewRow', {className: Piwik.getPlatform().isIos ? 'settingsTableViewRowHasChild' : 'settingsTableViewRow',

@@ -15,7 +15,8 @@ var Piwik = require('library/Piwik');
  * @class     Displays the current graph in full screen on the device.
  *
  * @property  {Object}  params
- * @property  {string}  params.graphUrl      The graph url without any size parameters
+ * @property  {string}  params.imageGraphUrl           The url to the static graph without any sizes
+ * @property  {string}  params.imageGraphEvolutionUrl  The url to the evolution graph without any sizes
  * @property  {string}  [params.reportName]  An optional report nam.
  * @property  {string}  [params.reportDate]  An optional report date
  *
@@ -24,6 +25,10 @@ var Piwik = require('library/Piwik');
  * @augments  Piwik.UI.Window
  */
 function window (params) {
+    
+    var graphUrls = Piwik.getUI().createSwitchGraph({window: this,
+                                                     imageGraphUrl: params.imageGraphUrl, 
+                                                     imageGraphEvolutionUrl: params.imageGraphEvolutionUrl});
     
     /**
      * Gets the width of the window.
@@ -82,7 +87,7 @@ function window (params) {
         var pictureWidth = Ti.Platform.displayCaps.platformWidth - navBarHeight - 20;
         
         return pictureWidth;
-    }
+    };
     
     /**
      * Gets the calculated height of the graph after a window orientation change on Android. We have to detect 
@@ -94,7 +99,7 @@ function window (params) {
         var pictureHeight = Ti.Platform.displayCaps.platformHeight - navBarHeight - 20;
         
         return pictureHeight;
-    }
+    };
     
     /**
      * Gets the graph url for the given width and height.
@@ -103,18 +108,18 @@ function window (params) {
      */
     this.getGraphUrlWithSize = function (width, height) {
 
-        if (!params || !params.graphUrl) {
+        if (!graphUrls.currentGraphUrl()) {
             
             return '';
         }
 
         var graph            = Piwik.require('PiwikGraph');
-        var graphUrlWithSize = graph.appendSize(params.graphUrl, width, height, true);
+        var graphUrlWithSize = graph.appendSize(graphUrls.currentGraphUrl(), width, height, true);
         graphUrlWithSize     = graph.setParams(graphUrlWithSize, {showMetricTitle: 1, legendAppendMetric: 1});
         graph                = null;
         
         return graphUrlWithSize;
-    }
+    };
         
     /**
      * Gets the image view for the given url, width and height.
@@ -127,6 +132,7 @@ function window (params) {
     
         var options = {width: width,
                        height: height,
+                       touchEnabled: false,
                        canScale: !Piwik.getPlatform().isAndroid,
                        hires: !Piwik.getPlatform().isAndroid,
                        defaultImage: '/images/graphDefault.png',
@@ -138,10 +144,9 @@ function window (params) {
         }
     
         return Piwik.getUI().createImageView(options);
-    }
-
-    var win = this;
+    };
     
+    var win = this;
     var pictureWidth     = this.getPictureWidth();
     var pictureHeight    = this.getPictureHeight();
     var graphUrlWithSize = this.getGraphUrlWithSize(pictureWidth, pictureHeight);
@@ -198,7 +203,9 @@ function window (params) {
 
         var quarter   = Math.floor(this.getViewHeight() / 4); // 25%
         var labelView = Ti.UI.createView({className: 'graphiPadDetailLabelContainerView'});
-        var topView   = Ti.UI.createImageView({height: quarter, className: 'graphiPadDetailTopContainerView'});
+        var topView   = Ti.UI.createImageView({height: quarter, 
+                                               touchEnabled: false,
+                                               className: 'graphiPadDetailTopContainerView'});
         
         if (params.reportName) {
             labelView.add(Ti.UI.createLabel({text: params.reportName, className: 'graphiPadDetailReportName'}));
@@ -221,18 +228,11 @@ function window (params) {
         
         win.add(bottomView);
         bottomView = null;
-        
     }
-
-    imageView.addEventListener('click', function () {
-        if (!win) {
-            return;
-        }
-        
-        win.close({opacity: 0, duration: 300});
-    });
-
-    win.addEventListener('click', function () {
+    
+    graphUrls.addSwitchGraph(win, true, false);
+    
+    graphUrls.addEventListener('close', function () {
         if (!win) {
             return;
         }
@@ -240,6 +240,25 @@ function window (params) {
         win.close({opacity: 0, duration: 300});
     });
     
+    graphUrls.addEventListener('switch', function () {
+        if (!win || !imageView) {
+            return;
+        }
+        
+        imageView.image = win.getGraphUrlWithSize(win.getPictureWidth(), win.getPictureHeight());
+    });
+    
+    win.addEventListener('click', function () {
+        if (!graphUrls) {
+            return;
+        }
+        
+        graphUrls.toggleVisibility();
+    });
+    
+    /**
+     * Cleanup.
+     */
     this.cleanup = function () {
 
         try {
@@ -251,15 +270,18 @@ function window (params) {
                 Ti.Gesture.removeEventListener('orientationchange', 
                                                Piwik.getPlatform().isAndroid ? rotateImageOnAndroid : rotateImage);
             }
+            
+            if (graphUrls && graphUrls.cleanup) {
+                graphUrls.cleanup();
+            }
         } catch (e) {
             Piwik.getLog().warn('Failed to remove orientationchange event listener', 'graph/fulldetail::execute');
         }
         
-        imageView = null;
-        win       = null;
-        
-        this.menuOptions  = null;
-        this.titleOptions = null;
+        imageView   = null;
+        win         = null;
+        params      = null;
+        graphUrls   = null;
     };
 }
 
