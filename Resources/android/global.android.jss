@@ -165,8 +165,8 @@
 /**
  * window settings/editaccount.js
  */
-#editAccountTableView {
-    separatorColor: '#ffffff';
+#editAccountScrollView {
+    layout: 'vertical';
 }
 
 .editAccountTableFooterView {

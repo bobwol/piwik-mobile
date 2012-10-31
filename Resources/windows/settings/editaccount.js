@@ -40,9 +40,6 @@ function window (params) {
     var activityIndicator = this.create('ActivityIndicator');
     var request           = Piwik.require('Network/AccountRequest');
     
-    var tableView = this.create('TableView', {id: 'editAccountTableView'});
-    var tableData = [];
-    
     var piwikUrl  = Ti.UI.createTextField({
         className: 'editAccountTextField',
         value: '',
@@ -80,49 +77,95 @@ function window (params) {
         borderStyle: Ti.UI.INPUT_BORDERSTYLE_NONE,
         autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    
-    tableData.push(this.create('TableViewSection', {title: _('Mobile_AccessUrlLabel'), 
-                                                    style: 'native'}));
-                                                    
-    var row = Ti.UI.createTableViewRow({className: 'editAccountControlRow1',
-                                        id: 'editAccountControlRow'});
-    row.add(piwikUrl);
-    tableData.push(row);
-    row     = null;
-    
-    tableData.push(this.create('TableViewSection', {title: _('Mobile_AnonymousAccess'), 
-                                                    style: 'native'}));
-
-    var row = Ti.UI.createTableViewRow({className: 'editAccountControlRow2',
-                                        id: 'editAccountControlRow'});
-    row.add(piwikAnonymous);
-    tableData.push(row);
-    row     = null;
-    
-    var credentialsSection = this.create('TableViewSection', {title: _('Mobile_LoginCredentials'), 
-                                                              style: 'native'});
-
-    tableData.push(credentialsSection);
-    credentialsSection     = null;
-
-    var piwikUserRow       = Ti.UI.createTableViewRow({className: 'editAccountControlRow3',
-                                                       id: 'editAccountControlRow'});
-    piwikUserRow.add(piwikUser);
-    tableData.push(piwikUserRow);
-    
-    var piwikPasswordRow   = Ti.UI.createTableViewRow({className: 'editAccountControlRow4',
-                                                       id: 'editAccountControlRow'});
-    piwikPasswordRow.add(piwikPassword);
-    tableData.push(piwikPasswordRow);
-    
-    var footerView = Ti.UI.createView({className: 'editAccountTableFooterView', layout: 'vertical'});
-    var save       = Ti.UI.createButton({title:  _('General_Save'), className: 'editAccountSaveButton'});
-    footerView.add(save);
-    
-    footerView.add(Ti.UI.createLabel({text: _('Mobile_NoPiwikAccount'), className: 'editAccountNoPiwikAccountLabel'}));
-    
+    var save = Ti.UI.createButton({title:  _('General_Save'), className: 'editAccountSaveButton'});
+    var addDemoLabel  = Ti.UI.createLabel({text: _('Mobile_NoPiwikAccount'), className: 'editAccountNoPiwikAccountLabel'});
     var addDemoButton = Ti.UI.createButton({title:  _('Mobile_AddPiwikDemo'), className: 'editAccountSaveButton'});
-    footerView.add(addDemoButton); 
+
+    var tableView  = null;
+    var scrollView = null;
+    var tableData  = null;
+    if (Piwik.getPlatform().isIos) {
+
+        tableView = this.create('TableView', {id: 'editAccountTableView'});
+        tableData = [];
+        tableData.push(this.create('TableViewSection', {title: _('Mobile_AccessUrlLabel'), 
+                                                        style: 'native'}));
+                                                        
+        var row = Ti.UI.createTableViewRow({className: 'editAccountControlRow1',
+                                            id: 'editAccountControlRow'});
+        row.add(piwikUrl);
+        tableData.push(row);
+        row = null;
+        
+        tableData.push(this.create('TableViewSection', {title: _('Mobile_AnonymousAccess'), 
+                                                        style: 'native'}));
+    
+        var row = Ti.UI.createTableViewRow({className: 'editAccountControlRow2',
+                                            id: 'editAccountControlRow'});
+        row.add(piwikAnonymous);
+        tableData.push(row);
+        row = null;
+        
+        var credentialsSection = this.create('TableViewSection', {title: _('Mobile_LoginCredentials'), 
+                                                                  style: 'native'});
+    
+        tableData.push(credentialsSection);
+        credentialsSection = null;
+    
+        var piwikUserRow = Ti.UI.createTableViewRow({className: 'editAccountControlRow3', id: 'editAccountControlRow'});
+        piwikUserRow.add(piwikUser);
+        tableData.push(piwikUserRow);
+        
+        var piwikPasswordRow = Ti.UI.createTableViewRow({className: 'editAccountControlRow4',
+                                                         id: 'editAccountControlRow'});
+        piwikPasswordRow.add(piwikPassword);
+        tableData.push(piwikPasswordRow);
+        
+        var footerView = Ti.UI.createView({className: 'editAccountTableFooterView', layout: 'vertical'});
+        footerView.add(save);
+        
+        footerView.add(addDemoLabel);
+        footerView.add(addDemoButton); 
+    
+        tableView.setFooterView(footerView);
+    
+        footerView = null;
+    } else {
+        var scrollView  = Ti.UI.createScrollView({id: 'editAccountScrollView'});
+        
+        var headerView  = Ti.UI.createView({className: 'tableViewSection'});
+        var headerLabel = Ti.UI.createLabel({text: _('Mobile_AccessUrlLabel'), id: 'tableViewSectionHeaderLabel'});
+        headerView.add(headerLabel);
+        scrollView.add(headerView);
+        headerView  = null;
+        headerLabel = null;
+        
+        scrollView.add(piwikUrl);
+        
+        var headerView  = Ti.UI.createView({className: 'tableViewSection'});
+        var headerLabel = Ti.UI.createLabel({text: _('Mobile_AnonymousAccess'), id: 'tableViewSectionHeaderLabel'});
+        headerView.add(headerLabel);
+        scrollView.add(headerView);
+        headerView  = null;
+        headerLabel = null;
+        
+        scrollView.add(piwikAnonymous);
+        
+        var headerView  = Ti.UI.createView({className: 'tableViewSection'});
+        var headerLabel = Ti.UI.createLabel({text: _('Mobile_LoginCredentials'), id: 'tableViewSectionHeaderLabel'});
+        headerView.add(headerLabel);
+        scrollView.add(headerView);
+        headerView  = null;
+        headerLabel = null;
+        
+        scrollView.add(piwikUser);
+        scrollView.add(piwikPassword);
+       
+        scrollView.add(save);
+        scrollView.add(addDemoLabel);
+        scrollView.add(addDemoButton); 
+    }
+    
     addDemoButton.addEventListener('click', function () {
         
         piwikUrl.value       = 'http://demo.piwik.org/';
@@ -135,10 +178,6 @@ function window (params) {
     
     addDemoButton = null;  
     
-    tableView.setFooterView(footerView);
-    
-    footerView           = null;
-
     piwikAnonymous.addEventListener('change', function (event) {
 
         if (!event) {
@@ -429,9 +468,14 @@ function window (params) {
         alertDialog.show();
     });
 
-    this.add(tableView.get());
-    
-    tableView.setData(tableData);
+    if (Piwik.getPlatform().isIos) {
+        
+        this.add(tableView.get());
+        tableView.setData(tableData);
+        
+    } else {
+        this.add(scrollView);
+    }
 
     /**
      * Pre fill previous created text fields with values if accountId is given and if this account exists.
@@ -475,9 +519,16 @@ function window (params) {
     this.cleanup = function () {
 
         if (tableView && tableView.get()) {
+            // iOS
             this.remove(tableView.get());
+        } 
+        
+        if (scrollView) {
+            // not iOS
+            this.remove(scrollView);
         }
 
+        scrollView  = null;
         tableData   = null;
         tableView   = null;
         that        = null;
