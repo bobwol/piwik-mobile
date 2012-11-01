@@ -149,15 +149,13 @@ function window () {
             return;
         }
 
-        var accountManager = Piwik.require('App/Accounts');
-        accountManager.deleteAccount(event.row.accountId);
+        Piwik.require('App/Accounts').deleteAccount(event.row.accountId);
 
         if (Piwik.getPlatform().isAndroid && that) {
             // row will be automatically removed from tableview on iOS, not on android. therefore make a simple reload
+            tableview.reset();
             that.open();
         }
-        
-        accountManager     = null;
     });
 
     this.add(tableview.get());
@@ -218,14 +216,9 @@ function window () {
      * the view. For example after deleting an account.
      */
     this.open = function () {
-        var eventResult      = {type: 'onopen'};
-        var accountManager   = Piwik.require('App/Accounts');
-
-        eventResult.accounts = accountManager.getAccounts();
+        var eventResult = {type: 'onopen', accounts: Piwik.require('App/Accounts').getAccounts()};
 
         this.fireEvent('onopen', eventResult);
-        
-        accountManager       = null;
     };
     
     this.cleanup = function () {
