@@ -168,6 +168,7 @@ function window (params) {
     }); 
     
     addDemoButton = null;  
+    addDemoLabel  = null;
     
     piwikAnonymous.addEventListener('change', function (event) {
 
