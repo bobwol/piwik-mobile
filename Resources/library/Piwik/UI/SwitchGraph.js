@@ -334,7 +334,11 @@ SwitchGraph.prototype.addSwitchGraph = function (win, showCloseButton, hideOnOpe
     
     win.add(this.toolbar);
     
-    win          = null;
+    win = null;
+    
+    for (var index in toolbarItems) {
+        toolbarItems[index] = null;
+    }
     toolbarItems = null;
     
     if (hideOnOpen) {

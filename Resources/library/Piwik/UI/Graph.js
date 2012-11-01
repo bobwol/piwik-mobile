@@ -189,6 +189,10 @@ Graph.prototype.addGraph = function (view) {
     
     view.add(this.showDetailImage);
     this.showDetailImage.animate({opacity: 0, delay: 800, duration: 600}, function () {
+        if (!that || that.showDetailImage) {
+            return;
+        }
+        
         that.showDetailImage.hide();
         that.showDetailImage.opacity = 1;
     });
@@ -243,7 +247,8 @@ Graph.prototype.cleanup = function () {
         this.graphUrls.cleanup();
     }
     
-    this.row = null;
+    this.row   = null;
+    this.width = 0;
     this.graphUrls  = null;
     this.graphImage = null;
     this.showDetailImage = null;
