@@ -400,9 +400,12 @@ function window (params) {
         Piwik.getTracker().trackEvent({title: 'Account No View Access', url: '/account/edit/no-view-access'});
 
         if (event && !event.errorMessageSent) {
+            var loginErrorMessage = String.format(_('General_ExceptionPrivilegeAtLeastOneWebsite'), _('UsersManager_PrivView'));
+            loginErrorMessage    += ' ' + _('Mobile_VerifyLoginData');
+            
             var alertDialog = Ti.UI.createAlertDialog({
                 title: _('General_Error'),
-                message: String.format(_('General_ExceptionPrivilegeAtLeastOneWebsite'), _('UsersManager_PrivView')),
+                message: loginErrorMessage,
                 buttonNames: [_('General_Ok')]
             });
 
