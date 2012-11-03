@@ -189,7 +189,7 @@ Graph.prototype.addGraph = function (view) {
     
     view.add(this.showDetailImage);
     this.showDetailImage.animate({opacity: 0, delay: 800, duration: 600}, function () {
-        if (!that || that.showDetailImage) {
+        if (!that || !that.showDetailImage) {
             return;
         }
         
