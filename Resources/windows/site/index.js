@@ -157,7 +157,7 @@ function window (params) {
     // this event is fired from another window, therefore we use Ti.App
     // be cureful using Ti.App events. They will never be released cause they run in a global app context.
     // cause on iPad this window will be always displayed as long as the app is opened, it doesn't matter.
-    if (Piwik.getPlatform().isIpad) {
+    if (Piwik.getPlatform().isIpad || Piwik.getPlatform().isAndroidTablet) {
         Ti.App.addEventListener('onSiteChanged', doRefreshIfNeeded);
     }
 
@@ -259,7 +259,7 @@ function window (params) {
 
     this.cleanup = function () {
         
-        if (Piwik.getPlatform().isIpad) {
+        if (Piwik.getPlatform().isIpad || Piwik.getPlatform().isAndroidTablet) {
             
             return;
         }

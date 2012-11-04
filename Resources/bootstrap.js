@@ -37,6 +37,8 @@ if (Piwik.getPlatform().isIpad) {
     Piwik.getUI().bootstrap({layoutUrl: 'layout/ipad'});
 } else if (Piwik.getPlatform().isIphone) {
     Piwik.getUI().bootstrap({layoutUrl: 'layout/iphone'});
+} else if (Piwik.getPlatform().isAndroidTablet) {
+    Piwik.getUI().bootstrap({layoutUrl: 'layout/androidtablet'});
 } else {
     Piwik.getUI().bootstrap({layoutUrl: 'layout/android'});
 }
