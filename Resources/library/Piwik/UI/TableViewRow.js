@@ -24,6 +24,8 @@ var stringUtils = Piwik.require('Utils/String');
  *                                                 user clicks the row.
  * @param    {string}  [params.layout]             Optional. 'vertical' if a vertical layout shall be used. Use it only
  *                                                 if you don't set a value.
+ * @param    {string}  [params.wrapTitle]          If true, the title will not be ellipsized if the title is too long.
+ *                                                 The title will be wrapped over multiple lines.
  * @param    {Object}  [params.rightImage]         Optional. An image to render in the right image area of the row cell.
  * @param    {string}  [params.rightImage.url]     The url (local or remote) to the right image.
  * @param    {number}  [params.rightImage.width]   The width of the right image.
@@ -62,6 +64,7 @@ TableViewRow.prototype.init = function (params) {
     var description = params.description || null;
     var rightImage  = params.rightImage || null;
     var command     = params.command || null;
+    var wrapTitle   = params.wrapTitle || false;
 
     var hasChild = false;
     if (Piwik.getPlatform().isAndroid && params.hasChild) {
@@ -82,14 +85,19 @@ TableViewRow.prototype.init = function (params) {
     delete params.value;
     delete params.description;
     delete params.rightImage;
+    delete wrapTitle;
 
     var row = Ti.UI.createTableViewRow(params);
 
     if (title) {
-        row.titleLabel = Ti.UI.createLabel({
-            text: title,
-            id: 'tableViewRowTitleLabel' + (description ? 'WithDescription' : '')
-        });
+        var titleOptions = {text: title, id: 'tableViewRowTitleLabel' + (description ? 'WithDescription' : '')};
+        
+        if (wrapTitle) {
+            titleOptions.ellipsize = false;
+            titleOptions.wordWrap  = true;
+        }
+        
+        row.titleLabel = Ti.UI.createLabel(titleOptions);
         
         row.add(row.titleLabel);
     }   
@@ -104,10 +112,8 @@ TableViewRow.prototype.init = function (params) {
     }
     
     if (description) {
-        var descriptionLabel = Ti.UI.createLabel({
-            text: description,
-            id: 'tableViewRowDescriptionLabel' + (params.layout ? params.layout : '')
-        });
+        var descriptionLabel = Ti.UI.createLabel({text: description,
+                                                  id: 'tableViewRowDescriptionLabel' + (params.layout ? params.layout : '')});
         
         row.add(descriptionLabel);
         descriptionLabel = null;

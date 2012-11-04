@@ -228,6 +228,7 @@ function window (params) {
 
             tableData.push(that.create('TableViewRow', {title:     report.name,
                                                         report:    report,
+                                                        wrapTitle: true,
                                                         className: 'reportTableViewRow'}));
         }
         
