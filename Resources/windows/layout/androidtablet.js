@@ -5,28 +5,34 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id$
  *
- * @fileOverview layout 'layout/android.js' .
+ * @fileOverview layout 'layout/androidtablet.js'.
  */
 
 /** @private */
 var Piwik = require('library/Piwik');
 
 /**
- * @class    Piwik Mobile Android layout. Handles how header, menu and the content will be displayed. How new windows 
- *           will be removed or added and so on.
+ * @class    Piwik Mobile Android Tablet layout. Handles how header, menu and the content will be displayed. 
+ *           How new windows will be removed or added and so on.
  *
  * @exports  layout as LayoutAndroid
  */
 function layout () {
 
     /**
-     * An array holding all current opened windows. Each new created window will be pushed to this array.
-     * On the contrary we have to pop a window from this array as soon as we close/remove it.
+     * An array holding all current opened windows in detail view (right view). Each new created window will be pushed 
+     * to this array. On the contrary we have to pop a window from this array as soon as we close/remove it.
      *
      * @type  Array
      */
     this.windows   = [];
-    
+
+    /**
+     * An array holding all current opened windows in master view. Each new created window will be pushed to this array.
+     * On the contrary we have to pop a window from this array as soon as we close/remove it.
+     *
+     * @type  Array
+     */
     this.masterViewWindows = [];
     
     /**
@@ -280,7 +286,7 @@ function layout () {
 
     this.shortenMenu = function () {
 
-        var widthMasterViewSmall    = '198dp';
+        var widthMasterViewSmall      = '198dp';
         this.masterViewSeparator.left = widthMasterViewSmall;
         
         this.masterView.left  = 0;
@@ -290,7 +296,7 @@ function layout () {
     
     this.enlargeMenu = function () {
 
-        var widthMasterViewLarge    = '318dp';
+        var widthMasterViewLarge      = '318dp';
         this.masterViewSeparator.left = widthMasterViewLarge;
         
         this.masterView.left  = 0;
@@ -304,22 +310,16 @@ function layout () {
             return;
         }
 
-        var isLarge = this.pixelToDp(Ti.Platform.displayCaps.platformWidth) >= 720;
-        if (isLarge || Ti.Platform.displayCaps.platformWidth >  Ti.Platform.displayCaps.platformHeight) {
+        // 320dp masterView + 400dp detailView
+        var isLarge = Piwik.getPlatform().pixelToDp(Ti.Platform.displayCaps.platformWidth) >= 720; 
+        
+        if (isLarge) {
             // landscape
             this.enlargeMenu();
         } else {
-            // portrait    
+            // portrait
             this.shortenMenu();
         }
-    }
-    
-    this.pixelToDp = function (pixel) {
-
-        var dpi = Ti.Platform.displayCaps.dpi;
-        var dp  = (pixel / dpi) * 160;
-        
-        return dp;
     }
 
     /**
@@ -338,9 +338,8 @@ function layout () {
         this.masterView = Ti.UI.createView({left: '-318dp', top: 0, bottom: 0, width: '318dp'});
         this.detailView = Ti.UI.createView({right: 0, top: 0, bottom: 0, left: '0dp'});
         
-        var that = this;
         Ti.Gesture.addEventListener('orientationchange', function () {
-            that.initMenu();
+            layout.initMenu();
         });
         
         this.initMenu();

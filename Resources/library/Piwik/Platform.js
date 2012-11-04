@@ -58,6 +58,22 @@ platform.isIpad    = ('ipad' === platform.osName);
 platform.isIphone  = (platform.isIos && !platform.isIpad);
 
 /**
+ * Converts a screen pixel to density-independent pixels.
+ * 
+ * @param    {int}  pixel   Screen pixels.
+ * 
+ * @returns  {int}  Converted value in dp. The value is rounded upward to it's nearest integer.
+ */
+platform.pixelToDp = function (pixel) {
+
+    var dpi = Ti.Platform.displayCaps.dpi;
+    var dp  = (pixel / dpi) * 160;
+    dp      = Math.ceil(dp);
+    
+    return dp;
+};
+
+/**
  * Detects whether current device is a tablet.
  * 
  * @private
@@ -71,15 +87,14 @@ function isTablet () {
     
     var width  = Ti.Platform.displayCaps.platformWidth;
     var height = Ti.Platform.displayCaps.platformHeight;
-    
-    /*  
     var min    = Math.min(width, height);
-    
-    if (min > 1280) {
+
+    if (550 > platform.pixelToDp(min)) {
+        // not enough dp, we do not consider this as a tablet
+        // the smallest size needs at least 200dp for masterview and 350dp for detailview
         
-        return true;
+        return false;
     }
-    */
      
     var dpi = Ti.Platform.displayCaps.dpi;
     width   = width / dpi;
