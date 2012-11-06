@@ -59,7 +59,7 @@ Visitor.prototype = Piwik.require('UI/View');
  */
 Visitor.prototype.init = function () {
 
-    var visitor   = this.getParam('visitor');
+    var visitor = this.getParam('visitor');
 
     if (!visitor) {
         Piwik.getLog().warn('visitor is not given', 'Piwik.UI.Visitor::init');
@@ -72,23 +72,35 @@ Visitor.prototype.init = function () {
     this.createSystem();
     this.createActionDetails();
     
-    var win       = this.create('ModalWindow', {title: _('General_Visitor'),
-                                                openView: this.getParam('openView')});
-   
+    var win       = this.create('ModalWindow', {title: _('General_Visitor'), openView: this.getParam('openView')});
     var tableView = this.create('TableView', {id: 'visitorTableView'});
 
     win.add(tableView.get());
     
     tableView.setData(this.getRows());
     win.open();
+    
+    var that = this;
+    win.addEventListener('close', function () {
+
+        if (that && that.cleanup) {
+            that.cleanup();
+            that = null;
+        }
+
+        if (win && tableView) {
+            win.remove(tableView.get());
+            tableView.cleanup();
+            win.cleanup();
+        }
+      
+        win       = null;
+        tableView = null;
+    });
 
     Piwik.getTracker().trackEvent({title: 'View Visitor', url: '/visitor/open'});
-    
-    win       = null;
-    tableView = null;
-    visitor   = null;
-    
-    return this;
+
+    visitor = null;
 };
 
 /**
@@ -98,10 +110,7 @@ Visitor.prototype.init = function () {
  */
 Visitor.prototype.getRows = function () {
     
-    var rows   = this._rows;
-    this._rows = null;
-
-    return rows;
+    return this._rows;
 };
 
 /**
@@ -126,8 +135,7 @@ Visitor.prototype.createOverview = function () {
                                                        '' + visitor.serverTimePretty,
                                                        '' + visitor.visitDurationPretty);
 
-    this._rows.push(this.create('TableViewRow', {title: visitDateLabel,
-                                                 className: 'visitorTableViewRow'}));
+    this._rows.push(this.create('TableViewRow', {title: visitDateLabel, className: 'visitorTableViewRow'}));
 
     if (visitor.visitIp) {
         this._rows.push(this.create('TableViewRow', {title: _('General_VisitorIP'),
@@ -268,7 +276,7 @@ Visitor.prototype.createSystem = function () {
 
     var visitor   = this.getParam('visitor', {});
     var accessUrl = this.getParam('accessUrl', '');
-    
+
     this._rows.push(this.create('TableViewSection', {title: _('UserSettings_VisitorSettings')}));
 
     if (visitor.operatingSystem) {
@@ -386,20 +394,18 @@ Visitor.prototype.createActionAction = function (actionDetail) {
     var row = Ti.UI.createTableViewRow({className: 'visitorActionActionTableViewRow'});
 
     if (actionDetail.pageTitle) {
-        row.add(Ti.UI.createLabel({text: '' + actionDetail.pageTitle,
-                                   id: 'visitorActionActionPageTitleLabel'}));
+        row.add(Ti.UI.createLabel({text: '' + actionDetail.pageTitle, id: 'visitorActionActionPageTitleLabel'}));
     }
     if (actionDetail.url) {
-        row.add(Ti.UI.createLabel({text: actionDetail.url,
-                                   id: 'visitorActionActionUrlLabel'}));
+        row.add(Ti.UI.createLabel({text: actionDetail.url, id: 'visitorActionActionUrlLabel'}));
     }
     if (actionDetail.serverTimePretty) {
-        row.add(Ti.UI.createLabel({text: actionDetail.serverTimePretty,
-                                   id: 'visitorActionActionServerTimeLabel'}));
+        row.add(Ti.UI.createLabel({text: actionDetail.serverTimePretty, id: 'visitorActionActionServerTimeLabel'}));
     }
 
     this._rows.push(row);
     row = null;
+    actionDetail = null;
 };
 
 /**
@@ -442,16 +448,14 @@ Visitor.prototype.createDefaultAction = function (actionDetail) {
                 break;
         }
 
-        view.add(Ti.UI.createLabel({text: title,
-                                    id: 'visitorActionDefaultTypeLabel'}));
+        view.add(Ti.UI.createLabel({text: title, id: 'visitorActionDefaultTypeLabel'}));
     }
 
     row.add(view);
     view = null;
 
     if (actionDetail.url) {
-        row.add(Ti.UI.createLabel({text: '' + actionDetail.url,
-                                   id: 'visitorActionDefaultUrlLabel'}));
+        row.add(Ti.UI.createLabel({text: '' + actionDetail.url, id: 'visitorActionDefaultUrlLabel'}));
     }
 
     this._rows.push(row);
@@ -505,8 +509,7 @@ Visitor.prototype.createEcommerceAction = function (actionDetail) {
     }
 
     if (ecommerceText) {
-        ecommerceView.add(Ti.UI.createLabel({text: ecommerceText,
-                                             id: 'visitorActionEcommerceTypeLabel'}));
+        ecommerceView.add(Ti.UI.createLabel({text: ecommerceText, id: 'visitorActionEcommerceTypeLabel'}));
     }
 
     var itemDetailsView = Ti.UI.createView({id: 'visitorActionEcommerceDetailsView'});
@@ -528,10 +531,8 @@ Visitor.prototype.createEcommerceAction = function (actionDetail) {
 
             var itemView = Ti.UI.createView({id: 'visitorActionEcommerceDetailsItemView'});
 
-            itemView.add(Ti.UI.createLabel({text: ' * ',
-                                            id: 'visitorActionEcommerceDetailsItemStarLabel'}));
-            itemView.add(Ti.UI.createLabel({text: itemText,
-                                            id: 'visitorActionEcommerceDetailsItemNameLabel'}));
+            itemView.add(Ti.UI.createLabel({text: ' * ', id: 'visitorActionEcommerceDetailsItemStarLabel'}));
+            itemView.add(Ti.UI.createLabel({text: itemText, id: 'visitorActionEcommerceDetailsItemNameLabel'}));
             itemDetailsView.add(itemView);
             itemView = null;
 
@@ -549,8 +550,7 @@ Visitor.prototype.createEcommerceAction = function (actionDetail) {
                 priceText += 'Quantity: ' + item.quantity;
             }
 
-            itemDetailsView.add(Ti.UI.createLabel({text: priceText,
-                                                   id: 'visitorActionEcommerceDetailsPriceLabel'}));
+            itemDetailsView.add(Ti.UI.createLabel({text: priceText, id: 'visitorActionEcommerceDetailsPriceLabel'}));
         }
     }
 
@@ -564,15 +564,13 @@ Visitor.prototype.createEcommerceAction = function (actionDetail) {
                                                     '' + visitor.siteCurrency);
     }
 
-    var listOfProductsText = String.format('List of Products (Quantity: %s)',
-                                           '' + parseInt(actionDetail.items, 10));
+    var listOfProductsText = String.format('List of Products (Quantity: %s)', '' + parseInt(actionDetail.items, 10));
 
     row.add(ecommerceView);
     ecommerceView = null;
-    row.add(Ti.UI.createLabel({text: revenueText,
-                               id: 'visitorActionEcommerceRevenueLabel'}));
-    row.add(Ti.UI.createLabel({text: listOfProductsText,
-                               id: 'visitorActionEcommerceDetailsListLabel'}));
+    
+    row.add(Ti.UI.createLabel({text: revenueText, id: 'visitorActionEcommerceRevenueLabel'}));
+    row.add(Ti.UI.createLabel({text: listOfProductsText, id: 'visitorActionEcommerceDetailsListLabel'}));
     row.add(itemDetailsView);
     itemDetailsView = null;
 
@@ -586,7 +584,20 @@ Visitor.prototype.createEcommerceAction = function (actionDetail) {
  * Cleanup.
  */
 Visitor.prototype.cleanup = function () {
-    this._rows = null;
+
+    if (this._rows) {
+        for (var index in this._rows) {
+            if (this._rows[index] && this._rows[index].cleanup) {
+                this._rows[index].cleanup();
+            }
+            
+            this._rows[index] = null;
+        }
+    }
+    
+    this._rows  = null;
+    this.params = null;
+    this.window = null;
 };
 
 module.exports = Visitor;

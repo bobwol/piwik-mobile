@@ -86,6 +86,7 @@ TableViewRow.prototype.init = function (params) {
     delete params.description;
     delete params.rightImage;
     delete wrapTitle;
+    params.window = null;
 
     var row = Ti.UI.createTableViewRow(params);
 

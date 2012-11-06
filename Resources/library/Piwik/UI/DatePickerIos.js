@@ -158,6 +158,10 @@ DatePicker.prototype.init = function (params) {
             return;
         }
         
+        if (that.win && that.win.cleanup) {
+            that.win.cleanup();
+        }
+        
         that.cleanup();
         that = null;
     });

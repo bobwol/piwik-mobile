@@ -135,6 +135,7 @@ function window (params) {
         that.create('Visitor', {accessUrl: accessUrl,
                                 visitor: event.row.visitor,
                                 openView: event.row.popoverView});
+        event = null;
     });
 
     var siteCommand = this.createCommand('ChooseSiteCommand');

@@ -79,6 +79,8 @@ ModalWindow.prototype.init = function () {
         win.addEventListener('hide', function () {
             that.viewToAddOtherViews = null;
             that.win                 = null;
+            that.params              = null;
+            that.window              = null;
             that                     = null;
         });
                                         
@@ -120,8 +122,7 @@ ModalWindow.prototype.init = function () {
     } else if (Piwik.getPlatform().isAndroid) {
 
         var crt  = Ti.UI.currentWindow;
-        win      = Ti.UI.createWindow({className: 'modalWindow',
-                                       title: title});
+        win      = Ti.UI.createWindow({className: 'modalWindow', title: title});
         var view = Ti.UI.createView({backgroundColor: '#fff'});
         
         this.viewToAddOtherViews = view;
@@ -175,12 +176,36 @@ ModalWindow.prototype.addEventListener = function (name, callback) {
 };
 
 /**
- * Add a child to the view hierarchy
+ * Add a child to the view hierarchy.
  * 
  * @param  {Titanium.UI.View}  view  The view to add to this views hiearchy
  */
 ModalWindow.prototype.add = function (view) {
     this.getView().add(view);
+    view = null;
+};
+
+/**
+ * Remove a child from the view hierarchy.
+ * 
+ * @param  {Titanium.UI.View}  view  The view to remove from this views hiearchy
+ */
+ModalWindow.prototype.remove = function (view) {
+    if (!this.getView()) {
+        Piwik.getLog().warn('View no longer exists to remove other view', 'Piwik.UI.ModalWindow::remove');
+        view = null;
+        
+        return;
+    }
+    
+    if (!view) {
+        Piwik.getLog().warn('View is not set, cannot remove view', 'Piwik.UI.ModalWindow::remove');
+        view = null;
+        
+        return;
+    }
+    
+    this.getView().remove(view);
     view = null;
 };
 
@@ -300,13 +325,9 @@ ModalWindow.prototype.close = function () {
         if (this.win && (Piwik.getPlatform().isAndroid || Piwik.getPlatform().isIphone)) {
             // window
             this.win.close();
-            this.viewToAddOtherViews = null;
-            this.win                 = null;
         } else if (this.win && Piwik.getPlatform().isIpad) {
             // popover
             this.win.hide();
-            this.viewToAddOtherViews = null;
-            this.win                 = null;
         }
         
     } catch (e) {
@@ -320,6 +341,8 @@ ModalWindow.prototype.close = function () {
 ModalWindow.prototype.cleanup = function () {
     this.viewToAddOtherViews = null;
     this.win                 = null;
+    this.params              = null;
+    this.window              = null;
 };
 
 module.exports = ModalWindow;

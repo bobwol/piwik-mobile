@@ -256,6 +256,7 @@ TableView.prototype.cleanup = function () {
     }
     
     this.tableView = null;
+    this.params    = null;
 };
 
 module.exports = TableView;

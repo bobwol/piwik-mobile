@@ -48,6 +48,7 @@ TableViewSection.prototype.init = function (params) {
 
     var title  = params.title || null;
     delete params.title;
+    params.window = null;
 
     var headerLabel = Ti.UI.createLabel({
         text: String(title),

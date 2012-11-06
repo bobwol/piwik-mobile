@@ -138,6 +138,7 @@ function UiWindow () {
         
         var uiWidget = Piwik.getUI()['create' + widget](params);
         mymempool.add(uiWidget);
+        
         params       = null;
         widget       = null;
         

@@ -126,6 +126,9 @@ ChooseSiteCommand.prototype.execute = function (params) {
     });
     
     win.addEventListener('close', function () {
+        if (win && win.cleanup) {
+            win.cleanup();
+        }
         win          = null;
         websitesList = null;
     });
