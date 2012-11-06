@@ -65,10 +65,15 @@ function window () {
         
         Piwik.getTracker().prepareVisitCustomVariables();
         
+        that.close(true);
+        
+        if (Piwik.getPlatform().isTablet) {
+            that.create('Window', {url: 'index/choosereport'});
+        }
+
         // user has access to only one site. jump directly to site view
         // @see http://dev.piwik.org/trac/ticket/2120
         that.create('Window', {url: 'site/index',
-                               closeWindow: that,
                                target: 'masterView',
                                site: event.site});
     });

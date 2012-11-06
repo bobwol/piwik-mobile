@@ -396,6 +396,32 @@ function layout () {
 
         piwikWindow = null;
     };
+    
+    this.setMenu = function (window, menu) {
+        if (!window || !menu) {
+            
+            return;
+        }
+        
+        menu.window = window;
+        this.menu.refresh(menu);
+        
+        window = null;
+        menu   = null;
+    };
+    
+    this.setHeader = function (window, header) {
+        if (!window || !header) {
+            
+            return;
+        }
+        
+        header.window = window;
+        this.header.refresh(header);
+        
+        window = null;
+        header = null;
+    };
 
     /**
      * Initialize the layout.

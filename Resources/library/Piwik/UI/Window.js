@@ -60,7 +60,7 @@ function UiWindow () {
      */
     this.maxDepth     = 6;
     
-    var that          = this;
+    var that = this;
     
     var mymempool = {
         cleanups: null,
@@ -107,9 +107,8 @@ function UiWindow () {
         }
     };
 
-    
     this.addEventListener('focusWindow', function (event) {
-        
+
         if (!that || !that.url) {
             Piwik.getLog().warn('url or window no longer exists, ignoring focus', 'Piwik.UI.Window::focusWindowEvent');
             
@@ -121,18 +120,10 @@ function UiWindow () {
             // track a page view
             Piwik.getTracker().trackWindow(that.url);
         }
-    
-        var titleOptions    = that.titleOptions;
-        var menuOptions     = that.menuOptions;
-        titleOptions.window = that;
-        menuOptions.window  = that;
-     
+
         // refresh the headline as well as the menu each time a window gets the focus.
-        Piwik.getUI().layout.header.refresh(titleOptions);
-        Piwik.getUI().layout.menu.refresh(menuOptions);
-        
-        titleOptions = null;
-        menuOptions  = null;
+        Piwik.getUI().layout.setHeader(that, that.titleOptions);
+        Piwik.getUI().layout.setMenu(that, that.menuOptions);
     });
     
     this.create = function (widget, params) {

@@ -106,8 +106,6 @@ function layout () {
         newWin.addEventListener('beforeOpen', function () {
             this.fireEvent('focusWindow', {});
         });
-        
-        newWin.rootWindow = rootWindow;
 
         if ('masterView' == newWin.target) {
 
@@ -138,6 +136,8 @@ function layout () {
             this.masterViewWindows[this.windows.length - 1].close(true);
         }
         
+        newWin.rootWindow = this.masterView;
+        
         masterViewHasContent = true;
         
         this.initMenu();
@@ -155,6 +155,8 @@ function layout () {
      * @private
      */
     this._addWindowToDetailView = function (newWin) {
+        
+        newWin.rootWindow = this.detailView;
         
         var currentWindow = this._getCurrentWindow('windows');
         if (currentWindow) {
@@ -180,17 +182,20 @@ function layout () {
      */
     this._replaceDetailView = function (newWin) {
         
-        var currentWindow = this._getCurrentWindow('windows');
-        if (currentWindow) {
-            currentWindow.fireEvent('blurWindow', {});
-            
-            if (1 < this.windows.length) {
-                // @todo what if first screen is ReportsView cause only one site available?
-                // do not replace websites overview
+        newWin.rootWindow = this.detailView;
+
+        while (1 < this.windows.length) {
+            // remove possible existing detail windows
+            try {
+                var currentWindow = this._getCurrentWindow('windows');
+                currentWindow.fireEvent('blurWindow', {});
                 currentWindow.close(true);
+                currentWindow = null;
+            } catch (e) {
+                Piwik.getLog().warn('Failed to close current window: ' + e, 'AndroidTabletLayout::_replaceDetailView');
             }
         }
-        
+
         Piwik.getUI().currentWindow = newWin;
         
         this.windows.push(newWin);
@@ -291,7 +296,13 @@ function layout () {
         
         this.masterView.left  = 0;
         this.masterView.width = widthMasterViewSmall;
-        this.detailView.left  = '200dp';
+        
+        this.masterHeaderView.left  = 0;
+        this.masterHeaderView.width = widthMasterViewSmall;
+        
+        this.detailView.left        = '200dp';
+        this.detailHeaderView.left  = '200dp';
+        
     };
     
     this.enlargeMenu = function () {
@@ -301,7 +312,12 @@ function layout () {
         
         this.masterView.left  = 0;
         this.masterView.width = widthMasterViewLarge;
-        this.detailView.left  = '320dp';
+        
+        this.masterHeaderView.left  = 0;
+        this.masterHeaderView.width = widthMasterViewLarge;
+        
+        this.detailView.left        = '320dp';
+        this.detailHeaderView.left  = '320dp';
     };
 
     this.initMenu = function () {
@@ -314,13 +330,46 @@ function layout () {
         var isLarge = Piwik.getPlatform().pixelToDp(Ti.Platform.displayCaps.platformWidth) >= 720; 
         
         if (isLarge) {
-            // landscape
             this.enlargeMenu();
         } else {
-            // portrait
             this.shortenMenu();
         }
-    }
+    };
+    
+    this.setMenu = function (window, menu) {
+        if (!window || !menu) {
+            
+            return;
+        }
+        
+        if ('masterView' == window.target) {
+            // ignore this :)
+        } else {
+            menu.window = window;
+            this.detailMenu.refresh(menu);
+        }
+
+        window = null;
+        menu   = null;
+    };
+    
+    this.setHeader = function (window, header) {
+        if (!window || !header) {
+            
+            return;
+        }
+        
+        header.window = window;
+        
+        if ('masterView' == window.target) {
+            this.masterHeader.refresh(header);
+        } else {
+            this.detailHeader.refresh(header);
+        }
+        
+        window = null;
+        header = null;
+    };
 
     /**
      * Initialize the layout.
@@ -329,12 +378,23 @@ function layout () {
      */
     this.init = function () {
 
-        this.header = Piwik.getUI().createHeader({title: 'Piwik Mobile'});
+        this.detailHeader = Piwik.getUI().createHeader({title: 'Piwik Mobile'});
+        this.masterHeader = Piwik.getUI().createHeader({title: ' '});
         
-        this.masterViewSeparator = Ti.UI.createView({top: '48dp', bottom: 0, left: '-2dp', zIndex: 1001, width: '2dp', backgroundColor: '#8a8780'});
+        this.detailHeaderView = this.detailHeader.getHeaderView();
+        this.masterHeaderView = this.masterHeader.getHeaderView();
+        this.masterHeaderView.left  = '-318dp';
+        this.masterHeaderView.width = '318dp';
+        
+        if (this.masterHeader.titleLabel) {
+            this.masterHeader.titleLabel.right = '16dp';
+        }
+        
+        this.masterViewSeparator = Ti.UI.createView({top: '0dp', bottom: 0, left: '-2dp', zIndex: 1001, width: '2dp', backgroundColor: '#8a8780'});
         rootWindow.add(this.masterViewSeparator);
 
-        this.menu       = Piwik.getUI().createMenu({menuView: this.header.getHeaderView()});
+        this.detailMenu = Piwik.getUI().createMenu({menuView: this.detailHeaderView});
+        
         this.masterView = Ti.UI.createView({left: '-318dp', top: 0, bottom: 0, width: '318dp'});
         this.detailView = Ti.UI.createView({right: 0, top: 0, bottom: 0, left: '0dp'});
         

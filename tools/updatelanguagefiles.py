@@ -132,6 +132,7 @@ valid_translations =  {
         'Mobile_AccessUrlLabel':                                              'Piwik Access Url',
         'Mobile_ChooseHttpTimeout':                                           'Choose HTTP timeout value',
         'Mobile_ChooseMetric':                                                'Choose Metric',
+        'Mobile_ChooseReport':                                                'Choose a report',
         'Mobile_DefaultReportDate':                                           'Report date',
         'Mobile_EnableGraphsLabel':                                           'Display graphs',
         'Mobile_EvolutionGraph':                                              'Evolution Graph',

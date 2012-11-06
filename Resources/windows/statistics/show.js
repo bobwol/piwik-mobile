@@ -154,7 +154,7 @@ function window (params) {
         that.menuOptions  = {commands: [refreshCommand], window: that};
 
         // update menu after each request cause of a possibly period and/or date change.
-        Piwik.getUI().layout.menu.refresh(that.menuOptions);
+        Piwik.getUI().layout.setMenu(that, that.menuOptions);
 
         tableViewRows = [];
 

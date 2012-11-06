@@ -1,4 +1,4 @@
-/*
+/**
  * Piwik - Web Analytics
  *
  * @link http://piwik.org
@@ -29,7 +29,7 @@
 #headerTitleLabel {
     height: '38dp';
     left: '16dp';
-    right: '16dp';
+    right: '80dp';
     top: '6dp';
     ellipsize: true;
     wordWrap: false;

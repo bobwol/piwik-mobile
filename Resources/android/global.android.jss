@@ -68,6 +68,14 @@
 }
 
 /**
+ * window index/choosereport.js
+ */
+.choosereportInfo {
+    color: '#bbbbbb';
+    font-size: '24sp';
+}
+
+/**
  * window site/index.js
  */
 #reportsTableView {

@@ -116,7 +116,7 @@ function window (params) {
     refresh.addEventListener('onRefresh', function () {
 
         that.titleOptions  = {title: '' + (site ? site.name : ''), window: that};
-        Piwik.getUI().layout.header.refresh(that.titleOptions);
+        Piwik.getUI().layout.setHeader(that, that.titleOptions);
 
         // remove all tableview rows. This should ensure there are no rendering issues when setting
         // new rows afterwards.

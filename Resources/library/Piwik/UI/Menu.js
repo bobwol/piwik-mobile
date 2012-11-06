@@ -7,7 +7,7 @@
  */
 
 /** @private */
-var Piwik       = require('library/Piwik');
+var Piwik = require('library/Piwik');
 
 /**
  * @class     A menu is created by the method Piwik.UI.createMenu. Therefore, the menu adds buttons, icons, option menus
@@ -188,14 +188,6 @@ Menu.prototype.refresh = function (params) {
             menuIcon = null;
         }
 
-        // hack. prevent header title from overlapping menu icons.
-        // @todo find a better solution for this.
-        var layout = Piwik.getUI().layout;
-        if (layout && layout.header && layout.header.titleLabel) {
-            layout.header.titleLabel.right = stringUtils.toSizeUnit('' + right);
-        }
-        
-        layout      = null;
         stringUtils = null;
     }
     
