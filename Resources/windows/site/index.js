@@ -38,7 +38,7 @@ var config = require('config');
  */
 function window (params) {
 
-    var site          = params.site ? params.site : null;
+    var site = params.site ? params.site : null;
     
     if (site && site.accountId) {
 
@@ -257,14 +257,33 @@ function window (params) {
 
         request.send({site: site});
     };
+    
+    if (Piwik.getPlatform().isAndroidTablet) {
+        // in contrast to the .cleanup(); method this will be only called if the window really closes.
+        this.addEventListener('closeWindow', function () {
+            if (doRefreshIfNeeded) {
+                Ti.App.removeEventListener('onSiteChanged', doRefreshIfNeeded);
+            }
+            
+            if (that) {
+                that._cleanup();
+            }
+        });
+    }
 
     this.cleanup = function () {
         
         if (Piwik.getPlatform().isIpad || Piwik.getPlatform().isAndroidTablet) {
+            // prevent from cleanup on tablet. If the previous window will be closed (index/index) the previous window's 
+            // cleanup method would call cleanup on this window...
             
             return;
         }
-
+        
+        this._cleanup();
+    };
+    
+    this._cleanup = function () {
         if (tableview && tableview.get()) {
             this.remove(tableview.get());
         }
@@ -281,7 +300,7 @@ function window (params) {
         this.titleOptions    = null;
         menuOptions          = null;
         currentRequestedSite = null;
-        doRefreshIfNeeded    = null;
+        doRefreshIfNeeded = null;
     };
 }
 

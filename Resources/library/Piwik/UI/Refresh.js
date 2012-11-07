@@ -157,7 +157,6 @@ Refresh.prototype.displayRefreshingMessage = function () {
     
         if (!this._activityIndicator) {
             // create the activity indicator if not already created
-            this._activityIndicator = null;
             this._activityIndicator = this.create('ActivityIndicator', {});
         }
     
