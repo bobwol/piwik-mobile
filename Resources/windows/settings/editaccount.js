@@ -517,6 +517,10 @@ function window (params) {
             // not iOS
             this.remove(scrollView);
         }
+        
+        if (request) {
+            request.cleanup();
+        }
 
         scrollView  = null;
         tableData   = null;

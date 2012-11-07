@@ -297,6 +297,10 @@ function window (params) {
             this.remove(tableView.get());
         }
 
+        if (request) {
+            request.cleanup();
+        }
+        
         tableViewRows = null;
         tableView     = null;
         request       = null;

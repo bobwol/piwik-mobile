@@ -441,7 +441,11 @@ function window (params) {
         if (tableView && tableView.get()) {
             this.remove(tableView.get());
         }
-
+        
+        if (request) {
+            request.cleanup();
+        }
+        
         try {
             // android, prevent memory leaks
             if (activity && stopRefreshTimer) {
@@ -454,7 +458,7 @@ function window (params) {
             Ti.App.removeEventListener('pause', onPause);
             onResume = null;
             onPause = null;
-            
+
         } catch (e) {
             Piwik.getLog().warn('Failed to remove event listener from activity' + e, 'statistics/live::window');
         }

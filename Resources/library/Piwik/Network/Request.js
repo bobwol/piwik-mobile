@@ -27,7 +27,7 @@ function Request () {
      */
     this.eventPrefix = null;
     
-    this.events      = [];
+    this.events      = null;
 }
 
 /**
@@ -38,21 +38,17 @@ function Request () {
  * @param  {Function}  callback  Callback function to invoke when the event is fired
  */
 Request.prototype.addEventListener = function (name, callback) {
+    
+    if (null === this.events) {
+        this.events = [];
+    }
 
     if (!this.eventPrefix) {
         this.eventPrefix = String(Math.random()).slice(2,8);
     }
     
     var eventName = this.eventPrefix + name;
-    
-    if (Piwik.getPlatform().isAndroid) {
-        Piwik.getUI().currentWindow.addEventListener(eventName, callback);
-        
-        callback = null;
-        
-        return;
-    }
-    
+ 
     this.events.push({event: eventName, callback: callback});
     
     callback = null;
@@ -67,20 +63,15 @@ Request.prototype.addEventListener = function (name, callback) {
  */
 Request.prototype.fireEvent = function (name, event) {
     
+    if (null === this.events) {
+        this.events = [];
+    }
     if (!this.eventPrefix) {
         this.eventPrefix = String(Math.random()).slice(2,8);
     }
     
     var eventName = this.eventPrefix + name;
-    
-    if (Piwik.getPlatform().isAndroid) {
-        Piwik.getUI().currentWindow.fireEvent(eventName, event);
 
-        event = null;
-
-        return;
-    }
-    
     for (var index = 0; index < this.events.length; index++) {
         if (eventName == this.events[index].event) {
             this.events[index].callback.apply(this, [event]);
@@ -88,6 +79,32 @@ Request.prototype.fireEvent = function (name, event) {
     }
 
     event = null;
+};
+
+/**
+ * Fires an event to all listeners. The event will be fired in {@link Piwik.UI.Window} context.
+ *
+ * @param  {string}    name   Name of the event you want to fire.
+ * @param  {Function}  event  An event object that will be passed to the callback function which was added
+ *                            via addEventListener.
+ */
+Request.prototype.cleanup = function () {
+    
+    if (!this.eventPrefix) {
+        return;
+    }
+
+    for (var index = 0; index < this.events.length; index++) {
+
+        if (this.events[index] && this.events[index].callback) {
+            this.events[index].callback = null;
+        }
+        
+        this.events[index] = null;
+    }
+
+    this.events      = null;
+    this.eventPrefix = null;
 };
 
 module.exports = Request;

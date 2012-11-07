@@ -287,6 +287,10 @@ function window (params) {
         if (tableview && tableview.get()) {
             this.remove(tableview.get());
         }
+        
+        if (request) {
+            request.cleanup();
+        }
 
         tableData = null;
         tableview = null;
