@@ -140,7 +140,9 @@ UiView.prototype.create = function (widget, params) {
     var window = this.getParam('window');
     if (window) {
         return window.create(widget, params);
-    }
+    } 
+    
+    Piwik.getLog().warn('No window exists do create widget', 'Piwik.UI.View::create');
 };
 
 UiView.prototype.createCommand = function (commandName, params) {
@@ -149,6 +151,8 @@ UiView.prototype.createCommand = function (commandName, params) {
     if (window) {
         return window.createCommand(commandName, params);
     }
+    
+    Piwik.getLog().warn('No window exists do create command', 'Piwik.UI.View::createCommand');
 };
 
 /**
