@@ -137,6 +137,19 @@ Graph.prototype.addSwitchGraph = function (view) {
         that.graphUrls.toggleVisibility();
     });
     
+    if (Piwik.getPlatform().isAndroid) {
+        this.graphUrls.fadeOut();
+    } else {
+        this.graphImage.addEventListener('load', function () {
+            // we need to wait till view is visible otherwise animation will never be executed.
+            if (!that || !that.graphUrls) {
+                return;
+            }
+            
+            that.graphUrls.fadeOut();
+        });
+    }
+
     view = null;
 };
 
@@ -188,14 +201,35 @@ Graph.prototype.addGraph = function (view) {
     });
     
     view.add(this.showDetailImage);
-    this.showDetailImage.animate({opacity: 0, delay: 800, duration: 600}, function () {
-        if (!that || !that.showDetailImage) {
-            return;
-        }
+    
+    if (Piwik.getPlatform().isAndroid) {
         
-        that.showDetailImage.hide();
-        that.showDetailImage.opacity = 1;
-    });
+        this.showDetailImage.animate({opacity: 0, delay: 600, duration: 600}, function () {
+            if (!that || !that.showDetailImage) {
+                return;
+            }
+            
+            that.showDetailImage.hide();
+            that.showDetailImage.opacity = 1;
+        });
+        
+    } else {
+        this.graphImage.addEventListener('load', function () {
+            // we need to wait till view is visible otherwise animation will never be executed.
+            if (!that || !that.showDetailImage) {
+                return;
+            }
+            
+            that.showDetailImage.animate({opacity: 0, delay: 600, duration: 600}, function () {
+                if (!that || !that.showDetailImage) {
+                    return;
+                }
+                
+                that.showDetailImage.hide();
+                that.showDetailImage.opacity = 1;
+            });
+        });
+    }
     
     this.graphImage.addEventListener('click', function () {
         

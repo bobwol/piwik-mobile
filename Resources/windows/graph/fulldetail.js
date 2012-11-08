@@ -230,7 +230,7 @@ function window (params) {
         bottomView = null;
     }
     
-    graphUrls.addSwitchGraph(win, true, false);
+    graphUrls.addSwitchGraph(win, true);
     
     graphUrls.addEventListener('close', function () {
         if (!win) {

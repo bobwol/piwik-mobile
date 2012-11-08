@@ -207,14 +207,13 @@ SwitchGraph.prototype.canSwitch = function () {
  * Adds a simple toolbar to the given window/view containing a button which allows to switch between graphs. The toolbar
  * will be only added if there are at least two different graph urls.
  *
- * @param  {Piwik.UI.Window|Ti.UI.View}  win         The toolbar will be rendered into this view or window.
- * @param  {boolean}                     hideOnOpen  Whether toolbar should be displayed by default or not.
+ * @param  {Piwik.UI.Window|Ti.UI.View}  win  The toolbar will be rendered into this view or window.
  * 
  * @fires  Piwik.UI.SwitchGraph#event:switch
  * 
  * @private
  */
-SwitchGraph.prototype._addSwitchGraphAndroid = function (win, hideOnOpen) {
+SwitchGraph.prototype._addSwitchGraphAndroid = function (win) {
     
     if (!this.canSwitch()) {
         win = null;
@@ -244,20 +243,25 @@ SwitchGraph.prototype._addSwitchGraphAndroid = function (win, hideOnOpen) {
     });
     
     switchGraphButton = null;
-    
-    if (hideOnOpen) {
-        this.toolbar.animate({opacity: 0, delay: 800, duration: 600}, function () {
-
-            if (!that || !that.toolbar) {
-                
-                return;
-            }
-
-            that.toolbar.hide();
-            that.toolbar.opacity = 0.9
-        });
-    }
 };
+
+/**
+ * Fades the switch graph view out.
+ */
+SwitchGraph.prototype.fadeOut = function () {
+    var that = this;
+    this.toolbar.animate({opacity: 0, delay: 600, duration: 600}, function () {
+
+        if (!that || !that.toolbar) {
+            
+            return;
+        }
+
+        that.toolbar.hide();
+        that.toolbar.opacity = Piwik.getPlatform().isAndroid ? 0.9 : 0.7
+        that = null;
+    });
+}
 
 
 /**
@@ -269,15 +273,14 @@ SwitchGraph.prototype._addSwitchGraphAndroid = function (win, hideOnOpen) {
  * @param  {boolean}                     showCloseButton  Whether a close button should be displayed or not. On Android
  *                                                        a close button will not be displayed as there is a hardware
  *                                                        key for that.
- * @param  {boolean}                     hideOnOpen  Whether toolbar should be displayed by default or not.
  * 
  * @fires  Piwik.UI.SwitchGraph#event:switch
  * @fires  Piwik.UI.SwitchGraph#event:close
  */
-SwitchGraph.prototype.addSwitchGraph = function (win, showCloseButton, hideOnOpen) {
+SwitchGraph.prototype.addSwitchGraph = function (win, showCloseButton) {
 
     if (Piwik.getPlatform().isAndroid) {
-       this._addSwitchGraphAndroid(win, hideOnOpen);
+       this._addSwitchGraphAndroid(win);
        win = null;
         
        return;
@@ -339,20 +342,8 @@ SwitchGraph.prototype.addSwitchGraph = function (win, showCloseButton, hideOnOpe
     for (var index in toolbarItems) {
         toolbarItems[index] = null;
     }
-    toolbarItems = null;
     
-    if (hideOnOpen) {
-        this.toolbar.animate({opacity: 0, delay: 800, duration: 600}, function () {
-
-            if (!that || !that.toolbar) {
-                
-                return;
-            }
-            
-            that.toolbar.hide();
-            that.toolbar.opacity = 0.7
-        });
-    }
+    toolbarItems = null;
 };
 
 /**
