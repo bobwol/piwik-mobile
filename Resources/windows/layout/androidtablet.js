@@ -183,18 +183,27 @@ function layout () {
     this._replaceDetailView = function (newWin) {
         
         newWin.rootWindow = this.detailView;
+        
+        if (1 == this.windows.length) {
+            var currentWindow = this._getCurrentWindow('windows');
+            if (currentWindow) {
+                currentWindow.fireEvent('blurWindow', {});
+            }
+        }
 
         while (1 < this.windows.length) {
             // remove possible existing detail windows
             try {
                 var currentWindow = this._getCurrentWindow('windows');
-                currentWindow.fireEvent('blurWindow', {});
-                currentWindow.close(true);
-                currentWindow = null;
+                if (currentWindow) {
+                    currentWindow.fireEvent('blurWindow', {});
+                    currentWindow.close(true);
+                    currentWindow = null;
+                }
             } catch (e) {
                 Piwik.getLog().warn('Failed to close current window: ' + e, 'AndroidTabletLayout::_replaceDetailView');
             }
-        }
+        } 
 
         Piwik.getUI().currentWindow = newWin;
         
