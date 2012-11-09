@@ -345,13 +345,11 @@ function window (params) {
          websiteRow   = null;
 
         if (event.lastMinutes && that) {
-            that.lastMinutes.refresh({actions: event.lastMinutes.actions,
-                                      visits: event.lastMinutes.visits});
+            that.lastMinutes.refresh({actions: event.lastMinutes.actions, visits: event.lastMinutes.visits});
         }
 
         if (event.lastHours && that) {
-            that.lastHours.refresh({actions: event.lastHours.actions,
-                                    visits: event.lastHours.visits});
+            that.lastHours.refresh({actions: event.lastHours.actions, visits: event.lastHours.visits});
         }
 
         // prepend each new visitor to visitors list. Recent visitors have a lower index afterwards, older visitors
@@ -392,8 +390,7 @@ function window (params) {
         for (var index = 0; index < visitors.length; index++) {
             visitor = visitors[index];
 
-            visitorOverview    = that.create('VisitorOverview', {visitor: visitor, 
-                                                                 accessUrl: accessUrl});
+            visitorOverview    = that.create('VisitorOverview', {visitor: visitor, accessUrl: accessUrl});
             visitorRow         = visitorOverview.getRow();
 
             // add visitor information to the row. This makes it possible to access this value when
