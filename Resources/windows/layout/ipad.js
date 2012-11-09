@@ -36,6 +36,15 @@ function layout () {
      * @type  Array
      */
     this._modalWindows  = [];
+
+    /**
+     * A reference to the piwik window in master view.
+     *
+     * @default  null
+     *
+     * @type     Piwik.UI.Window
+     */
+    this._masterWindow = null;
     
     /**
      * zIndex counter. Will be increased by one for each new created window. This ensures a new created window will be
@@ -134,9 +143,24 @@ function layout () {
      * @private
      */
     this._addWindowToMasterView = function (newWin) {
-    
+        if (!newWin) {
+            return;
+        }
+        
+        try {
+            if (this._masterWindow) {
+                this._masterWindow.fireEvent('blurWindow', {});
+                this._masterWindow.close(true);
+                this._masterWindow.rootWindow = null;
+                this._masterWindow = null;
+            }
+        } catch (e) {
+            Piwik.getLog().warn('Failed to close current window: ' + e, 'iPadLayout::_addWindowToMasterView');
+        }
+
         newWin.rootWindow = this._masterWin;
         this._masterWin.add(newWin);
+        this._masterWindow = newWin;
         
         newWin.fireEvent('focusWindow', {});
         
@@ -385,7 +409,7 @@ function layout () {
                 }
             } else if ('detail' == piwikWindow.target && this.windows && this.windows.length) {
                 this.windows.pop();
-            }
+            } 
 
             // remove window from main window so that it will be no longer visible
             piwikWindow.rootWindow.remove(piwikWindow);
@@ -432,8 +456,7 @@ function layout () {
 
         this._masterWin    = Ti.UI.createWindow({barColor: '#B2AEA5', title: _('General_Reports')});
 
-        var settingsButton = Ti.UI.createButton({image: 'images/ic_action_settings.png',
-                                                 width: 37});
+        var settingsButton = Ti.UI.createButton({image: 'images/ic_action_settings.png', width: 37});
 
         settingsButton.addEventListener('click', function () {
             Piwik.getUI().createWindow({url: 'settings/index', target: 'modal'});

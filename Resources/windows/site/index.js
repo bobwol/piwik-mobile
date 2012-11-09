@@ -258,7 +258,7 @@ function window (params) {
         request.send({site: site});
     };
     
-    if (Piwik.getPlatform().isAndroidTablet) {
+    if (Piwik.getPlatform().isIpad || Piwik.getPlatform().isAndroidTablet) {
         // in contrast to the .cleanup(); method this will be only called if the window really closes.
         this.addEventListener('closeWindow', function () {
             if (doRefreshIfNeeded) {
