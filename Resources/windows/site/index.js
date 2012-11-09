@@ -76,7 +76,8 @@ function window (params) {
     var refresh   = this.create('Refresh', {tableView: tableview});
     var tableData = [];
     
-    this.add(tableview.get());
+    var tableInstance = tableview.get();
+    this.add(tableInstance);
 
     tableview.addEventListener('click', function (event) {
 
@@ -284,8 +285,10 @@ function window (params) {
     };
     
     this._cleanup = function () {
-        if (tableview && tableview.get()) {
-            this.remove(tableview.get());
+
+        if (tableInstance) {
+            this.remove(tableInstance);
+            tableInstance = null;
         }
         
         if (request) {
