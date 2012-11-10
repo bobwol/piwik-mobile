@@ -168,7 +168,7 @@ ActivityIndicator.prototype.show = function (message) {
                 win.waitIndicatorImage = Ti.UI.createActivityIndicator({
                     id: 'activityWaitIndicator',
                     message: message ? message : '',
-                    style: Ti.UI.iPhone ? Ti.UI.iPhone.ActivityIndicatorStyle.DARK : ''
+                    style: Piwik.getPlatform().isIos ? Ti.UI.iPhone.ActivityIndicatorStyle.DARK : ''
                 });
                 
                 if (Piwik.getPlatform().isIos) {
