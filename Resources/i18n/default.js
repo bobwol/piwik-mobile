@@ -148,13 +148,13 @@ module.exports = {
     Mobile_Refresh:                                                     'Refresh',
     Mobile_Reloading:                                                   'Reloading...',
     Mobile_ReleaseToRefresh:                                            'Release to refresh...',
-    Mobile_SaveSuccessError:                                            'Please verify settings',
+    Mobile_SaveSuccessError:                                            'Piwik URL or username and password combination is wrong.',
     Mobile_SearchWebsite:                                               'Search websites',
     Mobile_ShowAll:                                                     'Show all',
     Mobile_ShowLess:                                                    'Show less',
     Mobile_UseSearchBarHint:                                            'Only the first %s websites are displayed here. Please use the search bar to access your other websites.',
     Mobile_HttpTimeout:                                                 'HTTP Timeout',
     Mobile_VerifyAccount:                                               'Verifying Account',
-    Mobile_VerifyLoginData:                                             'Make sure your entered login data is correct.',
+    Mobile_VerifyLoginData:                                             'Make sure your username and password combination is correct.',
     Mobile_YouAreOffline:                                               'Sorry, you are currently offline'
 };
