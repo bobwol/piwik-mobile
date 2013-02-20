@@ -385,7 +385,7 @@ Accounts.prototype.resetPiwikVersion = function(account) {
         return account;
     }
     
-    account.version            = 0;
+    account.version            = '';
     account.dateVersionUpdated = null;
     
     return account;
@@ -432,15 +432,13 @@ Accounts.prototype.updatePiwikVersion = function(account) {
   
         account.dateVersionUpdated = (new Date()) + '';
         
-        if (response) {
-            var stringUtils = Piwik.require('Utils/String');
-            account.version = stringUtils.toPiwikVersion(response.value);
-            stringUtils     = null;
+        if (response && response.value) {
+            account.version = '' + response.value;
         } else if (!account.version) {
-            account.version = 0;
+            account.version = '';
         } else {
             // there went something wrong with the request. For example the network connection broke up.
-            // do not set account version to 0 in such a case. We would overwrite an existing version, eg 183
+            // do not set account version to 0 in such a case. We would overwrite an existing version, eg '1.8.3'
         }
 
         var accountManager = Piwik.require('App/Accounts');

@@ -345,13 +345,8 @@ AccountRequest.prototype.requestVersion = function () {
                                       title: 'Piwik Server Version'};
             Piwik.getTracker().trackEvent(serverVersionEvent);
         } 
-        
-        var stringUtils   = Piwik.require('Utils/String');
-        var version       = stringUtils.toPiwikVersion(response.value);
-        var latestVersion = stringUtils.toPiwikVersion(that.latestVersion);
-        stringUtils       = null;
 
-        if (version && latestVersion && latestVersion > version) {
+        if (!Piwik.isVersionGreaterThanOrEqual(that.latestVersion, response.value)) {
             Piwik.getLog().debug('Version is out of date: ' + version,
                             'Piwik.Network.AccountRequest::requestVersion#version');
 

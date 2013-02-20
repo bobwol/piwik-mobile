@@ -43,7 +43,7 @@ function window (params) {
     if (site && site.accountId) {
 
         var account      = Piwik.require('App/Accounts').getAccountById(this.site.accountId);
-        var piwikVersion = (account && account.version) ? account.version : 0;
+        var piwikVersion = (account && account.version) ? account.version : '';
         account          = null;
         Piwik.getTracker().setCustomVariable(1, 'piwikVersion', piwikVersion, 'page');
 

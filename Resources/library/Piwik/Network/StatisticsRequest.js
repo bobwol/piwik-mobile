@@ -417,7 +417,7 @@ StatisticsRequest.prototype._formatReportData = function (response, account) {
     var reportMetadata = response.reportMetadata;
     var hasSubtables   = response.metadata && response.metadata.actionToLoadSubTables;
     
-    if (!account || !account.version || 184 > account.version) {
+    if (!account || !account.version || !Piwik.isVersionGreaterThanOrEqual('1.8.4', account.version)) {
         // Piwik 1.8.3 and earlier don't support subtable calls via Metadata API
         hasSubtables = false;
     }
