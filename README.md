@@ -29,7 +29,11 @@ See http://dev.piwik.org/trac/wiki/PiwikMobile
 
 See http://piwik.org/blog/category/piwik-mobile-changelog/
 
-##Contact
+## Issues
+
+Please report issues at http://dev.piwik.org/trac/milestone/Piwik%20Mobile%20Client
+
+## Contact
 
 http://piwik.org
 
