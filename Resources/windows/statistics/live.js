@@ -132,6 +132,20 @@ function window (params) {
 
     var accessUrl      = Piwik.getNetwork().getBasePath('' + account.accessUrl);
 
+    /**
+     * Holds a list of the last 30 visitors across multiple requests. We'll render only visitors which are defined
+     * in this array.
+     *
+     * Array (
+     *    [int] => [Object Visitor]
+     * )
+     *
+     * @type  Array
+     * @private
+     */
+    var visitors    = [];
+    var visitorRows = [];
+    
     this.addEventListener('onSiteChanged', function (event) {
         // user has changed the site
 
@@ -150,6 +164,7 @@ function window (params) {
         // quick fix to force redraw of websiteRow if selected website has no visitors
         that.lastMinutes = null;
         that.lastHours   = null;
+        visitors         = [];
         
         accessUrl = Piwik.getNetwork().getBasePath('' + account.accessUrl);
 
@@ -250,20 +265,6 @@ function window (params) {
 
         event = null;
     });
-
-    /**
-     * Holds a list of the last 30 visitors across multiple requests. We'll render only visitors which are defined
-     * in this array.
-     *
-     * Array (
-     *    [int] => [Object Visitor]
-     * )
-     *
-     * @type  Array
-     * @private
-     */
-    var visitors    = [];
-    var visitorRows = [];
     
     var siteCommand = this.createCommand('ChooseSiteCommand');
 
@@ -355,6 +356,7 @@ function window (params) {
         // prepend each new visitor to visitors list. Recent visitors have a lower index afterwards, older visitors
         // have a higher index. This makes sure we can simply remove older visitors later.
         var visitor = null;
+
         for (var index = event.details.length; 0 <= index; index--) {
 
             visitor = event.details[index];

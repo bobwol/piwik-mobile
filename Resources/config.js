@@ -21,7 +21,7 @@ var config = {};
  * c
  * @type boolean
  */
-config.logEnabled     = false;
+config.logEnabled     = true;
 
 /**
  * Enable or disable profiling. Should be disabled in a production release. Will be automatically disabled when
