@@ -12,7 +12,7 @@
         <target device="blackberry">false</target>
     </deployment-targets>
     <id>org.piwik.mobile</id>
-    <name>PiwikMobile</name>
+    <name>Piwik Mobile</name>
     <version>1.9.5</version>
     <publisher>Piwik.org</publisher>
     <url>http://piwik.org</url>
