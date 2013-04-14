@@ -178,7 +178,7 @@ LiveRequest.prototype.send = function (params) {
         parameters.filter_limit = 10;
     }
     
-    if (params.filter_offset && params.filter_limit && Piwik.isVersionGreaterThanOrEqual('1.11.10', account.version)) {
+    if ('undefined' !== (typeof params.filter_offset) && null !== params.filter_offset && params.filter_limit && Piwik.isVersionGreaterThanOrEqual('1.11.10', account.version)) {
         // quick hack for Piwik >= 1.12.0
         delete parameters.maxIdVisit;
         delete parameters.minTimestamp;

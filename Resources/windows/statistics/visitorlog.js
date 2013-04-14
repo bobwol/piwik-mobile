@@ -195,12 +195,15 @@ function window (params) {
                                                          className: 'visitorlogPagerTableViewRow'});
             nextPagerRow.addEventListener('click', function () {
                 
-                
                 nextOffset    = currentOffset;
                 currentOffset = currentOffset - defaultFilterLimit;
                 
                 if (0 > currentOffset) {
                     currentOffset = 0;
+                }
+                
+                if (!nextOffset) {
+                    nextOffset = 10;
                 }
     
                 params.filter_limit = nextOffset;
