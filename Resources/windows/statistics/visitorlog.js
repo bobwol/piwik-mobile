@@ -49,6 +49,12 @@ function window (params) {
     var visitorRows              = [];
     var refresh                  = null;
     
+     
+    var defaultFilterLimit = require('config').piwik.filterLimit;
+    var currentOffset = 0;
+    var nextOffset    = 10;
+
+    
     // variable to detect whether user has pressed "previous". We want to display the "next" row only if the user 
     // has pressed "previous" before.
     var userPressedPrevious      = false;
@@ -71,7 +77,9 @@ function window (params) {
         latestRequestedTimestamp = null;
         usedMaxVisitIds          = [];
         userPressedPrevious      = false;
-        
+        currentOffset = 0;
+        nextOffset    = 10;
+
         event = null;
 
         if (refresh) {
@@ -104,6 +112,8 @@ function window (params) {
         oldestVisitId            = null;
         usedMaxVisitIds          = [];
         userPressedPrevious      = false;
+        currentOffset = 0;
+        nextOffset    = 10;
 
         refresh.refresh();
     });
@@ -137,7 +147,7 @@ function window (params) {
                                 openView: event.row.popoverView});
         event = null;
     });
-
+   
     var siteCommand = this.createCommand('ChooseSiteCommand');
     request.addEventListener('onload', function (event) {
 
@@ -184,7 +194,18 @@ function window (params) {
             var nextPagerRow = Ti.UI.createTableViewRow({title: _('General_Next'),
                                                          className: 'visitorlogPagerTableViewRow'});
             nextPagerRow.addEventListener('click', function () {
+                
+                
+                nextOffset    = currentOffset;
+                currentOffset = currentOffset - defaultFilterLimit;
+                
+                if (0 > currentOffset) {
+                    currentOffset = 0;
+                }
     
+                params.filter_limit = nextOffset;
+                params.filter_offset = currentOffset;
+                
                 var previousUsedMaxIdVisit = null;
                 if (usedMaxVisitIds && usedMaxVisitIds.length) {
                     // remove the current displayed maxVisitId from stack
@@ -262,6 +283,13 @@ function window (params) {
             params.maxIdVisit        = oldestVisitId;
             params.fetchLiveOverview = false;
             userPressedPrevious      = true;
+            
+            
+            currentOffset = nextOffset;
+            nextOffset    = currentOffset + defaultFilterLimit;
+            params.filter_limit = nextOffset;
+            params.filter_offset = currentOffset;
+
             
             refresh.refresh();
 
