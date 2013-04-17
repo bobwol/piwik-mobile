@@ -78,7 +78,10 @@ VisitorOverview.prototype.init = function () {
     var dateAndIconsView = Ti.UI.createView({id: 'visitorOverviewDateView'});
 
     var timeLabel = '';
-    if (this.getParam('useFirstVisit', false)) {
+    
+    if (this.getParam('useLastVisit', false)) {
+         timeLabel = visitor.lastActionDateTime;
+    } else if (this.getParam('useFirstVisit', false)) {
         timeLabel = visitor.serverDatePrettyFirstAction + ' - ' + visitor.serverTimePrettyFirstAction;
     } else {
         timeLabel = visitor.serverDatePretty + ' - ' + visitor.serverTimePretty;

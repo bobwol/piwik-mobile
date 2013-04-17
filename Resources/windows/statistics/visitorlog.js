@@ -239,9 +239,13 @@ function window (params) {
         }
 
         if (event.details && event.details.length) {
+        
+            var accountVersion      = account ? account.version : '';
+            var isNewerPiwikVersion = Piwik.isVersionGreaterThanOrEqual('1.11.10',accountVersion);
+            
             for (var index = 0; index < event.details.length; index++) {
 
-               visitor = event.details[index];
+                visitor = event.details[index];
 
                 if (!visitor) {
                     continue;
@@ -254,7 +258,8 @@ function window (params) {
                 
                 visitorOverview = that.create('VisitorOverview', {visitor: visitor,
                                                                   accessUrl: accessUrl,
-                                                                  useFirstVisit: true});
+                                                                  useLastVisit: isNewerPiwikVersion,
+                                                                  useFirstVisit: !isNewerPiwikVersion});
                 visitorRow      = visitorOverview.getRow();
 
                 // add visitor information to the row. This makes it possibly to access this value when
