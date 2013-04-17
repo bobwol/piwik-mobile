@@ -184,6 +184,18 @@ LiveRequest.prototype.send = function (params) {
         delete parameters.minTimestamp;
         parameters.filter_limit = params.filter_limit;
         parameters.filter_offset = params.filter_offset;
+
+        if (params.period) {
+            parameters.period = params.period;
+        } else {
+            var session       = Piwik.require('App/Session');
+            parameters.period = session.get('piwik_parameter_period', 'day');
+        }
+        
+        if ('range' == parameters.period) {
+            parameters.period = 'month';
+        }
+        
     }
     
     if (params.date) {

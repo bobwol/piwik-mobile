@@ -26,7 +26,7 @@ var _     = require('library/underscore');
  * @augments  Piwik.UI.Window
  */
 function window (params) {
-
+    
     /**
      * @see  Piwik.UI.Window#titleOptions
      */
@@ -71,6 +71,7 @@ function window (params) {
                                        url: '/statistic-change/visitorlog'});
 
         params.date              = event.date;
+        params.period            = event.period ? event.period : null;
         params.minTimestamp      = null;
         params.maxIdVisit        = null;
         oldestVisitId            = null;
@@ -180,8 +181,23 @@ function window (params) {
         if (event.details && event.details.length && event.details[0] && event.details[0].serverDatePretty) {
             chooseDateTitle = event.details[0].serverDatePretty;
         }
+        
+        var dateParams = {date: params.date ? params.date : null};
+        
+        if (params.period) {
+            dateParams.period = params.period;
+        } else {
+             var session      = Piwik.require('App/Session');
+             var sessionPeriod = session.get('piwik_parameter_period', 'day');
+             
+             if (sessionPeriod) {
+                 dateParams.period = sessionPeriod;
+             }
+             
+             session = null;
+        }
 
-        var dateCommand     = that.createCommand('ChooseDateCommand', {date: params.date ? params.date : null});
+        var dateCommand     = that.createCommand('ChooseDateCommand', dateParams);
         visitorRows.push(that.create('TableViewRow', {title: chooseDateTitle, 
                                                       hasChild: true,
                                                       className: 'tableViewRowSelectable',
