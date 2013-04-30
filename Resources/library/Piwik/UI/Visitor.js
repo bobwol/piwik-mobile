@@ -446,6 +446,10 @@ Visitor.prototype.createDefaultAction = function (actionDetail) {
             case 'outlink':
                 title = _('General_Outlink');
                 break;
+
+            case 'search':
+                title = _('Actions_SubmenuSitesearch');
+                break;
         }
 
         view.add(Ti.UI.createLabel({text: title, id: 'visitorActionDefaultTypeLabel'}));
