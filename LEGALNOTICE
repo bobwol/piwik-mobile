@@ -39,8 +39,8 @@ CREDITS
         Major contributors are listed in http://piwik.org/the-piwik-team/.
 
         For detailed contribution history, refer to the source, tickets,
-        patches, and svn revision history, available at
-        http://dev.piwik.org/trac/browser/mobile .
+        patches, and Git repository history, available at
+        https://github.com/piwik/piwik-mobile .
 
 
 THIRD-PARTY COMPONENTS AND LIBRARIES
