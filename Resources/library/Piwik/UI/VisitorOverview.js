@@ -80,7 +80,7 @@ VisitorOverview.prototype.init = function () {
     var timeLabel = '';
     
     if (this.getParam('useLastVisit', false)) {
-         timeLabel = visitor.lastActionDateTime;
+        timeLabel = visitor.serverDatePretty + ' ' + visitor.serverTimePretty;
     } else if (this.getParam('useFirstVisit', false)) {
         timeLabel = visitor.serverDatePrettyFirstAction + ' - ' + visitor.serverTimePrettyFirstAction;
     } else {

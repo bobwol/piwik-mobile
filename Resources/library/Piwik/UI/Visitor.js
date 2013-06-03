@@ -131,9 +131,9 @@ Visitor.prototype.createOverview = function () {
     var visitor   = this.getParam('visitor', {});
     var accessUrl = this.getParam('accessUrl', '');
 
-    var visitDateLabel = String.format('%s - %s (%s)', '' + visitor.serverDatePretty,
-                                                       '' + visitor.serverTimePretty,
-                                                       '' + visitor.visitDurationPretty);
+    var visitDateLabel = String.format('%s %s (%s)', '' + visitor.serverDatePrettyFirstAction,
+                                                     '' + visitor.serverTimePrettyFirstAction,
+                                                     '' + visitor.visitDurationPretty);
 
     this._rows.push(this.create('TableViewRow', {title: visitDateLabel, className: 'visitorTableViewRow'}));
 

@@ -389,10 +389,17 @@ function window (params) {
         // TableViewRows as soon as a reuse an already rendered row.
         var visitorOverview = null;
         var visitorRow      = null;
+
+        var accountVersion      = account ? account.version : '';
+        var isNewerPiwikVersion = Piwik.isVersionGreaterThanOrEqual('1.11.10', accountVersion);
+
         for (var index = 0; index < visitors.length; index++) {
             visitor = visitors[index];
 
-            visitorOverview    = that.create('VisitorOverview', {visitor: visitor, accessUrl: accessUrl});
+            visitorOverview    = that.create('VisitorOverview', {visitor: visitor, 
+                                                                 accessUrl: accessUrl,
+                                                                 useLastVisit: isNewerPiwikVersion,
+                                                                 useFirstVisit: !isNewerPiwikVersion});
             visitorRow         = visitorOverview.getRow();
 
             // add visitor information to the row. This makes it possible to access this value when
