@@ -11,6 +11,10 @@ var Piwik       = require('library/Piwik');
 /** @private */
 var stringUtils = Piwik.require('Utils/String');
 
+function doesNotContainWhitespace (url) {
+    return -1 == ('' + url).indexOf(' ');
+}
+
 /**
  * @class     A statistic list entry is created by the method Piwik.UI.createStatisticListEntry. It displays a single
  *            statistics entry. The label value is placed on the left side whereas the value is displayed on the right 
@@ -81,7 +85,7 @@ StatisticListEntry.prototype.init = function () {
         this.row.add(Ti.UI.createImageView({className: 'tableViewRowArrowRightImage'}));
     }
     
-    if (logo) {
+    if (logo && doesNotContainWhitespace(logo)) {
         var imageView = Ti.UI.createImageView({height: this.getParam('logoHeight', 16),
                                                width: this.getParam('logoWidth', 16),
                                                image: '' + logo,
