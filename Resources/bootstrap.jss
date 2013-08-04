@@ -6,16 +6,16 @@
  * @version $Id$
  */
 
-@import "iphone/tableview.universal.jss";
-@import "iphone/graph.universal.jss";
-@import "iphone/statisticlist.universal.jss";
-@import "iphone/refresh.universal.jss";
-@import "iphone/datepicker.universal.jss";
-@import "iphone/menu.universal.jss";
-@import "iphone/liveoverview.universal.jss";
-@import "iphone/visitoroverview.universal.jss";
-@import "iphone/visitor.universal.jss";
-@import "iphone/modalwindow.universal.jss";
+@import "tableview.jss";
+@import "graph.jss";
+@import "statisticlist.jss";
+@import "refresh.jss";
+@import "datepicker.jss";
+@import "menu.jss";
+@import "liveoverview.jss";
+@import "visitoroverview.jss";
+@import "visitor.jss";
+@import "modalwindow.jss";
 
 #activityWaitIndicator {
     color: '#333333';
