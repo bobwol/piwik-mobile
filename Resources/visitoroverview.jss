@@ -36,11 +36,30 @@
     height: 'SIZE';
 }
 
+#visitorOverviewReferrerLabelIOS7 {
+    top: 4;
+    font-size: 13;
+    width: 'SIZE';
+    left: 15;
+    text-align: 'left';
+    height: 'SIZE';
+}
+
 #visitorOverviewPageviewsLabel {
     font-size: 13;
     top: 4;
     width: 'SIZE';
     left: 10;
+    text-align: 'left';
+    height: 'SIZE';
+    bottom: 8;
+}
+
+#visitorOverviewPageviewsLabelIOS7 {
+    font-size: 13;
+    top: 4;
+    width: 'SIZE';
+    left: 15;
     text-align: 'left';
     height: 'SIZE';
     bottom: 8;
@@ -55,11 +74,31 @@
     height: 'SIZE';
 }
 
+#visitorOverviewConvertedGoalsLabelIOS7 {
+    font-size: 13;
+    top: 4;
+    width:'SIZE';
+    left: 15;
+    textAlign: 'left';
+    height: 'SIZE';
+}
+
 #visitorOverviewDateTimeLabel {
     top: 0;
     font-size: 14;
     font-weight: 'bold';
     left: 10;
+    textAlign: 'left';
+    color: '#333';
+    width:'SIZE';
+    height: 'SIZE';
+}
+
+#visitorOverviewDateTimeLabelIOS7 {
+    top: 0;
+    font-size: 14;
+    font-weight: 'bold';
+    left: 15;
     textAlign: 'left';
     color: '#333';
     width:'SIZE';

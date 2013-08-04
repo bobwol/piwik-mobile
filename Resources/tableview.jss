@@ -41,11 +41,37 @@ tableviewrow {
     font-weight:'bold';
 }
 
+#tableViewSectionHeaderLabelIOS7 {
+    height: 'SIZE';
+    top: 3;
+    bottom: 4;
+    width: 'SIZE';
+    textAlign: 'left';
+    color: '#ffffff';
+    left: 15;
+    font-size: 15;
+    font-weight:'bold';
+}
+
 #tableViewRowTitleLabelWithDescription {
     textAlign: 'left';
     width: 'SIZE';
     height: 'SIZE';
     left: 10;
+    color: '#333333';
+    ellipsize: true;
+    wordWrap: false;
+    font-size: 18;
+    top: 11;
+    font-weight: 'bold';
+    touchEnabled: false;
+}
+
+#tableViewRowTitleLabelWithDescriptionIOS7 {
+    textAlign: 'left';
+    width: 'SIZE';
+    height: 'SIZE';
+    left: 15;
     color: '#333333';
     ellipsize: true;
     wordWrap: false;
@@ -70,6 +96,21 @@ tableviewrow {
     touchEnabled: false;
 }
 
+#tableViewRowTitleLabelIOS7 {
+    textAlign: 'left';
+    width: 'SIZE';
+    height: 'SIZE';
+    left: 15;
+    color: '#333333';
+    ellipsize: true;
+    wordWrap: false;
+    font-size: 18;
+    top: 11;
+    bottom: 11;
+    font-weight: 'bold';
+    touchEnabled: false;
+}
+
 #tableViewRowDescriptionLabel {
     font-size: 13;
     textAlign: 'left';
@@ -84,12 +125,40 @@ tableviewrow {
     touchEnabled: false;
 }
 
+#tableViewRowDescriptionLabelIOS7 {
+    font-size: 13;
+    textAlign: 'left';
+    width: 'SIZE';
+    height: 'SIZE';
+    left: 15;
+    top: 34;
+    bottom: 11;
+    color: '#808080';
+    ellipsize: true;
+    wordWrap: false;
+    touchEnabled: false;
+}
+
 #tableViewRowDescriptionLabelvertical {
     font-size: 13;
     textAlign: 'left';
     width: 'SIZE';
     height: 'SIZE';
     left: 10;
+    top: 4;
+    bottom: 11;
+    color: '#808080';
+    ellipsize: true;
+    wordWrap: false;
+    touchEnabled: false;
+}
+
+#tableViewRowDescriptionLabelverticalIOS7 {
+    font-size: 13;
+    textAlign: 'left';
+    width: 'SIZE';
+    height: 'SIZE';
+    left: 15;
     top: 4;
     bottom: 11;
     color: '#808080';

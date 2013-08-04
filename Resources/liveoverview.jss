@@ -28,9 +28,29 @@
     font-size: 14;
 }
 
+#liveOverviewTitleLabelIOS7 {
+    left: 15;
+    top: 8;
+    bottom: 0;
+    color: '#000000';
+    height: 'SIZE';
+    width: 'SIZE';
+    font-size: 14;
+}
+
 #liveOverviewValueLabel {
     bottom: 8;
     left: 10;
+    top: 3;
+    height: 'SIZE';
+    width:'100%';
+    color: '#385487';
+    font-size: 18;
+}
+
+#liveOverviewValueLabelIOS7 {
+    bottom: 8;
+    left: 15;
     top: 3;
     height: 'SIZE';
     width:'100%';

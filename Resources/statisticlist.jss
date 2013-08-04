@@ -55,6 +55,36 @@
     font-size: 16;
 }
 
+.statisticListTitleLabelIOS7 {
+    height: 'SIZE';
+    left: 15;
+    right: 95;
+    color: '#333333';
+    top: 13;
+    bottom: 10;
+    font-size: 16;
+}
+
+.statisticListTitleLabelWithLogo {
+    height: 'SIZE';
+    left: 35;
+    right: 87;
+    color: '#333333';
+    top: 13;
+    bottom: 10;
+    font-size: 16;
+}
+
+.statisticListTitleLabelWithLogoIOS7 {
+    height: 'SIZE';
+    left: 40;
+    right: 87;
+    color: '#333333';
+    top: 13;
+    bottom: 10;
+    font-size: 16;
+}
+
 .statisticListValueLabel {
     height: 'SIZE';
     right: 3;
@@ -79,6 +109,10 @@
 
 .statisticListLogoImage {
     left: 10;
+}
+
+.statisticListLogoImageIOS7 {
+    left: 15;
 }
 
 .statisticListPaginatorTableViewRow {

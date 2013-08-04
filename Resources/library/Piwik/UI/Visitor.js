@@ -308,10 +308,14 @@ Visitor.prototype.createSystem = function () {
     }
 
     if (visitor.pluginsIcons && visitor.pluginsIcons.length && accessUrl) {
-
+        var pluginLabelId = 'tableViewRowTitleLabel';
+        if (Piwik.getPlatform().isIos7orLater) {
+            pluginLabelId += 'IOS7';
+        }
+        
         var row = this.create('TableViewRow', {className: 'visitorTableViewRow'});
         row.add(Ti.UI.createLabel({text: _('UserSettings_Plugins'),
-                                   id: 'tableViewRowTitleLabel'}));
+                                   id: pluginLabelId}));
         
         var right = 10;
         for (var index = 0; index < visitor.pluginsIcons.length; index++) {
@@ -390,17 +394,21 @@ Visitor.prototype.createActionDetails = function () {
  * @param  {Object}  actionDetail
  */
 Visitor.prototype.createActionAction = function (actionDetail) {
-
+    var classAppendix = '';
+    if (Piwik.getPlatform().isIos7orLater) {
+        classAppendix = 'IOS7';
+    }
+        
     var row = Ti.UI.createTableViewRow({className: 'visitorActionActionTableViewRow'});
 
     if (actionDetail.pageTitle) {
-        row.add(Ti.UI.createLabel({text: '' + actionDetail.pageTitle, id: 'visitorActionActionPageTitleLabel'}));
+        row.add(Ti.UI.createLabel({text: '' + actionDetail.pageTitle, id: ('visitorActionActionPageTitleLabel' + classAppendix)}));
     }
     if (actionDetail.url) {
-        row.add(Ti.UI.createLabel({text: actionDetail.url, id: 'visitorActionActionUrlLabel'}));
+        row.add(Ti.UI.createLabel({text: actionDetail.url, id: ('visitorActionActionUrlLabel' + classAppendix)}));
     }
     if (actionDetail.serverTimePretty) {
-        row.add(Ti.UI.createLabel({text: actionDetail.serverTimePretty, id: 'visitorActionActionServerTimeLabel'}));
+        row.add(Ti.UI.createLabel({text: actionDetail.serverTimePretty, id: ('visitorActionActionServerTimeLabel' + classAppendix)}));
     }
 
     this._rows.push(row);
@@ -418,12 +426,16 @@ Visitor.prototype.createActionAction = function (actionDetail) {
  * @param  {Object}  actionDetail
  */
 Visitor.prototype.createDefaultAction = function (actionDetail) {
-
+    var classAppendix = '';
+    if (Piwik.getPlatform().isIos7orLater) {
+        classAppendix = 'IOS7';
+    }
+    
     var accessUrl = this.getParam('accessUrl', '');
     
     var row       = Ti.UI.createTableViewRow({className: 'visitorActionDefaultTableViewRow'});
 
-    var view      = Ti.UI.createView({id: 'visitorActionDefaultHeadlineView'});
+    var view      = Ti.UI.createView({id: ('visitorActionDefaultHeadlineView' + classAppendix)});
 
     if (accessUrl && actionDetail.icon) {
         view.add(Ti.UI.createImageView({image: accessUrl + actionDetail.icon,
@@ -452,7 +464,9 @@ Visitor.prototype.createDefaultAction = function (actionDetail) {
                 break;
         }
 
-        view.add(Ti.UI.createLabel({text: title, id: 'visitorActionDefaultTypeLabel'}));
+        var typeLabelId = 'visitorActionDefaultTypeLabel';
+        
+        view.add(Ti.UI.createLabel({text: title, id: typeLabelId}));
     }
 
     row.add(view);
@@ -533,7 +547,12 @@ Visitor.prototype.createEcommerceAction = function (actionDetail) {
                 itemText += ', ' + item.itemCategory;
             }
 
-            var itemView = Ti.UI.createView({id: 'visitorActionEcommerceDetailsItemView'});
+            var itemViewId = 'visitorActionEcommerceDetailsItemView';
+            if (Piwik.getPlatform().isIos7orLater) {
+                itemViewId += 'IOS7';
+            }
+            
+            var itemView = Ti.UI.createView({id: itemViewId});
 
             itemView.add(Ti.UI.createLabel({text: ' * ', id: 'visitorActionEcommerceDetailsItemStarLabel'}));
             itemView.add(Ti.UI.createLabel({text: itemText, id: 'visitorActionEcommerceDetailsItemNameLabel'}));

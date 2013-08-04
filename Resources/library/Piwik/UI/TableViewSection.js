@@ -50,9 +50,14 @@ TableViewSection.prototype.init = function (params) {
     delete params.title;
     params.window = null;
 
+    var headerLabelId = 'tableViewSectionHeaderLabel';
+    if (Piwik.getPlatform().isIos7orLater) {
+        headerLabelId += 'IOS7';
+    }
+    
     var headerLabel = Ti.UI.createLabel({
         text: String(title),
-        id: 'tableViewSectionHeaderLabel'
+        id: headerLabelId
     });
 
     params.className = 'tableViewSection';

@@ -69,9 +69,14 @@ StatisticListEntry.prototype.init = function () {
     this.row  = Ti.UI.createTableViewRow({className: rowClassName, 
                                           idSubtable: idSubtable,
                                           reportName: title});
+                                          
+    var titleClass = 'statisticListTitleLabel' + (logo ? 'WithLogo' : '');
+    if (Piwik.getPlatform().isIos7orLater) {
+        titleClass += 'IOS7';
+    }
 
     var titleLabel = Ti.UI.createLabel({text: title ? ('' + title) : '',
-                                        className: 'statisticListTitleLabel' + (logo ? 'WithLogo' : '')});
+                                        className: titleClass});
 
     this.row.add(titleLabel);
     titleLabel = null;
@@ -86,13 +91,19 @@ StatisticListEntry.prototype.init = function () {
     }
     
     if (logo && doesNotContainWhitespace(logo)) {
+                                   
+        var logoClass = 'statisticListLogoImage';
+        if (Piwik.getPlatform().isIos7orLater) {
+            logoClass += 'IOS7';
+        }
+        
         var imageView = Ti.UI.createImageView({height: this.getParam('logoHeight', 16),
                                                width: this.getParam('logoWidth', 16),
                                                image: '' + logo,
                                                canScale: !Piwik.getPlatform().isAndroid,
                                                hires: !Piwik.getPlatform().isAndroid,
                                                enableZoomControls: false,
-                                               className: 'statisticListLogoImage'});
+                                               className: logoClass});
         
         this.row.add(imageView);
         imageView = null;

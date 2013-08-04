@@ -11,6 +11,12 @@ var Piwik = require('library/Piwik');
 /** @private */
 var _     = require('library/underscore');
 
+var classAppendix = '';
+if (Piwik.getPlatform().isIos7orLater) {
+    classAppendix = 'IOS7';
+}
+
+
 /**
  * @class     A visitor overview is created by the method Piwik.UI.createVisitorOverview. The visitor overview UI widget
  *            displays a short overview of a single visitor. Like visit date/time, referrer, number of actions, duration
@@ -93,7 +99,7 @@ VisitorOverview.prototype.init = function () {
     }
 
     dateAndIconsView.add(Ti.UI.createLabel({text: timeLabel,
-                                            id: 'visitorOverviewDateTimeLabel'}));
+                                            id: ('visitorOverviewDateTimeLabel' + classAppendix)}));
 
     // use different className for the first icon. This makes it possible to specify for example another distance
     var iconClass = 'visitorOverviewFirstIcon';
@@ -125,20 +131,20 @@ VisitorOverview.prototype.init = function () {
     var referrerText = this.getReferrerDescription(visitor);
     if (referrerText) {
         this._row.add(Ti.UI.createLabel({text: referrerText,
-                                         id: 'visitorOverviewReferrerLabel'}));
+                                         id: ('visitorOverviewReferrerLabel' + classAppendix)}));
     }
 
     if (visitor.goalConversions) {
         var goalsText = String.format(_('General_VisitConvertedNGoals'), '' + visitor.goalConversions);
         
         this._row.add(Ti.UI.createLabel({text: goalsText,
-                                         id: 'visitorOverviewConvertedGoalsLabel'}));
+                                         id: ('visitorOverviewConvertedGoalsLabel' + classAppendix)}));
     }
 
     var pageViewsText = this.getPageviewsDescription(visitor);
     if (pageViewsText) {
         this._row.add(Ti.UI.createLabel({text: pageViewsText,
-                                         id: 'visitorOverviewPageviewsLabel'}));
+                                         id: ('visitorOverviewPageviewsLabel' + classAppendix)}));
     }
     
     visitor = null;

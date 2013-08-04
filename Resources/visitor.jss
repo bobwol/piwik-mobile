@@ -53,6 +53,33 @@
     height: 'SIZE';
 }
 
+#visitorActionActionPageTitleLabelIOS7 {
+    left: 15;
+    font-size: 13;
+    top: 5;
+    width: 'SIZE';
+    height: 'SIZE';
+    font-weight: 'bold';
+}
+
+#visitorActionActionUrlLabelIOS7 {
+    left: 15;
+    color: '#555555';
+    font-size: 13;
+    top: 3;
+    width: 'SIZE';
+    height: 'SIZE';
+}
+
+#visitorActionActionServerTimeLabelIOS7 {
+    bottom: 5;
+    top: 3;
+    left: 15;
+    font-size: 13;
+    width: 'SIZE';
+    height: 'SIZE';
+}
+
 .visitorActionDefaultTableViewRow {
     layout: 'vertical';
     height: 'SIZE';
@@ -63,6 +90,14 @@
 #visitorActionDefaultHeadlineView {
     layout: 'horizontal';
     left: 10;
+    top: 5;
+    height: 'SIZE';
+    width: 'FILL';
+}
+
+#visitorActionDefaultHeadlineViewIOS7 {
+    layout: 'horizontal';
+    left: 15;
     top: 5;
     height: 'SIZE';
     width: 'FILL';
@@ -143,6 +178,13 @@
     width: 'SIZE';
     height: 'SIZE';
     left: 10;
+}
+
+#visitorActionEcommerceDetailsItemViewIOS7 {
+    layout: 'horizontal';
+    width: 'SIZE';
+    height: 'SIZE';
+    left: 15;
 }
 
 #visitorActionEcommerceDetailsItemStarLabel {

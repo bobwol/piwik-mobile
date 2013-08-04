@@ -60,13 +60,20 @@ LiveOverview.prototype.init = function () {
     this.row        = Ti.UI.createTableViewRow({className: 'liveOverviewTableViewRow'});
     var container   = Ti.UI.createView({className: 'liveOverviewContainerView'});
 
-    var titleLabel  = Ti.UI.createLabel({text: this.getParam('title', ''),
-                                         id: 'liveOverviewTitleLabel'});
+    var titleId = 'liveOverviewTitleLabel';
+    if (Piwik.getPlatform().isIos7orLater) {
+        titleId += 'IOS7';
+    }
+    var titleLabel  = Ti.UI.createLabel({text: this.getParam('title', ''), id: titleId});
 
     container.add(titleLabel);
     titleLabel = null;
 
-    this.valueLabel = Ti.UI.createLabel({text: '-', id: 'liveOverviewValueLabel'});
+    var valueId = 'liveOverviewValueLabel';
+    if (Piwik.getPlatform().isIos7orLater) {
+        valueId += 'IOS7';
+    }
+    this.valueLabel = Ti.UI.createLabel({text: '-', id: valueId});
 
     this.refresh();
 

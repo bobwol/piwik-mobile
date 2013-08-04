@@ -91,7 +91,12 @@ TableViewRow.prototype.init = function (params) {
     var row = Ti.UI.createTableViewRow(params);
 
     if (title) {
-        var titleOptions = {text: title, id: 'tableViewRowTitleLabel' + (description ? 'WithDescription' : '')};
+        var rowId = 'tableViewRowTitleLabel' + (description ? 'WithDescription' : '');
+        if (Piwik.getPlatform().isIos7orLater) {
+            rowId += 'IOS7';
+        }
+        
+        var titleOptions = {text: title, id: rowId};
         
         if (wrapTitle) {
             titleOptions.ellipsize = false;
@@ -113,8 +118,14 @@ TableViewRow.prototype.init = function (params) {
     }
     
     if (description) {
+        
+        var descriptionId = 'tableViewRowDescriptionLabel' + (params.layout ? params.layout : '');
+        if (Piwik.getPlatform().isIos7orLater) {
+            descriptionId += 'IOS7';
+        }
+        
         var descriptionLabel = Ti.UI.createLabel({text: description,
-                                                  id: 'tableViewRowDescriptionLabel' + (params.layout ? params.layout : '')});
+                                                  id: descriptionId});
         
         row.add(descriptionLabel);
         descriptionLabel = null;
