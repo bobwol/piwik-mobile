@@ -454,7 +454,13 @@ function layout () {
      */
     this.init = function () {
 
-        this._masterWin    = Ti.UI.createWindow({barColor: '#B2AEA5', title: _('General_Reports')});
+        var masterWinOptions = {title: _('General_Reports')};
+        
+        if (!Piwik.getPlatform().isIos7orLater) {
+            masterWinOptions.barColor = '#B2AEA5';
+        }
+        
+        this._masterWin    = Ti.UI.createWindow(masterWinOptions);
 
         var settingsButton = Ti.UI.createButton({image: 'images/ic_action_settings.png', width: 37});
 
