@@ -14,3 +14,12 @@
     tabBarHidden: true;
     title: 'Piwik Mobile';
 }
+
+.mainwindowIOS7 {
+    navBarHidden: false;
+    fullscreen: false;
+    modal: false;
+    tabBarHidden: true;
+    title: 'Piwik Mobile';
+    backgroundColor: '#ffffff';
+}

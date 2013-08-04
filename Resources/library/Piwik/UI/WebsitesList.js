@@ -72,7 +72,13 @@ WebsitesList.prototype.init = function () {
     var refresh   = null;
     var rows      = [];
 
-    var searchBar = Ti.UI.createSearchBar({id: 'websiteSearchBar', 
+    var searchBarId = 'websiteSearchBar';
+    
+    if (Piwik.getPlatform().isIos7orLater) {
+        searchBarId = 'websiteSearchBarIOS7';
+    }
+    
+    var searchBar = Ti.UI.createSearchBar({id: searchBarId, 
                                            hintText: _('Mobile_SearchWebsite')});
 
     searchBar.addEventListener('return', function (event) {

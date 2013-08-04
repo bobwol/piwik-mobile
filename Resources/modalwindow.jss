@@ -11,3 +11,8 @@
     modal: true;
     backgroundColor: 'white';
 }
+
+.modalWindowIOS7 {
+    modal: true;
+    backgroundColor: 'white';
+}

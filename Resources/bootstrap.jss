@@ -33,6 +33,9 @@
     barColor: '#B2AEA5';
 }
 
+.piwikRootWindowIOS7 {
+}
+
 /**
  * window index/index.js
  */
@@ -57,6 +60,14 @@
 #websiteSearchBar {
     showCancel: true;
     barColor: '#bbbbbb';
+    height: 43;
+    top: 0;
+    autocorrect: false;
+    autocapitalization: 0;
+}
+
+#websiteSearchBarIOS7 {
+    showCancel: true;
     height: 43;
     top: 0;
     autocorrect: false;

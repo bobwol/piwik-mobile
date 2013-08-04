@@ -11,10 +11,16 @@
 // set the background color of the master UIView
 Ti.UI.setBackgroundColor('#ffffff');
 
+var mainClass = 'mainwindow';
+
+if (7 <= Ti.Platform.version) {
+    mainClass = 'mainwindowIOS7';
+}
+
 var options = {url: 'bootstrap.js',
                exitOnClose:  true,
                softInputMode: Ti.UI.Android ? Ti.UI.Android.SOFT_INPUT_ADJUST_RESIZE : '',
-               className: 'mainwindow'};
+               className: mainClass};
 
 var win     = Ti.UI.createWindow(options);
 options     = null;

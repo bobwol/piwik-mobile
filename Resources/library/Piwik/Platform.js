@@ -57,6 +57,8 @@ platform.isIpad    = ('ipad' === platform.osName);
  */
 platform.isIphone  = (platform.isIos && !platform.isIpad);
 
+platform.isIos7orLater = (7 <= Ti.Platform.version && platform.isIos);
+
 /**
  * Converts a screen pixel to density-independent pixels.
  * 

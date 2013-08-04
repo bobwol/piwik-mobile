@@ -331,9 +331,13 @@ SwitchGraph.prototype.addSwitchGraph = function (win, showCloseButton) {
     }
    
     this.toolbar = Ti.UI.iOS.createToolbar({items: toolbarItems,
-                                            opacity: 0.7,
+                                            opacity: Piwik.getPlatform().isIos7orLater ? 0.9 : 0.7, 
                                             className: 'graphSwitchGraphToolbar',
                                             visible: true});
+                                            
+    if (Piwik.getPlatform().isIos7orLater) {
+        this.toolbar.barColor = '#f5f5f5';
+    }
     
     win.add(this.toolbar);
     

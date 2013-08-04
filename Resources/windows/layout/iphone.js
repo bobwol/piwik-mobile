@@ -94,8 +94,13 @@ function layout () {
         if (currentWindow) {
             currentWindow.fireEvent('blurWindow', {});
         }
+        
+        var winClass = 'piwikRootWindow';
+        if (Piwik.getPlatform().isIos7orLater) {
+            winClass = 'piwikRootWindowIOS7';
+        }
 
-        var win = Ti.UI.createWindow({className: 'piwikRootWindow', backButtonTitle: _('Mobile_NavigationBack')});
+        var win = Ti.UI.createWindow({className: winClass, backButtonTitle: _('Mobile_NavigationBack')});
 
         win.add(newWin);
         win.addEventListener('close', function () {

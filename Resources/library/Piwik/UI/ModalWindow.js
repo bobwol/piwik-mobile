@@ -85,11 +85,17 @@ ModalWindow.prototype.init = function () {
         });
                                         
     } else if (Piwik.getPlatform().isIos) {
+        
+        var optionsWin = {className: 'modalWindowIOS7',
+                          modal: true,
+                          title: title};
+                  
+        if (!Piwik.getPlatform().isIos7orLater) {
+            optionsWin.barColor = '#B2AEA5';
+            optionsWin.className = 'modalWindow';
+        }
 
-        win   = Ti.UI.createWindow({className: 'modalWindow',
-                                    modal: true,
-                                    barColor: '#B2AEA5',
-                                    title: title});
+        win   = Ti.UI.createWindow(optionsWin);
                                    
         this.viewToAddOtherViews = win;
 

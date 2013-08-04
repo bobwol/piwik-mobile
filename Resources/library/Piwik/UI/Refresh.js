@@ -224,7 +224,6 @@ Refresh.prototype.refreshDone = function () {
 
         return;
     }
-
     var tableView = this.getParam('tableView');
     if (tableView) {
         tableView.setContentInsets({top: 0});
