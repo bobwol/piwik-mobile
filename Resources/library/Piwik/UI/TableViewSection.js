@@ -61,13 +61,15 @@ TableViewSection.prototype.init = function (params) {
     });
 
     params.className = 'tableViewSection';
-
+    if (Piwik.getPlatform().isIos7orLater) {
+        params.className += 'IOS7';
+    }
     
     if (Piwik.getPlatform().isIos) {
-        // @todo define this in jss
+        
         params.selectionStyle  = Ti.UI.iPhone.TableViewCellSelectionStyle.NONE;
 
-        if (params.style && 'native' == params.style) {
+        if (Piwik.getPlatform().isIos7orLater || (params.style && 'native' == params.style)) {
 
             params.headerTitle = String(title);
 

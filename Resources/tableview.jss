@@ -25,6 +25,9 @@ tableviewrow {
     opacity: 0.95;
 }
 
+.tableViewSectionIOS7 {
+}
+
 .tableViewRowSelectable {
     backgroundColor: '#f5f5f5';
 }
