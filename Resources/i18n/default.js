@@ -130,6 +130,7 @@ module.exports = {
     Mobile_StaticGraph:                                                 'Static Graph',
     Mobile_HelpUsToImprovePiwikMobile:                                  'Would you like to enable anonymous usage tracking in Piwik Mobile?',
     Mobile_HowtoDeleteAnAccountOniOS:                                   'Swipe left to right to delete an account',
+    Mobile_HowtoDeleteAnAccountOniOS7:                                  'Swipe right to left to delete an account',
     Mobile_HttpIsNotSecureWarning:                                      "Your Piwik authorization token (token_auth) is sent in clear text if you use 'HTTP'. For this reason we recommend HTTPS for secure transport of data over the internet. Do you want to proceed?",
     Mobile_LastUpdated:                                                 'Last Updated: %s',
     Mobile_LoginCredentials:                                            'Credentials',
