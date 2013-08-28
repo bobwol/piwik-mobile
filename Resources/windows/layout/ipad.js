@@ -304,8 +304,13 @@ function layout () {
      * @private
      */
     this._addWindowToDetailView = function (newWin) {
+        
+        var params = {};
+        if (!Piwik.getPlatform().isIos7orLater) {
+            params = {barColor: '#B2AEA5'};
+        }
  
-        var detailWindow  = Ti.UI.createWindow({barColor: '#B2AEA5'});
+        var detailWindow  = Ti.UI.createWindow(params);
         newWin.target     = 'detail';
         newWin.rootWindow = detailWindow;
         
@@ -340,7 +345,7 @@ function layout () {
                 }
             }
         });
-    }
+    };
     
     /**
      * Add a new window to the layout so that it will be visible afterwards. Does also add a property named
