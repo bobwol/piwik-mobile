@@ -144,6 +144,8 @@ function window (params) {
             return;
         }
         
+        var isSubtableReport = params && params.report && params.report.idSubtable;
+        
         var site = event.site;
         
         var metrics = {};
@@ -158,7 +160,7 @@ function window (params) {
 
         tableViewRows = [];
 
-        if (!event || !event.metadata || !event.metadata.isSubtableReport) {
+        if (!isSubtableReport) {
             // only display site command if it is not a subtable report
             // a website selector makes no sense here cause the same subtable won't exist for another website
             var siteCommand = that.createCommand('ChooseSiteCommand');
@@ -174,7 +176,8 @@ function window (params) {
         var imageGraphEvolutionUrl = null;
 
         if (event.graphsEnabled && event.metadata && that
-            && (event.metadata.imageGraphUrl || event.metadata.imageGraphEvolutionUrl)) {
+            && (event.metadata.imageGraphUrl || event.metadata.imageGraphEvolutionUrl)
+            && !isSubtableReport) {
 
             graph       = Piwik.require('PiwikGraph');
             var account = Piwik.require('App/Accounts').getAccountById(event.site.accountId);
