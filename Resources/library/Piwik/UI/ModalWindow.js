@@ -242,7 +242,7 @@ ModalWindow.prototype.setRightNavButton = function (view) {
         return;
     }
     
-    this.win.setRightNavButton(view);
+    this.viewToAddOtherViews.setRightNavButton(view);
     view = null;
 };
 

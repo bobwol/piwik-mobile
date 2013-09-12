@@ -26,6 +26,11 @@ var Piwik = require('library/Piwik');
  */
 function window (params) {
     
+    if (Piwik.getPlatform().isIos7orLater) {
+        this.fullscreen = false;
+        this.top  = 20;
+    }
+    
     var graphUrls = Piwik.getUI().createSwitchGraph({window: this,
                                                      imageGraphUrl: params.imageGraphUrl, 
                                                      imageGraphEvolutionUrl: params.imageGraphEvolutionUrl});

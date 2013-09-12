@@ -40,6 +40,7 @@
     borderTop: false;
     borderBottom: false;
     barColor: '#bbb';
+    navTintColor: '#333333';
     translucent: true;
     zIndex: 999;
     height: 20;
