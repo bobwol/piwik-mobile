@@ -31,9 +31,13 @@
 
 .piwikRootWindow {
     barColor: '#B2AEA5';
+    navTintColor: '#B2AEA5';
 }
 
 .piwikRootWindowIOS7 {
+    barColor: '#B2AEA5';
+    navTintColor: '#333333';
+    statusBarStyle: 1;
 }
 
 /**
@@ -60,6 +64,7 @@
 #websiteSearchBar {
     showCancel: true;
     barColor: '#bbbbbb';
+    navTintColor: '#333333';
     height: 43;
     top: 0;
     autocorrect: false;
@@ -68,6 +73,7 @@
 
 #websiteSearchBarIOS7 {
     showCancel: true;
+    navTintColor: '#333333';
     height: 43;
     top: 0;
     autocorrect: false;

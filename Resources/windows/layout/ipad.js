@@ -13,6 +13,8 @@ var Piwik = require('library/Piwik');
 /** @private */
 var _     = require('library/underscore');
 
+var statusBarStyle = Titanium.UI.iPhone.StatusBar.TRANSLUCENT_BLACK;
+
 /**
  * @class    iPad specific Piwik Mobile layout. Handles how header, menu and the content will be displayed. 
  *           How new windows will be removed or added and so on.
@@ -178,7 +180,7 @@ function layout () {
             return;
         }
          
-        layout._modalWindow = Ti.UI.createWindow({navBarHidden: true});
+        layout._modalWindow = Ti.UI.createWindow({navBarHidden: true, barColor: '#B2AEA5', navTintColor: '#333333'});
         
         layout._modalWindow.open({
             modal:true,
@@ -198,7 +200,7 @@ function layout () {
 
         this._createModalRootWindow();
 
-        var modalWin = Ti.UI.createWindow();
+        var modalWin = Ti.UI.createWindow({barColor: '#B2AEA5', navTintColor: '#333333', statusBarStyle: statusBarStyle});
         modalWin.add(newWin);
         
         newWin.rootWindow = modalWin;
@@ -305,10 +307,7 @@ function layout () {
      */
     this._addWindowToDetailView = function (newWin) {
         
-        var params = {};
-        if (!Piwik.getPlatform().isIos7orLater) {
-            params = {barColor: '#B2AEA5'};
-        }
+        var params = {barColor: '#B2AEA5', navTintColor: '#333333'};
  
         var detailWindow  = Ti.UI.createWindow(params);
         newWin.target     = 'detail';
@@ -459,11 +458,7 @@ function layout () {
      */
     this.init = function () {
 
-        var masterWinOptions = {title: _('General_Reports')};
-        
-        if (!Piwik.getPlatform().isIos7orLater) {
-            masterWinOptions.barColor = '#B2AEA5';
-        }
+        var masterWinOptions = {title: _('General_Reports'), barColor: '#B2AEA5', navTintColor: '#ffffff', statusBarStyle: statusBarStyle};
         
         this._masterWin    = Ti.UI.createWindow(masterWinOptions);
 

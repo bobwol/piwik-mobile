@@ -22,6 +22,8 @@ var _     = require('library/underscore');
  * @augments  Piwik.UI.Window
  */
 function window () {
+    
+    this.backgroundColor = '#ffffff';
 
     /**
      * @see  Piwik.UI.Window#titleOptions

@@ -72,7 +72,7 @@ Visitor.prototype.init = function () {
     this.createSystem();
     this.createActionDetails();
     
-    var win       = this.create('ModalWindow', {title: _('General_Visitor'), openView: this.getParam('openView')});
+    var win       = this.create('ModalWindow', {fullscreen: false, title: _('General_Visitor'), openView: this.getParam('openView')});
     var tableView = this.create('TableView', {id: 'visitorTableView'});
 
     win.add(tableView.get());

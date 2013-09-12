@@ -15,4 +15,7 @@
 .modalWindowIOS7 {
     modal: true;
     backgroundColor: 'white';
+    barColor: '#B2AEA5';
+    navTintColor: '#333333';
+    statusBarStyle: 1;
 }

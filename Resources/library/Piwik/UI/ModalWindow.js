@@ -87,17 +87,30 @@ ModalWindow.prototype.init = function () {
     } else if (Piwik.getPlatform().isIos) {
         
         var optionsWin = {className: 'modalWindowIOS7',
-                          modal: true,
+                          modal: true, barColor: '#B2AEA5',
                           title: title};
                   
         if (!Piwik.getPlatform().isIos7orLater) {
-            optionsWin.barColor = '#B2AEA5';
             optionsWin.className = 'modalWindow';
+        } else {
+            optionsWin.navTintColor   = '#333333';
+            optionsWin.statusBarStyle = Titanium.UI.iPhone.StatusBar.TRANSLUCENT_BLACK;
+        }
+        
+        var modalInnerWin = Ti.UI.createWindow(optionsWin);
+        
+        if (Piwik.getPlatform().isIos7orLater) {
+        
+            win = Ti.UI.iOS.createNavigationWindow({
+                modal: true,
+                window: modalInnerWin
+            });
+                                       
+        } else {
+            win = modalInnerWin;
         }
 
-        win   = Ti.UI.createWindow(optionsWin);
-                                   
-        this.viewToAddOtherViews = win;
+        this.viewToAddOtherViews = modalInnerWin;
 
         var _             = require('library/underscore');
         var cancelButton  = Ti.UI.createButton({title: _('SitesManager_Cancel_js'),
@@ -110,10 +123,10 @@ ModalWindow.prototype.init = function () {
             }
         });
 
-        win.leftNavButton = cancelButton;
+        modalInnerWin.leftNavButton = cancelButton;
         cancelButton      = null;
         
-        win.addEventListener('close', function () {
+        modalInnerWin.addEventListener('close', function () {
             if (!that) {
                 
                 return;
@@ -125,6 +138,8 @@ ModalWindow.prototype.init = function () {
             that = null;
         });
 
+        modalInnerWin = null;
+        
     } else if (Piwik.getPlatform().isAndroid) {
 
         var crt  = Ti.UI.currentWindow;

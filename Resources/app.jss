@@ -22,4 +22,7 @@
     tabBarHidden: true;
     title: 'Piwik Mobile';
     backgroundColor: '#ffffff';
+    barColor: '#B2AEA5';
+    navTintColor: '#333333';
+    statusBarStyle: 1;
 }
