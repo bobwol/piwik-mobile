@@ -199,22 +199,6 @@ WebsitesList.prototype.init = function () {
       
             return;
         }
-        
-        if (that.getParam('handleOnlyOneSiteAvailableEvent', false) &&
-            !event.filterUsed && 1 == event.sites.length && event.sites[0]) {
-            // fire only if this event is enabled.
-            // do not fire this event if user has used the filter/searchBar. Maybe that is not the site
-            // he was looking for.
-            
-            // do not show searchBar in this case, otherwise the keyboard may be opened each time the user 
-            // closes another window. See workarounds above and below
-
-            var session = Piwik.require('App/Session');
-            session.set('current_site', event.sites[0]);
-
-            that.fireEvent('onOnlyOneSiteAvailable', {site: event.sites[0], type: 'onOnlyOneSiteAvailable'});
-            return;
-        }
   
         // not 100% working workaround for:
         // https://jira.appcelerator.org/browse/TIMOB-7609 

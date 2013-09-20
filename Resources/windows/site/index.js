@@ -58,12 +58,6 @@ function window (params) {
 
     var menuOptions   = {commands: [this.createCommand('RefreshCommand')]};
 
-    if (1 == Piwik.getUI().layout.windows.length) {
-        // show settingschooser only if this is the first window. ensures user can open settings screen if this
-        // is the first screen. It is the first window if the user has configured has access to only one website.
-        menuOptions.commands.push(this.createCommand('OpenSettingsCommand'));
-    }
-
     /**
      * @see  Piwik.UI.Window#menuOptions
      */
