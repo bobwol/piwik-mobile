@@ -99,16 +99,10 @@ ModalWindow.prototype.init = function () {
         
         var modalInnerWin = Ti.UI.createWindow(optionsWin);
         
-        if (Piwik.getPlatform().isIos7orLater) {
-        
-            win = Ti.UI.iOS.createNavigationWindow({
-                modal: true,
-                window: modalInnerWin
-            });
-                                       
-        } else {
-            win = modalInnerWin;
-        }
+        win = Ti.UI.iOS.createNavigationWindow({
+            modal: true,
+            window: modalInnerWin
+        });
 
         this.viewToAddOtherViews = modalInnerWin;
 
