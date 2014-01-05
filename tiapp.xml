@@ -2,7 +2,7 @@
 <ti:app xmlns:ti="http://ti.appcelerator.org">
     <modules/>
     <property name="ti.android.runtime">v8</property>
-    <sdk-version>3.1.4.v20130918151553</sdk-version>
+    <sdk-version>3.1.4.v20131213162008</sdk-version>
     <deployment-targets>
         <target device="tizen">false</target>
         <target device="mobileweb">true</target>
