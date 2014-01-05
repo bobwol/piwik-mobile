@@ -27,21 +27,21 @@ platform.osName    = ('' + Ti.Platform.osname).toLowerCase();
  *
  * @type  boolean
  */
-platform.isAndroid = ('android' === platform.osName);
+platform.isAndroid = false;
 
 /**
  * True if the current platform is mobile web / browser, false otherwise.
  *
  * @type  boolean
  */
-platform.isWeb     = ('mobileweb' === platform.osName);
+platform.isWeb     = false;
 
 /**
  * True if the current platform is iOS (iPod or iPad or iPhone), false otherwise.
  *
  * @type  boolean
  */
-platform.isIos     = ('i' === platform.osName.substr(0, 1));
+platform.isIos     = true;
 
 /**
  * True if the current device is an iPad, false otherwise.
@@ -57,7 +57,7 @@ platform.isIpad    = ('ipad' === platform.osName);
  */
 platform.isIphone  = (platform.isIos && !platform.isIpad);
 
-platform.isIos7orLater = (7 <= Ti.Platform.version && platform.isIos);
+platform.isIos7orLater = (7 <= parseInt(Ti.Platform.version, 10) && platform.isIos);
 
 /**
  * Converts a screen pixel to density-independent pixels.
