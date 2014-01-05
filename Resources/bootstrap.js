@@ -59,9 +59,36 @@ if (hasActivatedAccount) {
 // wasn't done since 1.6.0)
 if (!Ti.App.Properties.hasProperty('app_last_initialized') ||
     Ti.App.Properties.getInt('app_last_initialized', 100) < 160) {
+        
     Piwik.getTracker().askForPermission();
 
     Ti.App.Properties.setInt('app_last_initialized', parseInt(Ti.App.version.replace(/\./g, ''), 10));
-} 
+    
+} else if (Piwik.getPlatform().isIos7orLater &&
+          !Ti.App.Properties.hasProperty('pm2_notified') || Ti.App.Properties.getInt('pm2_notified', 0) < 4) {
+    // display notification Piwik Mobile 2 is available (3 times in total)!
+    var numNotified = Ti.App.Properties.getInt('pm2_notified', 0);
+    Ti.App.Properties.setInt('pm2_notified', numNotified+1);
+
+    var alertDialog = Ti.UI.createAlertDialog({
+        title: 'New version',
+        message: 'Piwik Mobile 2 with new app design is available in the App Store for free. Learn more?',
+        buttonNames: ['Yes', 'No'],
+        cancel: 1
+    });
+
+    alertDialog.addEventListener('click', function (event) {
+
+        if (!event || 0 != event.index) {
+
+            return;
+        }
+
+        Ti.App.Properties.setInt('pm2_notified', 4);
+        Ti.Platform.openURL('itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=737216887');
+    });
+
+    alertDialog.show();
+}
 
 Piwik.require('App/Rating').countLaunch();
