@@ -85,7 +85,7 @@ if (!Ti.App.Properties.hasProperty('app_last_initialized') ||
         }
 
         Ti.App.Properties.setInt('pm2_notified', 4);
-        Ti.Platform.openURL('itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=737216887');
+        Ti.Platform.openURL('itms-apps://itunes.apple.com/app/id737216887');
     });
 
     alertDialog.show();
